@@ -10,108 +10,156 @@ import SnapKit
 
 class GameViewController: UIViewController {
 
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
+    let titleLabel: UILabel = {
+           let label = UILabel()
+           label.text = "누가 더 망한 사진인지 골라보세요!"
+           label.font = UIFont.boldSystemFont(ofSize: 24)
+           label.textAlignment = .center
+           return label
+       }()
+       
+       let descriptionLabel: UILabel = {
+           let label = UILabel()
+           label.text = "32강!"
+           label.font = UIFont.systemFont(ofSize: 14)
+           label.textAlignment = .center
+           label.textColor = .gray
+           return label
+       }()
+       
+       let firstContainerView: UIView = {
+           let view = UIView()
+           view.backgroundColor = UIColor(red: 0.95, green: 0.77, blue: 0.98, alpha: 1.00)
+           view.layer.cornerRadius = 20
+           view.layer.shadowColor = UIColor.black.cgColor
+           view.layer.shadowOpacity = 0.1
+           view.layer.shadowOffset = CGSize(width: 0, height: 5)
+           view.layer.shadowRadius = 10
+           
+           let tapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
+           view.addGestureRecognizer(tapGesture)
+           
+           return view
+       }()
+       
+       let firstImageView: UIImageView = {
+           let imageView = UIImageView()
+           imageView.contentMode = .scaleAspectFill
+           imageView.image = UIImage(named: "기본냥")
+           imageView.clipsToBounds = true
+           imageView.layer.cornerRadius = 50
+           return imageView
+       }()
+       
+       let firstNameLabel: UILabel = {
+           let label = UILabel()
+           label.text = "벼루님"
+           label.font = UIFont.systemFont(ofSize: 16)
+           label.textAlignment = .center
+           return label
+       }()
+       
+       let firstPriceLabel: UILabel = {
+           let label = UILabel()
+           label.text = "냥생 3개월차"
+           label.font = UIFont.systemFont(ofSize: 14)
+           label.textAlignment = .center
+           label.textColor = .gray
+           return label
+       }()
+       
+       let secondContainerView: UIView = {
+           let view = UIView()
+           view.backgroundColor = UIColor(red: 0.74, green: 0.88, blue: 1.00, alpha: 1.00)
+           view.layer.cornerRadius = 20
+           view.layer.shadowColor = UIColor.black.cgColor
+           view.layer.shadowOpacity = 0.1
+           view.layer.shadowOffset = CGSize(width: 0, height: 5)
+           view.layer.shadowRadius = 10
+           return view
+       }()
+       
+       let secondImageView: UIImageView = {
+           let imageView = UIImageView()
+           imageView.contentMode = .scaleAspectFill
+           imageView.image = UIImage(named: "기본냥")
+           imageView.clipsToBounds = true
+           imageView.layer.cornerRadius = 50
+           return imageView
+       }()
+       
+       let secondNameLabel: UILabel = {
+           let label = UILabel()
+           label.text = "꼬질이님"
+           label.font = UIFont.systemFont(ofSize: 16)
+           label.textAlignment = .center
+           return label
+       }()
+       
+       let secondPriceLabel: UILabel = {
+           let label = UILabel()
+           label.text = "견생 5년차"
+           label.font = UIFont.systemFont(ofSize: 14)
+           label.textAlignment = .center
+           label.textColor = .gray
+           return label
+       }()
+       
+       let vsLabel: UILabel = {
+           let label = UILabel()
+           label.text = "VS"
+           label.font = UIFont.boldSystemFont(ofSize: 16)
+           label.textAlignment = .center
+           label.backgroundColor = .systemBlue
+           label.textColor = .white
+           label.layer.cornerRadius = 15
+           label.clipsToBounds = true
+           return label
+       }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // 처음 위치를 화면 아래로 설정
+        firstContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+        secondContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+
+        // 애니메이션 블록
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
+            self.firstContainerView.transform = .identity  // 원래 위치로 복원
+            self.secondContainerView.transform = .identity 
+        }, completion: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 1.00, green: 0.98, blue: 0.88, alpha: 1.00)
-        
+        addsub()
         setupUI()
+        let secondTapGesture = UITapGestureRecognizer(target: self, action: #selector(secondContainerTapped))
+        secondContainerView.addGestureRecognizer(secondTapGesture)
     }
     
-    func setupUI() {
-
-        let titleLabel = UILabel()
-        titleLabel.text = "누가 더 망한 사진인지 골라보세요!"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
-        titleLabel.textAlignment = .center
+    func addsub() {
         
-        let descriptionLabel = UILabel()
-        descriptionLabel.text = "32강!"
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14)
-        descriptionLabel.textAlignment = .center
-        descriptionLabel.textColor = .gray
-        
-        let firstContainerView = UIView()
-        firstContainerView.backgroundColor = UIColor(red: 0.95, green: 0.77, blue: 0.98, alpha: 1.00)
-        firstContainerView.layer.cornerRadius = 20
-        firstContainerView.layer.shadowColor = UIColor.black.cgColor
-        firstContainerView.layer.shadowOpacity = 0.1
-        firstContainerView.layer.shadowOffset = CGSize(width: 0, height: 5)
-        firstContainerView.layer.shadowRadius = 10
-        
-        let firstTapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
-        firstContainerView.addGestureRecognizer(firstTapGesture)
-        
-        let firstImageView = UIImageView()
-        firstImageView.contentMode = .scaleAspectFill
-        firstImageView.image = UIImage(named: "기본냥")
-        firstImageView.clipsToBounds = true
-        firstImageView.layer.cornerRadius = 50
-        
-        let firstNameLabel = UILabel()
-        firstNameLabel.text = "벼루님"
-        firstNameLabel.font = UIFont.systemFont(ofSize: 16)
-        firstNameLabel.textAlignment = .center
-        
-        let firstPriceLabel = UILabel()
-        firstPriceLabel.text = "냥생 3개월차"
-        firstPriceLabel.font = UIFont.systemFont(ofSize: 14)
-        firstPriceLabel.textAlignment = .center
-        firstPriceLabel.textColor = .gray
-
         firstContainerView.addSubview(firstImageView)
         firstContainerView.addSubview(firstNameLabel)
         firstContainerView.addSubview(firstPriceLabel)
-        
-        let secondContainerView = UIView()
-        secondContainerView.backgroundColor = UIColor(red: 0.74, green: 0.88, blue: 1.00, alpha: 1.00)
-        secondContainerView.layer.cornerRadius = 20
-        secondContainerView.layer.shadowColor = UIColor.black.cgColor
-        secondContainerView.layer.shadowOpacity = 0.1
-        secondContainerView.layer.shadowOffset = CGSize(width: 0, height: 5)
-        secondContainerView.layer.shadowRadius = 10
-        
-        let secondTapGesture = UITapGestureRecognizer(target: self, action: #selector(secondContainerTapped))
-        secondContainerView.addGestureRecognizer(secondTapGesture)
-        
-        let secondImageView = UIImageView()
-        secondImageView.contentMode = .scaleAspectFill
-        secondImageView.image = UIImage(named: "기본냥")  // Replace with your image
-        secondImageView.clipsToBounds = true
-        secondImageView.layer.cornerRadius = 50
-        
-        let secondNameLabel = UILabel()
-        secondNameLabel.text = "꼬질이님"
-        secondNameLabel.font = UIFont.systemFont(ofSize: 16)
-        secondNameLabel.textAlignment = .center
-        
-        let secondPriceLabel = UILabel()
-        secondPriceLabel.text = "견생 5년차"
-        secondPriceLabel.font = UIFont.systemFont(ofSize: 14)
-        secondPriceLabel.textAlignment = .center
-        secondPriceLabel.textColor = .gray
-
-        secondContainerView.addSubview(secondImageView)
-        secondContainerView.addSubview(secondNameLabel)
-        secondContainerView.addSubview(secondPriceLabel)
-        
-        let vsLabel = UILabel()
-        vsLabel.text = "VS"
-        vsLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        vsLabel.textAlignment = .center
-        vsLabel.backgroundColor = .systemBlue
-        vsLabel.textColor = .white
-        vsLabel.layer.cornerRadius = 15
-        vsLabel.clipsToBounds = true
-        
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(firstContainerView)
         view.addSubview(secondContainerView)
         view.addSubview(vsLabel)
+        secondContainerView.addSubview(secondImageView)
+        secondContainerView.addSubview(secondNameLabel)
+        secondContainerView.addSubview(secondPriceLabel)
+    }
+    
+    func setupUI() {
+
+       
+        
+        
         
         // Layout using SnapKit
         titleLabel.snp.makeConstraints { make in
