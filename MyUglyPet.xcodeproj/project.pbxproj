@@ -13,7 +13,7 @@
 		AA7272BC2C6C967C007551C4 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = AA7272BB2C6C967C007551C4 /* Base */; };
 		AA7272BE2C6C967E007551C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA7272BD2C6C967E007551C4 /* Assets.xcassets */; };
 		AA7272C12C6C967E007551C4 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = AA7272C02C6C967E007551C4 /* Base */; };
-		AA7272CA2C6C989D007551C4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272C92C6C989D007551C4 /* HomeViewController.swift */; };
+		AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */; };
 		AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272CB2C6C98D5007551C4 /* TabBarController.swift */; };
 		AA7272CF2C6CA082007551C4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7272CE2C6CA082007551C4 /* SnapKit */; };
 		AA7272D22C6CA091007551C4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA7272D12C6CA091007551C4 /* Alamofire */; };
@@ -26,6 +26,7 @@
 		AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272E12C6D861F007551C4 /* APIKey.swift */; };
 		AA7272E52C6DC7E2007551C4 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272E42C6DC7E2007551C4 /* CommentTableViewCell.swift */; };
 		AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272E62C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift */; };
+		AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +38,7 @@
 		AA7272BD2C6C967E007551C4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA7272C02C6C967E007551C4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA7272C22C6C967E007551C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AA7272C92C6C989D007551C4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostHomeViewController.swift; sourceTree = "<group>"; };
 		AA7272CB2C6C98D5007551C4 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		AA7272DB2C6CE55B007551C4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewController.swift; sourceTree = "<group>"; };
@@ -45,6 +46,7 @@
 		AA7272E12C6D861F007551C4 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		AA7272E42C6DC7E2007551C4 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		AA7272E62C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,10 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				AA7272CB2C6C98D5007551C4 /* TabBarController.swift */,
+				AA7272E82C6DD8BF007551C4 /* View */,
 				AA7272E32C6DC7D7007551C4 /* Cell */,
-				AA7272C92C6C989D007551C4 /* HomeViewController.swift */,
-				AA7272DB2C6CE55B007551C4 /* DetailViewController.swift */,
-				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
@@ -115,6 +115,17 @@
 				AA7272E62C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		AA7272E82C6DD8BF007551C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */,
+				AA7272DB2C6CE55B007551C4 /* DetailViewController.swift */,
+				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
+				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,8 +221,9 @@
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
+				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,
 				AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */,
-				AA7272CA2C6C989D007551C4 /* HomeViewController.swift in Sources */,
+				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,7 +22,7 @@ extension UIView: ReusableIdentifier {
 
 
 
-class HomeViewController: UIViewController {
+class AllPostHomeViewController: UIViewController {
     
     let plusButton: UIButton = {
         let button = UIButton(type: .system)
@@ -72,7 +72,7 @@ class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
@@ -341,7 +341,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension AllPostHomeViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
     }
