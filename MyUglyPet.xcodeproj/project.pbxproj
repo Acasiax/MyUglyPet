@@ -28,6 +28,7 @@
 		AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272E62C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift */; };
 		AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */; };
 		AA7272EC2C6DECD6007551C4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272EB2C6DECD6007551C4 /* GameViewController.swift */; };
+		AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272ED2C6E637A007551C4 /* BaseGameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		AA7272E62C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeViewController.swift; sourceTree = "<group>"; };
 		AA7272EB2C6DECD6007551C4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		AA7272ED2C6E637A007551C4 /* BaseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
 				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
 				AA7272EB2C6DECD6007551C4 /* GameViewController.swift */,
+				AA7272ED2C6E637A007551C4 /* BaseGameView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				AA7272EC2C6DECD6007551C4 /* GameViewController.swift in Sources */,
 				AA7272E52C6DC7E2007551C4 /* CommentTableViewCell.swift in Sources */,
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
+				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,

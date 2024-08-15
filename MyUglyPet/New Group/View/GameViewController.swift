@@ -4,232 +4,126 @@
 //
 //  Created by 이윤지 on 8/15/24.
 //
-
+//firstContainerView와 secondContainerView를 선택할 때
 import UIKit
 import SnapKit
 
-class GameViewController: UIViewController {
+struct Pet {
+    let name: String
+    let age: String
+    let image: UIImage
+}
 
-    let titleLabel: UILabel = {
-           let label = UILabel()
-           label.text = "누가 더 망한 사진인지 골라보세요!"
-           label.font = UIFont.boldSystemFont(ofSize: 24)
-           label.textAlignment = .center
-           return label
-       }()
+class GameViewController: BaseGameView {
+    
+    let pets: [Pet] = [
+        Pet(name: "벼루님", age: "냥생 3개월차", image: UIImage(named: "기본냥")!),
+        Pet(name: "꼬질이님", age: "견생 5년차", image: UIImage(named: "기본냥")!),
+        Pet(name: "3님", age: "냥생 3개월차", image: UIImage(named: "기본냥")!),
+        Pet(name: "4님", age: "견생 5년차", image: UIImage(named: "기본냥")!),
+        Pet(name: "5", age: "냥생 3개월차", image: UIImage(named: "기본냥")!),
+        Pet(name: "6님", age: "견생 5년차", image: UIImage(named: "기본냥")!)
        
-       let descriptionLabel: UILabel = {
-           let label = UILabel()
-           label.text = "32강!"
-           label.font = UIFont.systemFont(ofSize: 14)
-           label.textAlignment = .center
-           label.textColor = .gray
-           return label
-       }()
-       
-       let firstContainerView: UIView = {
-           let view = UIView()
-           view.backgroundColor = UIColor(red: 0.95, green: 0.77, blue: 0.98, alpha: 1.00)
-           view.layer.cornerRadius = 20
-           view.layer.shadowColor = UIColor.black.cgColor
-           view.layer.shadowOpacity = 0.1
-           view.layer.shadowOffset = CGSize(width: 0, height: 5)
-           view.layer.shadowRadius = 10
-           
-           let tapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
-           view.addGestureRecognizer(tapGesture)
-           
-           return view
-       }()
-       
-       let firstImageView: UIImageView = {
-           let imageView = UIImageView()
-           imageView.contentMode = .scaleAspectFill
-           imageView.image = UIImage(named: "기본냥")
-           imageView.clipsToBounds = true
-           imageView.layer.cornerRadius = 50
-           return imageView
-       }()
-       
-       let firstNameLabel: UILabel = {
-           let label = UILabel()
-           label.text = "벼루님"
-           label.font = UIFont.systemFont(ofSize: 16)
-           label.textAlignment = .center
-           return label
-       }()
-       
-       let firstPriceLabel: UILabel = {
-           let label = UILabel()
-           label.text = "냥생 3개월차"
-           label.font = UIFont.systemFont(ofSize: 14)
-           label.textAlignment = .center
-           label.textColor = .gray
-           return label
-       }()
-       
-       let secondContainerView: UIView = {
-           let view = UIView()
-           view.backgroundColor = UIColor(red: 0.74, green: 0.88, blue: 1.00, alpha: 1.00)
-           view.layer.cornerRadius = 20
-           view.layer.shadowColor = UIColor.black.cgColor
-           view.layer.shadowOpacity = 0.1
-           view.layer.shadowOffset = CGSize(width: 0, height: 5)
-           view.layer.shadowRadius = 10
-           return view
-       }()
-       
-       let secondImageView: UIImageView = {
-           let imageView = UIImageView()
-           imageView.contentMode = .scaleAspectFill
-           imageView.image = UIImage(named: "기본냥")
-           imageView.clipsToBounds = true
-           imageView.layer.cornerRadius = 50
-           return imageView
-       }()
-       
-       let secondNameLabel: UILabel = {
-           let label = UILabel()
-           label.text = "꼬질이님"
-           label.font = UIFont.systemFont(ofSize: 16)
-           label.textAlignment = .center
-           return label
-       }()
-       
-       let secondPriceLabel: UILabel = {
-           let label = UILabel()
-           label.text = "견생 5년차"
-           label.font = UIFont.systemFont(ofSize: 14)
-           label.textAlignment = .center
-           label.textColor = .gray
-           return label
-       }()
-       
-       let vsLabel: UILabel = {
-           let label = UILabel()
-           label.text = "VS"
-           label.font = UIFont.boldSystemFont(ofSize: 16)
-           label.textAlignment = .center
-           label.backgroundColor = .systemBlue
-           label.textColor = .white
-           label.layer.cornerRadius = 15
-           label.clipsToBounds = true
-           return label
-       }()
+    ]
+    
+    var currentPetIndex: Int = 0
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // 처음 위치를 화면 아래로 설정
-        firstContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-        secondContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-
-        // 애니메이션 블록
-        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-            self.firstContainerView.transform = .identity  // 원래 위치로 복원
-            self.secondContainerView.transform = .identity 
-        }, completion: nil)
+        startAnimations()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 1.00, green: 0.98, blue: 0.88, alpha: 1.00)
         addsub()
         setupUI()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
+        view.addGestureRecognizer(tapGesture)
         let secondTapGesture = UITapGestureRecognizer(target: self, action: #selector(secondContainerTapped))
         secondContainerView.addGestureRecognizer(secondTapGesture)
     }
     
-    func addsub() {
+    func showNextPet(in containerView: UIView) {
+        currentPetIndex = (currentPetIndex + 1) % pets.count
+        let pet = pets[currentPetIndex]
         
-        firstContainerView.addSubview(firstImageView)
-        firstContainerView.addSubview(firstNameLabel)
-        firstContainerView.addSubview(firstPriceLabel)
-        view.addSubview(titleLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(firstContainerView)
-        view.addSubview(secondContainerView)
-        view.addSubview(vsLabel)
-        secondContainerView.addSubview(secondImageView)
-        secondContainerView.addSubview(secondNameLabel)
-        secondContainerView.addSubview(secondPriceLabel)
+        if containerView == firstContainerView {
+            firstImageView.image = pet.image
+            firstNameLabel.text = pet.name
+            firstPriceLabel.text = pet.age
+        } else if containerView == secondContainerView {
+            secondImageView.image = pet.image
+            secondNameLabel.text = pet.name
+            secondPriceLabel.text = pet.age
+        }
     }
     
-    func setupUI() {
-
-       
-        
-        
-        
-        // Layout using SnapKit
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.centerX.equalToSuperview()
-        }
-        
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-        }
-        
-        firstContainerView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(40)
-            make.leading.equalToSuperview().offset(20)
-            make.width.equalTo(160)
-            make.height.equalTo(200)
-        }
-        
-        secondContainerView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(40)
-            make.trailing.equalToSuperview().offset(-20)
-            make.width.equalTo(160)
-            make.height.equalTo(200)
-        }
-        
-        firstImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(100)
-        }
-        
-        firstNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(firstImageView.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-        }
-        
-        firstPriceLabel.snp.makeConstraints { make in
-            make.top.equalTo(firstNameLabel.snp.bottom).offset(4)
-            make.centerX.equalToSuperview()
-        }
-        
-        secondImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(100)
-        }
-        
-        secondNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(secondImageView.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-        }
-        
-        secondPriceLabel.snp.makeConstraints { make in
-            make.top.equalTo(secondNameLabel.snp.bottom).offset(4)
-            make.centerX.equalToSuperview()
-        }
-        
-        vsLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(firstContainerView)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(30)
-        }
-    }
-
+//    @objc func firstContainerTapped() {
+//        print("첫번째 컨테이너가 선택되었습니다.")
+//        animateContainerView(firstContainerView)
+//        showNextPet(in: firstContainerView)
+//        // startAnimations()
+//    }
+    
     @objc func firstContainerTapped() {
         print("첫번째 컨테이너가 선택되었습니다.")
+        animateContainerView(firstContainerView)
+        
+        // 0.4초 지연 후 showNextPet 실행
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.startAnimations() 
+            self.showNextPet(in: self.firstContainerView)
+        }
+        
+        
     }
-
+    
+    
     @objc func secondContainerTapped() {
         print("두번째 컨테이너가 선택되었습니다.")
+        animateContainerView(secondContainerView)
+        showNextPet(in: secondContainerView)
     }
 }
+
+
+//애니메이션 코드
+extension GameViewController {
+    
+    func startAnimations() {
+        // 처음 위치를 화면 아래로 설정
+        firstContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+        secondContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+        
+        // titleLabel 애니메이션 초기 설정 (살짝 아래에 위치)
+        titleLabel.transform = CGAffineTransform(translationX: 0, y: 10)
+        worldCupLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        
+        // 애니메이션 블록
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
+            self.firstContainerView.transform = .identity  // 원래 위치로 복원
+            self.secondContainerView.transform = .identity
+        }, completion: nil)
+        
+        // titleLabel 애니메이션 (아래에서 위로 살짝 올라오는 효과)
+        UIView.animate(withDuration: 1.0, delay: 0.3, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+            self.titleLabel.transform = .identity // 원래 위치로 복원
+            self.worldCupLabel.transform = .identity // 원래 크기로 복원
+        }, completion: nil)
+    }
+    
+    // 살짝 확대된 후 복원하는 애니메이션
+    func animateContainerView(_ view: UIView) {
+        UIView.animate(withDuration: 0.1, animations: {
+            view.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+        }) { (_) in
+            UIView.animate(withDuration: 0.1) {
+                view.transform = CGAffineTransform.identity
+            }
+        }
+    }
+    
+    
+}
+
