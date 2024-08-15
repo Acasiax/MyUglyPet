@@ -83,7 +83,12 @@ class GameViewController: BaseGameView {
     @objc func secondContainerTapped() {
         print("두번째 컨테이너가 선택되었습니다.")
         animateContainerView(secondContainerView)
-        showNextPet(in: secondContainerView)
+        
+        // 0.4초 지연 후 showNextPet 실행
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.startAnimations()
+            self.showNextPet(in: self.secondContainerView)
+        }
     }
 }
 
@@ -101,7 +106,7 @@ extension GameViewController {
         worldCupLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         
         // 애니메이션 블록
-        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
             self.firstContainerView.transform = .identity  // 원래 위치로 복원
             self.secondContainerView.transform = .identity
         }, completion: nil)
