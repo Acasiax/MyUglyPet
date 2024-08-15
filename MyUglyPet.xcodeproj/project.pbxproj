@@ -350,6 +350,7 @@
 				DEVELOPMENT_TEAM = 4KLMMMFY4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyUglyPet/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "냥멍난이";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -382,6 +383,7 @@
 				DEVELOPMENT_TEAM = 4KLMMMFY4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyUglyPet/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "냥멍난이";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

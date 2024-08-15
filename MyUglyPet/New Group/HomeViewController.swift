@@ -131,7 +131,15 @@ class AllPostTableViewCell: UITableViewCell {
     
     lazy var locationTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울시 문래동 · 1시간 전"
+        label.text = "서울시 문래동"
+        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.textColor = .lightGray
+        return label
+    }()
+    
+    lazy var timeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "1시간 전"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .lightGray
         return label
@@ -219,6 +227,7 @@ class AllPostTableViewCell: UITableViewCell {
         contentView.addSubview(userNameLabel)
         contentView.addSubview(infoLabel)
         contentView.addSubview(locationTimeLabel)
+        contentView.addSubview(timeLabel)
         contentView.addSubview(followButton)
         contentView.addSubview(collectionView)
         contentView.addSubview(contentLabel)
@@ -249,6 +258,11 @@ class AllPostTableViewCell: UITableViewCell {
         locationTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(infoLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
+        }
+        
+        timeLabel.snp.makeConstraints { make in
+            make.top.equalTo(infoLabel.snp.bottom).offset(4)
+            make.left.equalTo(locationTimeLabel.snp.right).offset(8) 
         }
         
         followButton.snp.makeConstraints { make in
