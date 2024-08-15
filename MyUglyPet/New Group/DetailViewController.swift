@@ -9,8 +9,28 @@ import UIKit
 import SnapKit
 
 
-class DetailViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+struct Comment {
+    let profileImage: UIImage?
+    let username: String
+    let date: String
+    let text: String
+}
+
+
+class DetailViewController: UIViewController {
+
+    var photos: [UIImage] = [
+           UIImage(systemName: "house")!,
+           UIImage(systemName: "bell")!,
+           UIImage(systemName: "heart")!,
+           UIImage(systemName: "star")!,
+           UIImage(systemName: "leaf")!,
+           UIImage(systemName: "leaf")!,
+           UIImage(systemName: "leaf")!,
+       ]
     
+    var comments: [Comment] = []  // 댓글을 저장하는 배열
+
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 20
@@ -19,43 +39,39 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         imageView.image = UIImage(systemName: "person.circle")
         return imageView
     }()
-    
+
     lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.text = "BLUE"
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         label.textColor = .black
-        label.backgroundColor = .gray
         return label
     }()
-    
+
     lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.text = "4세 남아, 보더콜리"
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .darkGray
-        label.backgroundColor = .gray
         return label
     }()
-    
+
     lazy var locationTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "경기도 고양시 일산서구"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .lightGray
-        label.backgroundColor = .gray
         return label
     }()
-    
+
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "1시간 전"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .lightGray
-        label.backgroundColor = .gray
         return label
     }()
-    
+
     lazy var followButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("팔로우", for: .normal)
@@ -66,26 +82,24 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         return button
     }()
-    
+
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(DetailPhotoCollectionViewCell.self, forCellWithReuseIdentifier: DetailPhotoCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .yellow
         return collectionView
     }()
-    
+
     lazy var contentLabel: UILabel = {
         let label = UILabel()
         label.text = "아침산책~~"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .black
-        label.backgroundColor = .gray
         return label
     }()
-    
+
     lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         let heartImage = UIImage(systemName: "heart")
@@ -94,25 +108,23 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         button.backgroundColor = .green
         return button
     }()
-    
+
     lazy var likeLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .black
-        label.backgroundColor = .gray
         return label
     }()
-    
+
     lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         let commentImage = UIImage(systemName: "bubble.right")
         button.setImage(commentImage, for: .normal)
         button.tintColor = .black
-        button.backgroundColor = .green
         return button
     }()
-    
+
     lazy var commentLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
@@ -121,15 +133,74 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         return label
     }()
     
+    // 구분선
+    lazy var separatorLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .green
+        return view
+    }()
+    
+    // 댓글 없음 레이블
+    lazy var noCommentsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "댓글이 없습니다."
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .lightGray
+        return label
+    }()
+    
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+        tableView.separatorStyle = .singleLine
+        return tableView
+    }()
+    
+    
+    // 댓글 입력 뷰
+    lazy var commentInputView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray.withAlphaComponent(0.1)
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    lazy var commentTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "댓글을 입력해주세요"
+        textField.font = UIFont.systemFont(ofSize: 14)
+        return textField
+    }()
+    
+    lazy var sendButton: UIButton = {
+        let button = UIButton(type: .system)
+        let sendImage = UIImage(systemName: "paperplane.fill")
+        button.setImage(sendImage, for: .normal)
+        button.tintColor = .systemBlue
+        button.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var attachmentButton: UIButton = {
+        let button = UIButton(type: .system)
+        let attachImage = UIImage(systemName: "photo")
+        button.setImage(attachImage, for: .normal)
+        button.tintColor = .systemGray
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .lightGray
         collectionView.dataSource = self
         collectionView.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
         configureHierarchy()
         configureConstraints()
     }
-    
+
     private func configureHierarchy() {
         view.addSubview(userProfileImageView)
         view.addSubview(userNameLabel)
@@ -143,130 +214,188 @@ class DetailViewController: UIViewController, UICollectionViewDataSource, UIColl
         view.addSubview(likeLabel)
         view.addSubview(commentButton)
         view.addSubview(commentLabel)
+        view.addSubview(separatorLine)
+        view.addSubview(noCommentsLabel)
+        view.addSubview(tableView)
+        view.addSubview(commentInputView)
+        commentInputView.addSubview(attachmentButton)
+        commentInputView.addSubview(commentTextField)
+        commentInputView.addSubview(sendButton)
     }
-    
+
     private func configureConstraints() {
         userProfileImageView.snp.makeConstraints { make in
             make.top.left.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.width.height.equalTo(40)
         }
-        
+
         userNameLabel.snp.makeConstraints { make in
             make.top.equalTo(userProfileImageView.snp.top)
             make.left.equalTo(userProfileImageView.snp.right).offset(20)
             make.right.lessThanOrEqualTo(followButton.snp.left).offset(-10)
             make.height.lessThanOrEqualTo(20)
         }
-        
+
         infoLabel.snp.makeConstraints { make in
             make.top.equalTo(userNameLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
             make.height.lessThanOrEqualTo(20)
         }
-        
+
         locationTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(infoLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
             make.height.lessThanOrEqualTo(20)
         }
-        
+
         timeLabel.snp.makeConstraints { make in
             make.centerY.equalTo(locationTimeLabel)
             make.left.equalTo(locationTimeLabel.snp.right).offset(8)
         }
-        
+
         followButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.right.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.width.equalTo(60)
             make.height.equalTo(30)
         }
-        
+
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(locationTimeLabel.snp.bottom).offset(10)
             make.left.right.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.height.equalTo(200)
         }
-        
+
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(collectionView.snp.bottom).offset(4)
             make.left.equalTo(userProfileImageView)
             make.right.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.height.lessThanOrEqualTo(80)
         }
-        
+
         likeButton.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.bottom).offset(10)
             make.left.equalTo(contentLabel)
         }
-        
+
         likeLabel.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton)
             make.left.equalTo(likeButton.snp.right).offset(5)
         }
-        
+
         commentButton.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton)
             make.left.equalTo(likeLabel.snp.right).offset(20)
         }
-        
+
         commentLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentButton)
             make.left.equalTo(commentButton.snp.right).offset(5)
         }
+
+        separatorLine.snp.makeConstraints { make in
+            make.top.equalTo(likeButton.snp.bottom).offset(20)
+            make.left.right.equalTo(view).inset(20)
+            make.height.equalTo(1)
+        }
+        
+        noCommentsLabel.snp.makeConstraints { make in
+            make.top.equalTo(separatorLine.snp.bottom).offset(20)
+            make.centerX.equalTo(view)
+        }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(separatorLine.snp.bottom).offset(10)
+            make.left.right.equalTo(view).inset(20)
+            make.bottom.equalTo(commentInputView.snp.top).offset(-10)
+        }
+
+        commentInputView.snp.makeConstraints { make in
+            make.left.right.equalTo(view).inset(10)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.height.equalTo(50)
+        }
+        
+        attachmentButton.snp.makeConstraints { make in
+            make.left.equalTo(commentInputView).inset(10)
+            make.centerY.equalTo(commentInputView)
+            make.width.height.equalTo(24)
+        }
+        
+        commentTextField.snp.makeConstraints { make in
+            make.left.equalTo(attachmentButton.snp.right).offset(10)
+            make.centerY.equalTo(commentInputView)
+        }
+        
+        sendButton.snp.makeConstraints { make in
+            make.right.equalTo(commentInputView).inset(10)
+            make.centerY.equalTo(commentInputView)
+            make.width.height.equalTo(24)
+        }
     }
     
-    // MARK: - UICollectionViewDataSource
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5 // 테스트용으로 5개의 아이템 표시
+    @objc func sendButtonTapped() {
+        guard let text = commentTextField.text, !text.isEmpty else { return }
+        
+        // Get the current date and time
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // Customize the date format as needed
+        let currentDate = dateFormatter.string(from: Date())
+        
+        let newComment = Comment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
+        comments.append(newComment)
+        
+        commentTextField.text = ""
+        noCommentsLabel.isHidden = true
+        tableView.reloadData()
+    }
+
+
+}
+
+extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return comments.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailPhotoCollectionViewCell.identifier, for: indexPath) as! DetailPhotoCollectionViewCell
-        // 셀 이미지 설정
-        cell.imageView.image = UIImage(systemName: "lock.doc") // 예시 이미지
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
+        
+        let comment = comments[indexPath.row]
+        cell.configure(with: comment.profileImage, username: comment.username, date: comment.date, comment: comment.text)
+        
         return cell
     }
+}
+
+
+
+
+extension DetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - UICollectionViewDataSource
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return min(photos.count, 2) + (photos.count > 2 ? 1 : 0)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailPhotoCollectionViewCell.identifier, for: indexPath) as! DetailPhotoCollectionViewCell
+        
+        if indexPath.item < 2 {
+            cell.configure(with: photos[indexPath.item])
+        } else if indexPath.item == 2 && photos.count > 2 {
+            let remainingCount = photos.count - 2
+            cell.configure(with: photos[2], overlayText: "+\(remainingCount)")
+        }
+        
+        return cell
+    }
+
     // MARK: - UICollectionViewDelegateFlowLayout
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 100, height: 100)
     }
 }
 
-class DetailPhotoCollectionViewCell: UICollectionViewCell {
-    
-
-    
-    let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configureHierarchy()
-        configureConstraints()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func configureHierarchy() {
-        contentView.addSubview(imageView)
-    }
-    
-    private func configureConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-}
-
-
- 

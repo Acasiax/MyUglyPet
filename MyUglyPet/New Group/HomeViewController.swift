@@ -67,7 +67,7 @@ class HomeViewController: UIViewController {
     
     @objc private func plusButtonTapped() {
         print("Plus button tapped")
-        let postCreationVC = PostCreationViewController()
+        let postCreationVC = CreatePostViewController()
         self.navigationController?.pushViewController(postCreationVC, animated: true)
     }
 }
@@ -94,11 +94,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         detailViewController.title = "Post Detail \(indexPath.row + 1)"
         
       
-        if let navigationController = self.navigationController {
-            navigationController.pushViewController(detailViewController, animated: true)
-        } else {
-            present(detailViewController, animated: true, completion: nil)
-        }
+        navigationController?.pushViewController(detailViewController, animated: true)
+        
     }
 }
 
@@ -109,7 +106,7 @@ class AllPostTableViewCell: UITableViewCell {
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(systemName: "person.circle")
+        imageView.image = UIImage(named: "기본냥")
         return imageView
     }()
     
@@ -216,6 +213,8 @@ class AllPostTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
         configureConstraints()
+        commentButton.addTarget(self, action: #selector(handleCommentButtonTapped), for: .touchUpInside)
+
     }
     
     required init?(coder: NSCoder) {
@@ -262,7 +261,7 @@ class AllPostTableViewCell: UITableViewCell {
         
         timeLabel.snp.makeConstraints { make in
             make.top.equalTo(infoLabel.snp.bottom).offset(4)
-            make.left.equalTo(locationTimeLabel.snp.right).offset(8) 
+            make.left.equalTo(locationTimeLabel.snp.right).offset(8)
         }
         
         followButton.snp.makeConstraints { make in
@@ -303,6 +302,12 @@ class AllPostTableViewCell: UITableViewCell {
             make.left.equalTo(commentButton.snp.right).offset(5)
         }
     }
+    
+    @objc private func handleCommentButtonTapped() {
+        print("댓글 버튼이 눌렸습니다.")
+        
+    }
+
 }
 
 class PostCollectionViewCell: UICollectionViewCell {
@@ -311,7 +316,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "photo")
+        imageView.image = UIImage(named: "기본냥")
         return imageView
     }()
     
