@@ -30,7 +30,7 @@ class MainHomeViewController: UIViewController {
     private let missions: [Mission] = MissionData.missions
     
 
-    private lazy var dogButton: UIButton = {
+    private lazy var petButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "기본냥"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
@@ -77,7 +77,7 @@ class MainHomeViewController: UIViewController {
     }
 
     private func setupLayout() {
-        view.addSubview(dogButton)
+        view.addSubview(petButton)
         view.addSubview(uploadButton)
         view.addSubview(collectionView)
         
@@ -85,15 +85,15 @@ class MainHomeViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        dogButton.snp.makeConstraints { make in
+        petButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-100)
+            make.centerY.equalToSuperview().offset(-200)
             make.width.height.equalTo(150)
         }
         
         uploadButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(dogButton.snp.bottom).offset(20)
+            make.top.equalTo(petButton.snp.bottom).offset(20)
             make.width.equalTo(200)
             make.height.equalTo(50)
         }
