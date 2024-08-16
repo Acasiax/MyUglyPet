@@ -25,6 +25,8 @@ class GameViewController: BaseGameView {
         Pet(name: "6님", age: "견생 5년차", image: UIImage(named: "기본냥")!)
        
     ]
+    let rounds: [String] = ["32강", "16강", "8강", "4강"]
+    var currentRoundIndex: Int = 0
     
     var currentPetIndex: Int = 0
     
@@ -59,21 +61,21 @@ class GameViewController: BaseGameView {
         }
     }
     
-//    @objc func firstContainerTapped() {
-//        print("첫번째 컨테이너가 선택되었습니다.")
-//        animateContainerView(firstContainerView)
-//        showNextPet(in: firstContainerView)
-//        // startAnimations()
-//    }
+    // 현재 라운드를 업데이트하고 라벨에 반영
+    func updateRound() {
+        currentRoundIndex = (currentRoundIndex + 1) % rounds.count
+        descriptionLabel.text = rounds[currentRoundIndex]
+    }
+    
     
     @objc func firstContainerTapped() {
         print("첫번째 컨테이너가 선택되었습니다.")
         animateContainerView(firstContainerView)
         
-        // 0.4초 지연 후 showNextPet 실행
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.startAnimations() 
-            self.showNextPet(in: self.firstContainerView)
+            self.updateRound()
+            self.startAnimations()
+            self.showNextPet(in: self.secondContainerView)
         }
         
         
@@ -84,10 +86,10 @@ class GameViewController: BaseGameView {
         print("두번째 컨테이너가 선택되었습니다.")
         animateContainerView(secondContainerView)
         
-        // 0.4초 지연 후 showNextPet 실행
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.updateRound()
             self.startAnimations()
-            self.showNextPet(in: self.secondContainerView)
+            self.showNextPet(in: self.firstContainerView)
         }
     }
 }
