@@ -134,7 +134,7 @@ extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     @objc private func missionButtonTapped() {
-        print("매뉴 버튼 탭")
+        print("하러가기 버튼 탭")
     }
     @objc private func uploadButtonTapped() {
         print("업로드 버튼 탭")

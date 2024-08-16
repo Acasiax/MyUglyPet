@@ -316,7 +316,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "기본냥멍1")
+        imageView.image = UIImage(named: "기본냥멍2")
         return imageView
     }()
     

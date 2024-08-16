@@ -35,6 +35,7 @@
 		AA7272F82C6F8668007551C4 /* PinkLightEffect.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272F72C6F8668007551C4 /* PinkLightEffect.json */; };
 		AA7272FA2C6F923F007551C4 /* yellowani.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272F92C6F923F007551C4 /* yellowani.json */; };
 		AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272FB2C6F975D007551C4 /* Congratulation.json */; };
+		AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		AA7272F72C6F8668007551C4 /* PinkLightEffect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PinkLightEffect.json; sourceTree = "<group>"; };
 		AA7272F92C6F923F007551C4 /* yellowani.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = yellowani.json; sourceTree = "<group>"; };
 		AA7272FB2C6F975D007551C4 /* Congratulation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Congratulation.json; sourceTree = "<group>"; };
+		AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
 				AA7272EB2C6DECD6007551C4 /* GameViewController.swift */,
 				AA7272ED2C6E637A007551C4 /* BaseGameView.swift */,
+				AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				AA7272EC2C6DECD6007551C4 /* GameViewController.swift in Sources */,
 				AA7272E52C6DC7E2007551C4 /* CommentTableViewCell.swift in Sources */,
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
+				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,

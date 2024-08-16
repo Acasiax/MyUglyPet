@@ -10,20 +10,20 @@ import SnapKit
 
 struct Pet {
     let name: String
-    let age: String
+    let hello: String
     let image: UIImage
 }
 
 class GameViewController: BaseGameView {
     
     let pets: [Pet] = [
-        Pet(name: "벼루님", age: "냥생 3개월차", image: UIImage(named: "기본냥멍1")!),
-        Pet(name: "꼬질이님", age: "견생 5년차", image: UIImage(named: "기본냥멍2")!),
-        Pet(name: "3님", age: "냥생 3개월차", image: UIImage(named: "기본냥멍3")!),
-        Pet(name: "4님", age: "견생 5년차", image: UIImage(named: "기본냥멍4")!),
-        Pet(name: "5님", age: "냥생 3개월차", image: UIImage(named: "기본냥멍5")!),
-        Pet(name: "6님", age: "견생 5년차", image: UIImage(named: "기본냥멍6")!),
-        Pet(name: "7님", age: "견생 5년차", image: UIImage(named: "기본냥멍7")!),
+        Pet(name: "벼루님", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),
+        Pet(name: "꼬질이님", hello: "퇴근후 기절각", image: UIImage(named: "기본냥멍2")!),
+        Pet(name: "3님", hello: "꿀잠이다멍", image: UIImage(named: "기본냥멍3")!),
+        Pet(name: "4님", hello: "멈칫", image: UIImage(named: "기본냥멍4")!),
+        Pet(name: "5님", hello: "식칼어딨어멍멍", image: UIImage(named: "기본냥멍5")!),
+        Pet(name: "6님", hello: "왔냐?", image: UIImage(named: "기본냥멍6")!),
+        Pet(name: "7님", hello: "주인아밥줘라", image: UIImage(named: "기본냥멍7")!),
     ]
     
     let rounds: [String] = ["망한 사진 월드컵 32강", "망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
@@ -71,12 +71,12 @@ class GameViewController: BaseGameView {
         if containerView == firstContainerView {
             firstImageView.image = pet.image
             firstNameLabel.text = pet.name
-            firstPriceLabel.text = pet.age
+            firstPriceLabel.text = pet.hello
             currentPetIndex = newPetIndex
         } else if containerView == secondContainerView {
             secondImageView.image = pet.image
             secondNameLabel.text = pet.name
-            secondPriceLabel.text = pet.age
+            secondPriceLabel.text = pet.hello
             lastPetIndex = newPetIndex
         }
     }
@@ -90,7 +90,7 @@ class GameViewController: BaseGameView {
 
     func checkForFinalWinner(selectedPet: Pet) {
         if currentRoundIndex == 3 { // 현재 라운드가 4강인지 확인
-            print("4강 우승자: \(selectedPet.name), 나이: \(selectedPet.age)")
+            print("4강 우승자: \(selectedPet.name), 나이: \(selectedPet.hello)")
             
             // 첫 번째 컨테이너와 두 번째 컨테이너를 숨깁니다.
             UIView.animate(withDuration: 0.5, animations: {
@@ -119,7 +119,7 @@ class GameViewController: BaseGameView {
     func showWinnerContainerView(with pet: Pet) {
         // 우승자의 정보를 winnerContainerView에 설정
         winnerNameLabel.text = pet.name
-        winnerAgeLabel.text = pet.age
+        winnerAgeLabel.text = pet.hello
         winnerImageView.image = pet.image
         
         // basiclottieAnimationView를 숨기기
