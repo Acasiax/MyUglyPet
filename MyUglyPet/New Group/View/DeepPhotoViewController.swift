@@ -8,6 +8,72 @@
 import UIKit
 import SnapKit
 
+class CustomPageControl: UIView {
+    
+    private var stackView = UIStackView()
+    private var indicators = [UIImageView]()
+    
+    var numberOfPages: Int = 0 {
+        didSet {
+            setupIndicators()
+        }
+    }
+    
+    var currentPage: Int = 0 {
+        didSet {
+            updateIndicators()
+        }
+    }
+    
+    var currentPageImage: UIImage?
+    var pageImage: UIImage?
+    var indicatorTintColor: UIColor = .gray
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupStackView()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupStackView()
+    }
+    
+    private func setupStackView() {
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+        addSubview(stackView)
+        
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    private func setupIndicators() {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        indicators.removeAll()
+        
+        for _ in 0..<numberOfPages {
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFit
+            imageView.tintColor = indicatorTintColor
+            imageView.image = pageImage
+            indicators.append(imageView)
+            stackView.addArrangedSubview(imageView)
+        }
+        
+        updateIndicators()
+    }
+    
+    private func updateIndicators() {
+        for (index, imageView) in indicators.enumerated() {
+            imageView.image = index == currentPage ? currentPageImage : pageImage
+        }
+    }
+}
+
 class DeepPhotoViewController: UIViewController {
     
     var photos: [UIImage] = []
@@ -19,19 +85,20 @@ class DeepPhotoViewController: UIViewController {
         layout.minimumLineSpacing = 0
         layout.itemSize = UIScreen.main.bounds.size
         layout.sectionInset = .zero
+
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = CustomColors.softBlue
         return collectionView
     }()
     
-    private let pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = .white
-        pageControl.pageIndicatorTintColor = .gray
-        pageControl.hidesForSinglePage = true
+    private let customPageControl: CustomPageControl = {
+        let pageControl = CustomPageControl()
+        pageControl.currentPageImage = UIImage(systemName: "pawprint.circle.fill") // 현재 페이지 이미지
+    
+        pageControl.pageImage = UIImage(systemName: "pawprint.circle") // 기본 페이지 이미지
         return pageControl
     }()
     
@@ -45,17 +112,17 @@ class DeepPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = CustomColors.softPurple
         view.addSubview(collectionView)
-        view.addSubview(pageControl)
+        view.addSubview(customPageControl)
         view.addSubview(closeButton)
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
+        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.identifier)
         
-        pageControl.numberOfPages = photos.count
-        pageControl.currentPage = selectedIndex
+        customPageControl.numberOfPages = photos.count
+        customPageControl.currentPage = selectedIndex
         
         setupConstraints()
         
@@ -68,8 +135,8 @@ class DeepPhotoViewController: UIViewController {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
-        pageControl.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+        customPageControl.snp.makeConstraints { make in
+            make.bottom.equalTo(collectionView.snp.bottom).offset(-50)
             make.centerX.equalToSuperview()
         }
         
@@ -81,7 +148,7 @@ class DeepPhotoViewController: UIViewController {
     }
     
     @objc private func closeButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -93,14 +160,14 @@ extension DeepPhotoViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
         cell.imageView.image = photos[indexPath.item]
         return cell
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
-        pageControl.currentPage = pageIndex
+        customPageControl.currentPage = pageIndex
     }
 }
 
