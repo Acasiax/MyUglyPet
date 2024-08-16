@@ -7,8 +7,39 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 class BaseGameView: UIViewController {
+    
+    
+    let basiclottieAnimationView: LottieAnimationView = {
+        let animationView = LottieAnimationView(name: "yellowani")
+        animationView.contentMode = .scaleAspectFill
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 0.5
+       // animationView.isHidden = true // 처음에는 숨김
+        return animationView
+    }()
+    
+    
+    let pinklottieAnimationView: LottieAnimationView = {
+        let animationView = LottieAnimationView(name: "PinkLightEffect")
+        animationView.contentMode = .scaleAspectFill
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 0.5
+        animationView.isHidden = true
+        return animationView
+    }()
+    
+    let congratulationAnimationView: LottieAnimationView = {
+        let animationView = LottieAnimationView(name: "Congratulation")
+        animationView.contentMode = .scaleAspectFill
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 0.5
+        animationView.isHidden = true
+        return animationView
+    }()
+    
     
     let worldCupLabel: UILabel = {
         let label = UILabel()
@@ -35,10 +66,14 @@ class BaseGameView: UIViewController {
     
     let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "32강!"
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.text = "망한 사진 월드컵 32강"
+        label.backgroundColor = CustomColors.softPink
+        //UIColor(red: 0.96, green: 0.62, blue: 0.04, alpha: 1.00)
         label.textAlignment = .center
-        label.textColor = .gray
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.layer.cornerRadius = 17
+        label.clipsToBounds = true
         return label
     }()
     
@@ -129,6 +164,16 @@ class BaseGameView: UIViewController {
         return label
     }()
     
+    let winnerTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "가장 망한 사진의\n우승자는!!"
+        label.font = UIFont.boldSystemFont(ofSize: 28)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true // 처음에는 숨김
+        return label
+    }()
+    
     let winnerContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .green
@@ -170,6 +215,9 @@ class BaseGameView: UIViewController {
     
     
     func addsub() {
+        view.addSubview(basiclottieAnimationView)
+        view.addSubview(pinklottieAnimationView)
+        view.addSubview(congratulationAnimationView)
         
         view.addSubview(worldCupLabel)
         view.addSubview(titleLabel)
@@ -177,6 +225,7 @@ class BaseGameView: UIViewController {
         view.addSubview(firstContainerView)
         view.addSubview(secondContainerView)
         view.addSubview(vsLabel)
+        view.addSubview(winnerTitleLabel)
         firstContainerView.addSubview(firstImageView)
         firstContainerView.addSubview(firstNameLabel)
         firstContainerView.addSubview(firstPriceLabel)
@@ -194,32 +243,38 @@ class BaseGameView: UIViewController {
     
     func setupUI() {
         
-        worldCupLabel.snp.makeConstraints { make in
+//        worldCupLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+//            make.centerX.equalToSuperview()
+//            make.height.equalTo(40) // 높이를 설정
+//            make.width.equalTo(130) // 텍스트보다 넓게 설정
+//        }
+        descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.centerX.equalToSuperview()
-            make.height.equalTo(40) // 높이를 설정
-            make.width.equalTo(130) // 텍스트보다 넓게 설정
+            make.height.equalTo(40)
+            make.width.equalTo(190)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(worldCupLabel.snp.bottom).offset(20)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
         }
         
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+        winnerTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
         }
         
         firstContainerView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(40)
+            make.top.equalTo(titleLabel.snp.bottom).offset(40)
             make.leading.equalToSuperview().offset(20)
             make.width.equalTo(160)
             make.height.equalTo(200)
         }
         
         secondContainerView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(40)
+            make.top.equalTo(titleLabel.snp.bottom).offset(40)
             make.trailing.equalToSuperview().offset(-20)
             make.width.equalTo(160)
             make.height.equalTo(200)
@@ -263,8 +318,43 @@ class BaseGameView: UIViewController {
             make.width.height.equalTo(30)
         }
         
+        basiclottieAnimationView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview() // 전체 화면을 애니메이션으로 덮기 위해 설정
+                }
+        
+        pinklottieAnimationView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview() // 전체 화면을 애니메이션으로 덮기 위해 설정
+                }
+        
+        congratulationAnimationView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(-30) 
+            make.centerX.equalToSuperview() // X축(가로축)에서 가운데 정렬
+        }
+
         
         
+        winnerContainerView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+               make.width.equalTo(200)
+               make.height.equalTo(250)
+               make.centerY.equalToSuperview().offset(-30)
+           }
+
+           winnerImageView.snp.makeConstraints { make in
+               make.top.equalToSuperview().offset(20)
+               make.centerX.equalToSuperview()
+               make.width.height.equalTo(100)
+           }
+
+           winnerNameLabel.snp.makeConstraints { make in
+               make.top.equalTo(winnerImageView.snp.bottom).offset(10)
+               make.centerX.equalToSuperview()
+           }
+
+           winnerAgeLabel.snp.makeConstraints { make in
+               make.top.equalTo(winnerNameLabel.snp.bottom).offset(5)
+               make.centerX.equalToSuperview()
+           }
         
         
         

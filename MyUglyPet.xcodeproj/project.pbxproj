@@ -30,6 +30,11 @@
 		AA7272EC2C6DECD6007551C4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272EB2C6DECD6007551C4 /* GameViewController.swift */; };
 		AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272ED2C6E637A007551C4 /* BaseGameView.swift */; };
 		AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272EF2C6F3C15007551C4 /* CustomColors.swift */; };
+		AA7272F22C6F82E2007551C4 /* LightEffectAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272F12C6F82E1007551C4 /* LightEffectAnimation.json */; };
+		AA7272F52C6F8389007551C4 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = AA7272F42C6F8389007551C4 /* Lottie */; };
+		AA7272F82C6F8668007551C4 /* PinkLightEffect.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272F72C6F8668007551C4 /* PinkLightEffect.json */; };
+		AA7272FA2C6F923F007551C4 /* yellowani.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272F92C6F923F007551C4 /* yellowani.json */; };
+		AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272FB2C6F975D007551C4 /* Congratulation.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +58,10 @@
 		AA7272EB2C6DECD6007551C4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		AA7272ED2C6E637A007551C4 /* BaseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGameView.swift; sourceTree = "<group>"; };
 		AA7272EF2C6F3C15007551C4 /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
+		AA7272F12C6F82E1007551C4 /* LightEffectAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = LightEffectAnimation.json; sourceTree = "<group>"; };
+		AA7272F72C6F8668007551C4 /* PinkLightEffect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PinkLightEffect.json; sourceTree = "<group>"; };
+		AA7272F92C6F923F007551C4 /* yellowani.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = yellowani.json; sourceTree = "<group>"; };
+		AA7272FB2C6F975D007551C4 /* Congratulation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Congratulation.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +74,7 @@
 				AA7272DA2C6CA0B0007551C4 /* RxSwift in Frameworks */,
 				AA7272D82C6CA0B0007551C4 /* RxCocoa in Frameworks */,
 				AA7272D22C6CA091007551C4 /* Alamofire in Frameworks */,
+				AA7272F52C6F8389007551C4 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +102,7 @@
 		AA7272B32C6C967C007551C4 /* MyUglyPet */ = {
 			isa = PBXGroup;
 			children = (
+				AA7272F62C6F85B2007551C4 /* Lottie */,
 				AA7272C82C6C97E9007551C4 /* New Group */,
 				AA7272B42C6C967C007551C4 /* AppDelegate.swift */,
 				AA7272B62C6C967C007551C4 /* SceneDelegate.swift */,
@@ -137,6 +148,17 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		AA7272F62C6F85B2007551C4 /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272F12C6F82E1007551C4 /* LightEffectAnimation.json */,
+				AA7272F72C6F8668007551C4 /* PinkLightEffect.json */,
+				AA7272F92C6F923F007551C4 /* yellowani.json */,
+				AA7272FB2C6F975D007551C4 /* Congratulation.json */,
+			);
+			path = Lottie;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -159,6 +181,7 @@
 				AA7272D42C6CA099007551C4 /* Kingfisher */,
 				AA7272D72C6CA0B0007551C4 /* RxCocoa */,
 				AA7272D92C6CA0B0007551C4 /* RxSwift */,
+				AA7272F42C6F8389007551C4 /* Lottie */,
 			);
 			productName = MyUglyPet;
 			productReference = AA7272B12C6C967C007551C4 /* MyUglyPet.app */;
@@ -193,6 +216,7 @@
 				AA7272D02C6CA091007551C4 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				AA7272D32C6CA099007551C4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				AA7272D62C6CA0B0007551C4 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = AA7272B22C6C967C007551C4 /* Products */;
 			projectDirPath = "";
@@ -208,8 +232,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7272FA2C6F923F007551C4 /* yellowani.json in Resources */,
+				AA7272F82C6F8668007551C4 /* PinkLightEffect.json in Resources */,
 				AA7272E02C6D860E007551C4 /* .gitignore in Resources */,
 				AA7272BE2C6C967E007551C4 /* Assets.xcassets in Resources */,
+				AA7272F22C6F82E2007551C4 /* LightEffectAnimation.json in Resources */,
+				AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */,
 				AA7272C12C6C967E007551C4 /* Base in Resources */,
 				AA7272BC2C6C967C007551C4 /* Base in Resources */,
 			);
@@ -502,6 +530,14 @@
 				minimumVersion = 6.7.1;
 			};
 		};
+		AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -529,6 +565,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA7272D62C6CA0B0007551C4 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		AA7272F42C6F8389007551C4 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
