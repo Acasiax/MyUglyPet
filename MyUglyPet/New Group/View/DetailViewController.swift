@@ -35,6 +35,7 @@ class DetailViewController: BaseDetailView {
         tableView.dataSource = self
         configureHierarchy()
         configureConstraints()
+   
     }
 }
 
@@ -62,21 +63,31 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let deepPhotoVC = DeepPhotoViewController()
+        deepPhotoVC.photos = photos
+        deepPhotoVC.selectedIndex = indexPath.item
+        navigationController?.pushViewController(deepPhotoVC, animated: true)
+    }
+
+    
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let collectionViewWidth = collectionView.bounds.width
         
         if photos.count == 1 {
             // 이미지가 1개일 때는 전체 컬렉션뷰의 너비를 사용
-            return CGSize(width: collectionViewWidth, height: collectionViewWidth)
+            return CGSize(width: collectionViewWidth, height: 200)  // 여기를 200으로 설정해보세요
         } else if photos.count == 2 {
             // 이미지가 2개일 때는 각각 절반 너비를 사용
-            return CGSize(width: collectionViewWidth / 2, height: collectionViewWidth / 2)
+            return CGSize(width: collectionViewWidth / 2, height: 200)  // 여기를 200으로 설정해보세요
         } else {
             // 이미지가 3개 이상일 때는 기본 크기를 사용 (예: 1/3 너비)
-            return CGSize(width: collectionViewWidth / 3, height: collectionViewWidth / 3)
+            return CGSize(width: collectionViewWidth / 3, height: 200)  // 여기를 200으로 설정해보세요
         }
     }
+
 }
 
 

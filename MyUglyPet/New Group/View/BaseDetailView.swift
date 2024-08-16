@@ -64,15 +64,7 @@ class BaseDetailView: UIViewController {
         return button
     }()
 
-    let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(DetailPhotoCollectionViewCell.self, forCellWithReuseIdentifier: DetailPhotoCollectionViewCell.identifier)
-      //  collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isScrollEnabled = false // 스크롤 비활성화
-        collectionView.backgroundColor = .yellow
-        return collectionView
-    }()
+ 
 
     lazy var contentLabel: UILabel = {
         let label = UILabel()
@@ -139,6 +131,21 @@ class BaseDetailView: UIViewController {
         return tableView
     }()
     
+    
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0  // 줄 간격을 0으로 설정해보세요
+        layout.minimumInteritemSpacing = 0  // 셀 간 간격을 0으로 설정해보세요
+        layout.sectionInset = .zero  // 섹션 인셋을 0으로 설정해보세요
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(DetailPhotoCollectionViewCell.self, forCellWithReuseIdentifier: DetailPhotoCollectionViewCell.identifier)
+        collectionView.showsHorizontalScrollIndicator = true
+        collectionView.isScrollEnabled = false // 스크롤 비활성화
+        collectionView.backgroundColor = .yellow
+       
+        return collectionView
+    }()
     
     // 댓글 입력 뷰
     lazy var commentInputView: UIView = {
