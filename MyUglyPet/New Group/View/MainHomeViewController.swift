@@ -32,7 +32,7 @@ class MainHomeViewController: UIViewController {
 
     private lazy var petButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "기본냥"), for: .normal)
+        button.setImage(UIImage(named: "기본냥멍1"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.clipsToBounds = true
         button.layer.cornerRadius = 75
@@ -71,7 +71,7 @@ class MainHomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red: 0.74, green: 0.88, blue: 1.00, alpha: 1.00)
+        view.backgroundColor = CustomColors.softBlue
         
         setupLayout() 
     }
@@ -162,7 +162,7 @@ class MissionCell: UICollectionViewCell {
     }
     
     func configure(iconName: String, title: String, carrotCount: Int) {
-        iconImageView.image = UIImage(named: "기본냥")
+        iconImageView.image = UIImage(named: "기본냥멍1")
         iconImageView.backgroundColor = .yellow
         titleLabel.text = title
         carrotLabel.text = "🥕 당근 \(carrotCount)개"
@@ -170,7 +170,7 @@ class MissionCell: UICollectionViewCell {
     }
     
     private func setupCell() {
-        contentView.backgroundColor = UIColor(red: 1.00, green: 0.98, blue: 0.88, alpha: 1.00)
+        contentView.backgroundColor = CustomColors.lightBeige
         contentView.layer.cornerRadius = 10
         contentView.addSubview(iconImageView)
         contentView.addSubview(titleLabel)
@@ -181,9 +181,9 @@ class MissionCell: UICollectionViewCell {
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         carrotLabel.font = UIFont.systemFont(ofSize: 14)
         carrotLabel.textColor = .orange
-        actionButton.setTitleColor(.green, for: .normal)
+        actionButton.setTitleColor(.white, for: .normal)
         actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        actionButton.backgroundColor = .lightGray
+        actionButton.backgroundColor = CustomColors.softPink
         actionButton.layer.cornerRadius = 10
     }
     

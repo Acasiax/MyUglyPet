@@ -13,12 +13,12 @@ class BaseGameView: UIViewController {
     let worldCupLabel: UILabel = {
         let label = UILabel()
         label.text = "망한 사진 월드컵"
-        label.backgroundColor = UIColor(red: 1.00, green: 0.53, blue: 0.67, alpha: 1.00)
-        label.textColor = .white // 텍스트 색상을 변경할 수 있습니다.
+        label.backgroundColor = CustomColors.softPink
+        label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textAlignment = .center
-        label.layer.cornerRadius = 13 // 높이의 절반으로 설정 (타원형)
-        label.clipsToBounds = true // 레이블의 모서리를 둥글게 잘라냄
+        label.layer.cornerRadius = 13
+        label.clipsToBounds = true
         
         return label
     }()
@@ -44,7 +44,7 @@ class BaseGameView: UIViewController {
     
     let firstContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 0.95, green: 0.77, blue: 0.98, alpha: 1.00)
+        view.backgroundColor = CustomColors.softPurple
         view.layer.cornerRadius = 20
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1
@@ -57,7 +57,7 @@ class BaseGameView: UIViewController {
     let firstImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "기본냥")
+        imageView.image = UIImage(systemName: "star")
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 50
         return imageView
@@ -82,7 +82,7 @@ class BaseGameView: UIViewController {
     
     let secondContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 0.74, green: 0.88, blue: 1.00, alpha: 1.00)
+        view.backgroundColor = CustomColors.softBlue
         view.layer.cornerRadius = 20
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1
@@ -94,7 +94,7 @@ class BaseGameView: UIViewController {
     let secondImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "기본냥멍2")
+        imageView.image = UIImage(systemName: "figure.stand")
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 50
         return imageView
@@ -129,6 +129,45 @@ class BaseGameView: UIViewController {
         return label
     }()
     
+    let winnerContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .green
+        view.layer.cornerRadius = 20
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOffset = CGSize(width: 0, height: 5)
+        view.layer.shadowRadius = 10
+        view.isHidden = true // 처음에는 숨김
+        return view
+    }()
+
+    let winnerImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(systemName: "star")
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 50
+        return imageView
+    }()
+
+    let winnerNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "우승자"
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textAlignment = .center
+        return label
+    }()
+
+    let winnerAgeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "나이"
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textAlignment = .center
+        label.textColor = .gray
+        return label
+    }()
+
+    
     
     func addsub() {
         
@@ -146,6 +185,11 @@ class BaseGameView: UIViewController {
         secondContainerView.addSubview(secondImageView)
         secondContainerView.addSubview(secondNameLabel)
         secondContainerView.addSubview(secondPriceLabel)
+        
+        view.addSubview(winnerContainerView)
+            winnerContainerView.addSubview(winnerImageView)
+            winnerContainerView.addSubview(winnerNameLabel)
+            winnerContainerView.addSubview(winnerAgeLabel)
     }
     
     func setupUI() {
@@ -156,12 +200,6 @@ class BaseGameView: UIViewController {
             make.height.equalTo(40) // 높이를 설정
             make.width.equalTo(130) // 텍스트보다 넓게 설정
         }
-
-        
-//        worldCupLabel.snp.makeConstraints { make in
-//            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-//            make.centerX.equalToSuperview()
-//        }
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(worldCupLabel.snp.bottom).offset(20)
@@ -224,5 +262,11 @@ class BaseGameView: UIViewController {
             make.centerX.equalToSuperview()
             make.width.height.equalTo(30)
         }
+        
+        
+        
+        
+        
+        
     }
 }

@@ -106,7 +106,7 @@ class AllPostTableViewCell: UITableViewCell {
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "기본냥")
+        imageView.image = UIImage(named: "기본냥멍1")
         return imageView
     }()
     
@@ -316,7 +316,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "기본냥")
+        imageView.image = UIImage(named: "기본냥멍1")
         return imageView
     }()
     

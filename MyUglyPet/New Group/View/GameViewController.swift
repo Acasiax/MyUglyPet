@@ -17,83 +17,118 @@ struct Pet {
 class GameViewController: BaseGameView {
     
     let pets: [Pet] = [
-        Pet(name: "벼루님", age: "냥생 3개월차", image: UIImage(named: "기본냥")!),
+        Pet(name: "벼루님", age: "냥생 3개월차", image: UIImage(named: "기본냥멍1")!),
         Pet(name: "꼬질이님", age: "견생 5년차", image: UIImage(named: "기본냥멍2")!),
         Pet(name: "3님", age: "냥생 3개월차", image: UIImage(named: "기본냥멍3")!),
         Pet(name: "4님", age: "견생 5년차", image: UIImage(named: "기본냥멍4")!),
-        Pet(name: "5", age: "냥생 3개월차", image: UIImage(named: "기본냥멍5")!),
+        Pet(name: "5님", age: "냥생 3개월차", image: UIImage(named: "기본냥멍5")!),
         Pet(name: "6님", age: "견생 5년차", image: UIImage(named: "기본냥멍6")!),
-        Pet(name: "7님", age: "견생 5년차", image: UIImage(named: "기본냥멍7")!)
-       
+        Pet(name: "7님", age: "견생 5년차", image: UIImage(named: "기본냥멍7")!),
     ]
-    let rounds: [String] = ["32강", "16강", "8강", "4강"]
+    
+    let rounds: [String] = ["32강", "16강", "8강", "4강", "결승"]
     var currentRoundIndex: Int = 0
-    
     var currentPetIndex: Int = 0
-    
+    var lastPetIndex: Int?
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startAnimations()
+        showInitialPets()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 1.00, green: 0.98, blue: 0.88, alpha: 1.00)
+        view.backgroundColor = CustomColors.lightBeige
         addsub()
         setupUI()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
-        view.addGestureRecognizer(tapGesture)
+        tapGest()
+    }
+    
+    func tapGest() {
+        let firstTapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
+        firstContainerView.addGestureRecognizer(firstTapGesture)
+        
         let secondTapGesture = UITapGestureRecognizer(target: self, action: #selector(secondContainerTapped))
         secondContainerView.addGestureRecognizer(secondTapGesture)
     }
     
+    func showInitialPets() {
+        showNextPet(in: firstContainerView)
+        showNextPet(in: secondContainerView)
+    }
+    
     func showNextPet(in containerView: UIView) {
-        currentPetIndex = (currentPetIndex + 1) % pets.count
-        let pet = pets[currentPetIndex]
+        var newPetIndex: Int
+        repeat {
+            newPetIndex = Int.random(in: 0..<pets.count)
+        } while newPetIndex == currentPetIndex || newPetIndex == lastPetIndex
+        
+        let pet = pets[newPetIndex]
         
         if containerView == firstContainerView {
             firstImageView.image = pet.image
             firstNameLabel.text = pet.name
             firstPriceLabel.text = pet.age
+            currentPetIndex = newPetIndex
         } else if containerView == secondContainerView {
             secondImageView.image = pet.image
             secondNameLabel.text = pet.name
             secondPriceLabel.text = pet.age
+            lastPetIndex = newPetIndex
         }
     }
     
-    // 현재 라운드를 업데이트하고 라벨에 반영
     func updateRound() {
-        currentRoundIndex = (currentRoundIndex + 1) % rounds.count
-        descriptionLabel.text = rounds[currentRoundIndex]
+        currentRoundIndex += 1
+        if currentRoundIndex < rounds.count {
+            descriptionLabel.text = rounds[currentRoundIndex]
+        }
     }
     
+    func checkForFinalWinner(selectedPet: Pet) {
+        if currentRoundIndex == 3 { // 현재 라운드가 4강인지 확인
+            print("4강 우승자: \(selectedPet.name), 나이: \(selectedPet.age)")
+        }
+    }
     
     @objc func firstContainerTapped() {
         print("첫번째 컨테이너가 선택되었습니다.")
+        let selectedPet = pets[currentPetIndex]
+        checkForFinalWinner(selectedPet: selectedPet)
+        
         animateContainerView(firstContainerView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.updateRound()
-            self.startAnimations()
-            self.showNextPet(in: self.secondContainerView)
+            if self.currentRoundIndex < self.rounds.count - 1 {
+                self.startAnimations()
+                self.showNextPet(in: self.secondContainerView)
+            }
         }
-        
-        
     }
-    
     
     @objc func secondContainerTapped() {
         print("두번째 컨테이너가 선택되었습니다.")
+        let selectedPet = pets[lastPetIndex!]
+        checkForFinalWinner(selectedPet: selectedPet)
+        
         animateContainerView(secondContainerView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.updateRound()
-            self.startAnimations()
-            self.showNextPet(in: self.firstContainerView)
+            if self.currentRoundIndex < self.rounds.count - 1 {
+                self.startAnimations()
+                self.showNextPet(in: self.firstContainerView)
+            }
         }
     }
 }
+
+
+
+
+
 
 
 //애니메이션 코드
