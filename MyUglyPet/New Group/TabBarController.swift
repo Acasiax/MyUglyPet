@@ -41,11 +41,11 @@ enum MainTab: CaseIterable {
     var viewController: UIViewController {
         let viewController: UIViewController
         switch self {
-        case .music: viewController = DetailViewController()
+        case .music: viewController = CreatePostViewController()
         case .movies: viewController = MainHomeViewController()
-        case .podcast: viewController = GameViewController()
+        case .podcast: viewController = DetailViewController()
         case .books: viewController = AllPostHomeViewController()
-        case .search: viewController =  CreatePostViewController()
+        case .search: viewController =  GameViewController()
         }
         let navController = UINavigationController(rootViewController: viewController)
                navController.tabBarItem = UITabBarItem(title: self.title, image: self.image, tag: self.hashValue)

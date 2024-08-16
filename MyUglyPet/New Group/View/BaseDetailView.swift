@@ -127,6 +127,7 @@ class BaseDetailView: UIViewController {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+        tableView.backgroundColor = CustomColors.softBlue
         tableView.separatorStyle = .singleLine
         return tableView
     }()
