@@ -281,7 +281,7 @@ class BaseDetailView: UIViewController {
 
         separatorLine.snp.makeConstraints { make in
             make.top.equalTo(likeButton.snp.bottom).offset(20)
-            make.left.right.equalTo(view).inset(20)
+            make.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(1)
         }
         
@@ -292,12 +292,12 @@ class BaseDetailView: UIViewController {
         
         tableView.snp.makeConstraints { make in
             make.top.equalTo(separatorLine.snp.bottom).offset(10)
-            make.left.right.equalTo(view).inset(20)
+            make.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(commentInputView.snp.top).offset(-10)
         }
 
         commentInputView.snp.makeConstraints { make in
-            make.left.right.equalTo(view).inset(10)
+            make.left.right.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
         }

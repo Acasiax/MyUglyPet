@@ -44,6 +44,7 @@
 		AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273102C7065C3007551C4 /* ScrollViewController.swift */; };
 		AA72731B2C7078D9007551C4 /* arrowup.json in Resources */ = {isa = PBXBuildFile; fileRef = AA72731A2C7078D8007551C4 /* arrowup.json */; };
 		AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */; };
+		AA7273202C70E03A007551C4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7273202C70E03A007551C4 /* IQKeyboardManagerSwift in Frameworks */,
 				AA7272D52C6CA099007551C4 /* Kingfisher in Frameworks */,
 				AA7272CF2C6CA082007551C4 /* SnapKit in Frameworks */,
 				AA7272DA2C6CA0B0007551C4 /* RxSwift in Frameworks */,
@@ -265,6 +267,7 @@
 				AA7272D72C6CA0B0007551C4 /* RxCocoa */,
 				AA7272D92C6CA0B0007551C4 /* RxSwift */,
 				AA7272F42C6F8389007551C4 /* Lottie */,
+				AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */,
 			);
 			productName = MyUglyPet;
 			productReference = AA7272B12C6C967C007551C4 /* MyUglyPet.app */;
@@ -300,6 +303,7 @@
 				AA7272D32C6CA099007551C4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				AA7272D62C6CA0B0007551C4 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				AA72731E2C70E03A007551C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = AA7272B22C6C967C007551C4 /* Products */;
 			projectDirPath = "";
@@ -630,6 +634,14 @@
 				minimumVersion = 4.5.0;
 			};
 		};
+		AA72731E2C70E03A007551C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -662,6 +674,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA72731E2C70E03A007551C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

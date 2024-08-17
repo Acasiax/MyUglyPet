@@ -89,7 +89,7 @@ class AllPostTableViewCell: UITableViewCell {
     lazy var contentLabel: UILabel = {
         let label = UILabel()
         label.text = "우리집 강쥐 오늘 해피하게 뻗음"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .black
         return label
     }()
@@ -193,20 +193,22 @@ class AllPostTableViewCell: UITableViewCell {
             make.right.equalToSuperview().inset(10)
         }
 
+        contentLabel.snp.makeConstraints { make in
+            make.top.equalTo(locationTimeLabel.snp.bottom).offset(25)
+            make.left.equalTo(userProfileImageView)
+        }
+        
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(locationTimeLabel.snp.bottom).offset(10)
+            make.top.equalTo(contentLabel.snp.bottom).offset(10)
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(200)
         }
 
-        contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(4)
-            make.left.equalTo(userProfileImageView)
-        }
+       
 
         likeButton.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(10)
-            make.left.equalTo(contentLabel)
+            make.top.equalTo(collectionView.snp.bottom).offset(10)
+            make.left.equalTo(collectionView)
             make.bottom.equalToSuperview().inset(10)
         }
 
