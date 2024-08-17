@@ -45,6 +45,12 @@
 		AA72731B2C7078D9007551C4 /* arrowup.json in Resources */ = {isa = PBXBuildFile; fileRef = AA72731A2C7078D8007551C4 /* arrowup.json */; };
 		AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */; };
 		AA7273202C70E03A007551C4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */; };
+		AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273222C70F8AC007551C4 /* LoginViewController.swift */; };
+		AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273242C70FB7E007551C4 /* BirthdayInputViewController.swift */; };
+		AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273262C70FC0A007551C4 /* NameInputViewController.swift */; };
+		AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273282C70FCA4007551C4 /* EmailInputViewController.swift */; };
+		AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72732B2C70FD18007551C4 /* PasswordInputViewController.swift */; };
+		AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72732D2C70FD85007551C4 /* PhoneNumberInputViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +87,12 @@
 		AA7273102C7065C3007551C4 /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		AA72731A2C7078D8007551C4 /* arrowup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = arrowup.json; sourceTree = "<group>"; };
 		AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableViewCell.swift; sourceTree = "<group>"; };
+		AA7273222C70F8AC007551C4 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		AA7273242C70FB7E007551C4 /* BirthdayInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayInputViewController.swift; sourceTree = "<group>"; };
+		AA7273262C70FC0A007551C4 /* NameInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputViewController.swift; sourceTree = "<group>"; };
+		AA7273282C70FCA4007551C4 /* EmailInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailInputViewController.swift; sourceTree = "<group>"; };
+		AA72732B2C70FD18007551C4 /* PasswordInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputViewController.swift; sourceTree = "<group>"; };
+		AA72732D2C70FD85007551C4 /* PhoneNumberInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberInputViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +172,7 @@
 		AA7272E82C6DD8BF007551C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AA7273212C70F891007551C4 /* LoginView */,
 				AA72730D2C705ED9007551C4 /* DetailPost */,
 				AA7273092C704145007551C4 /* HomeView */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
@@ -242,6 +255,27 @@
 				AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */,
 			);
 			path = DetailPost;
+			sourceTree = "<group>";
+		};
+		AA7273212C70F891007551C4 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				AA7273222C70F8AC007551C4 /* LoginViewController.swift */,
+				AA72732A2C70FCF7007551C4 /* SignUp */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		AA72732A2C70FCF7007551C4 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				AA7273262C70FC0A007551C4 /* NameInputViewController.swift */,
+				AA7273282C70FCA4007551C4 /* EmailInputViewController.swift */,
+				AA72732B2C70FD18007551C4 /* PasswordInputViewController.swift */,
+				AA72732D2C70FD85007551C4 /* PhoneNumberInputViewController.swift */,
+				AA7273242C70FB7E007551C4 /* BirthdayInputViewController.swift */,
+			);
+			path = SignUp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -339,8 +373,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */,
+				AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */,
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
+				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,
 				AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */,
 				AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */,
 				AA7272EC2C6DECD6007551C4 /* GameViewController.swift in Sources */,
@@ -350,15 +386,19 @@
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
+				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,
 				AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */,
 				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA72730F2C705EFC007551C4 /* BaseAllPostView.swift in Sources */,
+				AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */,
 				AA72730C2C70419A007551C4 /* Protocol+.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,
 				AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */,
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
+				AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */,
+				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
