@@ -37,6 +37,7 @@
 		AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */ = {isa = PBXBuildFile; fileRef = AA7272FB2C6F975D007551C4 /* Congratulation.json */; };
 		AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */; };
 		AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */; };
+		AA7273032C70287B007551C4 /* AnimationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273022C70287B007551C4 /* AnimationUtility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		AA7272FB2C6F975D007551C4 /* Congratulation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Congratulation.json; sourceTree = "<group>"; };
 		AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailView.swift; sourceTree = "<group>"; };
 		AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepPhotoViewController.swift; sourceTree = "<group>"; };
+		AA7273022C70287B007551C4 /* AnimationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationUtility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		AA7272B32C6C967C007551C4 /* MyUglyPet */ = {
 			isa = PBXGroup;
 			children = (
+				AA7273012C70286A007551C4 /* Animation */,
 				AA7272F62C6F85B2007551C4 /* Lottie */,
 				AA7272C82C6C97E9007551C4 /* New Group */,
 				AA7272B42C6C967C007551C4 /* AppDelegate.swift */,
@@ -163,6 +166,14 @@
 				AA7272FB2C6F975D007551C4 /* Congratulation.json */,
 			);
 			path = Lottie;
+			sourceTree = "<group>";
+		};
+		AA7273012C70286A007551C4 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				AA7273022C70287B007551C4 /* AnimationUtility.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +277,7 @@
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
+				AA7273032C70287B007551C4 /* AnimationUtility.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,

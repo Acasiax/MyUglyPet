@@ -14,8 +14,9 @@ struct Pet {
     let image: UIImage
 }
 
+
 class GameViewController: BaseGameView {
-    
+
     let pets: [Pet] = [
         Pet(name: "벼루님", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),
         Pet(name: "꼬질이님", hello: "퇴근후 기절각", image: UIImage(named: "기본냥멍2")!),
@@ -33,7 +34,7 @@ class GameViewController: BaseGameView {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startAnimations()
+        AnimationUtility.startAnimations(firstContainerView: firstContainerView, secondContainerView: secondContainerView, titleLabel: titleLabel, worldCupLabel: worldCupLabel, in: view)
         showInitialPets()
     }
     
@@ -44,7 +45,6 @@ class GameViewController: BaseGameView {
         setupUI()
         tapGest()
         basiclottieAnimationView.play()
-        
     }
     
     func tapGest() {
@@ -92,7 +92,6 @@ class GameViewController: BaseGameView {
         if currentRoundIndex == 3 { // 현재 라운드가 4강인지 확인
             print("4강 우승자: \(selectedPet.name), 나이: \(selectedPet.hello)")
             
-            // 첫 번째 컨테이너와 두 번째 컨테이너를 숨깁니다.
             UIView.animate(withDuration: 0.5, animations: {
                 self.titleLabel.alpha = 0
                 self.firstContainerView.alpha = 0
@@ -103,58 +102,40 @@ class GameViewController: BaseGameView {
                 self.firstContainerView.isHidden = true
                 self.secondContainerView.isHidden = true
                 self.vsLabel.isHidden = true
-               
                 
-                // 우승자의 정보를 설정하고 winnerContainerView를 표시합니다.
                 self.showWinnerContainerView(with: selectedPet)
             }
         }
     }
 
-    
-    
-    
-    
-    
     func showWinnerContainerView(with pet: Pet) {
-        // 우승자의 정보를 winnerContainerView에 설정
         winnerNameLabel.text = pet.name
         winnerAgeLabel.text = pet.hello
         winnerImageView.image = pet.image
-        
-        // basiclottieAnimationView를 숨기기
-           basiclottieAnimationView.isHidden = true
 
-        
+        basiclottieAnimationView.isHidden = true
+
         winnerTitleLabel.isHidden = false
-        // winnerContainerView를 화면에 표시
         winnerContainerView.isHidden = false
-  
-       
+
         winnerContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
         
-        //우승자 카드 회전해서 나오는 애니메이션
         animateWinnerContainerView()
     }
 
-    
-   
-
-
-    
     @objc func firstContainerTapped() {
         print("첫번째 컨테이너가 선택되었습니다.")
         let selectedPet = pets[currentPetIndex]
         checkForFinalWinner(selectedPet: selectedPet)
         
-        animateContainerView(firstContainerView)
+        AnimationUtility.animateContainerView(firstContainerView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.updateRound()
             if self.currentRoundIndex < self.rounds.count - 1 {
-                self.startAnimations()
+                AnimationUtility.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
                 self.showNextPet(in: self.secondContainerView)
-                self.animateDescriptionLabel()
+                AnimationUtility.animateDescriptionLabel(self.descriptionLabel)
             }
         }
     }
@@ -164,14 +145,14 @@ class GameViewController: BaseGameView {
         let selectedPet = pets[lastPetIndex!]
         checkForFinalWinner(selectedPet: selectedPet)
         
-        animateContainerView(secondContainerView)
+        AnimationUtility.animateContainerView(secondContainerView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.updateRound()
             if self.currentRoundIndex < self.rounds.count - 1 {
-                self.startAnimations()
+                AnimationUtility.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
                 self.showNextPet(in: self.firstContainerView)
-                self.animateDescriptionLabel()
+                AnimationUtility.animateDescriptionLabel(self.descriptionLabel)
             }
         }
     }
@@ -183,48 +164,49 @@ class GameViewController: BaseGameView {
 
 
 
-//애니메이션 코드
-extension GameViewController {
-    
-    func startAnimations() {
-        // 처음 위치를 화면 아래로 설정
-        firstContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-        secondContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-        
-        // 첫 번째 컨테이너 애니메이션
-        UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-            self.firstContainerView.transform = .identity  // 첫 번째 컨테이너 원래 위치로 복원
-        }, completion: nil)
-        
-        // 두 번째 컨테이너 애니메이션 (첫 번째 컨테이너 시작 후 0.2초 지연)
-        UIView.animate(withDuration: 1.5, delay: 0.08, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-            self.secondContainerView.transform = .identity  // 두 번째 컨테이너 원래 위치로 복원
-        }, completion: nil)
-        
-        // titleLabel과 worldCupLabel 애니메이션 (첫 번째 컨테이너와 동시에 시작)
-        titleLabel.transform = CGAffineTransform(translationX: 0, y: 10)
-        worldCupLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-        
-        UIView.animate(withDuration: 1.0, delay: 0.3, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-            self.titleLabel.transform = .identity
-            self.worldCupLabel.transform = .identity
-        }, completion: nil)
-    }
 
-    
-    // 살짝 확대된 후 복원하는 애니메이션
-    func animateContainerView(_ view: UIView) {
-        UIView.animate(withDuration: 0.1, animations: {
-            view.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-        }) { (_) in
-            UIView.animate(withDuration: 0.1) {
-                view.transform = CGAffineTransform.identity
-            }
-        }
-    }
-    
-    
-    //우승자 카드 회전해서 나오는 애니메이션
+////애니메이션 코드
+extension GameViewController {
+//    
+//    func startAnimations() {
+//        // 처음 위치를 화면 아래로 설정
+//        firstContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+//        secondContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+//        
+//        // 첫 번째 컨테이너 애니메이션
+//        UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
+//            self.firstContainerView.transform = .identity  // 첫 번째 컨테이너 원래 위치로 복원
+//        }, completion: nil)
+//        
+//        // 두 번째 컨테이너 애니메이션 (첫 번째 컨테이너 시작 후 0.2초 지연)
+//        UIView.animate(withDuration: 1.5, delay: 0.08, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
+//            self.secondContainerView.transform = .identity  // 두 번째 컨테이너 원래 위치로 복원
+//        }, completion: nil)
+//        
+//        // titleLabel과 worldCupLabel 애니메이션 (첫 번째 컨테이너와 동시에 시작)
+//        titleLabel.transform = CGAffineTransform(translationX: 0, y: 10)
+//        worldCupLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+//        
+//        UIView.animate(withDuration: 1.0, delay: 0.3, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+//            self.titleLabel.transform = .identity
+//            self.worldCupLabel.transform = .identity
+//        }, completion: nil)
+//    }
+//
+//    
+//    // 살짝 확대된 후 복원하는 애니메이션
+//    func animateContainerView(_ view: UIView) {
+//        UIView.animate(withDuration: 0.1, animations: {
+//            view.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+//        }) { (_) in
+//            UIView.animate(withDuration: 0.1) {
+//                view.transform = CGAffineTransform.identity
+//            }
+//        }
+//    }
+//    
+//    
+//    //우승자 카드 회전해서 나오는 애니메이션
     func animateWinnerContainerView() {
         // 카드 회전 전에 Lottie 애니메이션 숨기기
         self.pinklottieAnimationView.isHidden = true
@@ -249,22 +231,22 @@ extension GameViewController {
             }
         }
     }
-
-
-    
-    
-    //몇강 라운드인지 알려주는 애니메이션
-    func animateDescriptionLabel() {
-        // 확대 시작 상태 (1.2배로 확대)
-        descriptionLabel.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-        
-        // 애니메이션 적용
-        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut, animations: {
-            // 확대된 상태에서 원래 상태로 되돌립니다.
-            self.descriptionLabel.transform = .identity
-        }, completion: nil)
-    }
-
-    
+//
+//
+//    
+//    
+//    //몇강 라운드인지 알려주는 애니메이션
+//    func animateDescriptionLabel() {
+//        // 확대 시작 상태 (1.2배로 확대)
+//        descriptionLabel.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+//        
+//        // 애니메이션 적용
+//        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut, animations: {
+//            // 확대된 상태에서 원래 상태로 되돌립니다.
+//            self.descriptionLabel.transform = .identity
+//        }, completion: nil)
+//    }
+//
+//    
 }
 

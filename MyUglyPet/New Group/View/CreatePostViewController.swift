@@ -4,11 +4,22 @@
 //
 //  Created by 이윤지 on 8/14/24.
 //
+//    let reviewTextView: UITextField = {
+//        let textField = UITextField()
+//        textField.layer.borderColor = UIColor.lightGray.cgColor
+//        textField.layer.borderWidth = 1
+//        textField.layer.cornerRadius = 5
+//        textField.font = UIFont.systemFont(ofSize: 16)
+//        textField.placeholder = "여기에 내용을 입력하세요..."
+//        textField.contentVerticalAlignment = .top // 커서를 상단에 맞춤
+//        return textField
+//    }()
+
 
 import UIKit
 import SnapKit
 
-class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+class CreatePostViewController: UIViewController, UITextViewDelegate {
 
     // 요소를 클로저 형태로 정의
     let submitButton: UIButton = {
@@ -32,7 +43,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFiel
     
     let minimumTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "/ 최소10자"
+        label.text = "/ 최소5자"
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .lightGray
         return label
@@ -43,13 +54,14 @@ class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFiel
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 10
+        button.backgroundColor = CustomColors.softPink.withAlphaComponent(0.5)
         button.addTarget(self, action: #selector(photoAttachmentButtonTapped), for: .touchUpInside)
         return button
     }()
     
     let cameraIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "camera"))
-        imageView.tintColor = .lightGray
+        imageView.tintColor = .white
         return imageView
     }()
     
@@ -71,7 +83,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFiel
     
     let guidelineLabel: UILabel = {
         let label = UILabel()
-        label.text = "반려동물의 소개글을 10자 이상 남겨주시면 다른 냥멍집사에게도 도움이 됩니다."
+        label.text = "반려동물의 소개글을 5자 이상 남겨주시면 다른 냥멍집사에게도 도움이 됩니다."
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.numberOfLines = 0
@@ -86,28 +98,15 @@ class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFiel
         textView.font = UIFont.systemFont(ofSize: 16)
         return textView
     }()
-    
-//    let reviewTextView: UITextField = {
-//        let textField = UITextField()
-//        textField.layer.borderColor = UIColor.lightGray.cgColor
-//        textField.layer.borderWidth = 1
-//        textField.layer.cornerRadius = 5
-//        textField.font = UIFont.systemFont(ofSize: 16)
-//        textField.placeholder = "여기에 내용을 입력하세요..."
-//        textField.contentVerticalAlignment = .top // 커서를 상단에 맞춤
-//        return textField
-//    }()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = CustomColors.lightBeige
         reviewTextView.delegate = self
         addSubviews()
         setupConstraints()
     }
     
-    // 모든 addSubview를 여기에 모아둠
     func addSubviews() {
         view.addSubview(photoAttachmentButton)
         photoAttachmentButton.addSubview(cameraIcon)
@@ -121,7 +120,6 @@ class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFiel
         view.addSubview(submitButton)
     }
     
-    // 오토레이아웃 설정을 여기에 모아둠
     func setupConstraints() {
         photoAttachmentButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
@@ -174,22 +172,22 @@ class CreatePostViewController: UIViewController, UITextViewDelegate, UITextFiel
             make.height.equalTo(50)
         }
     }
+ 
     
     @objc func photoAttachmentButtonTapped() {
-        print("Photo attachment button tapped")
+        print("카메라 버튼 탭")
+        AnimationUtility.animateButtonPress(photoAttachmentButton)
     }
     
     @objc func submitButtonTapped() {
-        print("Submit button tapped")
+        print("작성완료 버튼 탭")
     }
     
     func textViewDidChange(_ textView: UITextView) {
         if let text = textView.text {
-            // 글자 수에 따라 characterCountLabel 업데이트
             characterCountLabel.text = "\(text.count)"
             
-            // 글자 수가 10 이상이면 버튼 활성화
-            if text.count >= 10 {
+            if text.count >= 5 {
                 submitButton.isEnabled = true
                 submitButton.backgroundColor = .orange
             } else {
