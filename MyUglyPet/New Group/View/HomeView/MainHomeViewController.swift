@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 struct Mission {
     let iconName: String
@@ -23,13 +24,21 @@ struct MissionData {
 
 
 class MainHomeViewController: UIViewController {
-
+    
     private let missions: [Mission] = MissionData.missions
     
-
+    let arrowupLottieAnimationView: LottieAnimationView = {
+        let animationView = LottieAnimationView(name: "arrowup")
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 1.0
+        animationView.isHidden = true
+        return animationView
+    }()
+    
     private lazy var petButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "기본냥멍1"), for: .normal)
+        button.setImage(UIImage(named: "기본냥멍1"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.clipsToBounds = true
         button.layer.cornerRadius = 75
@@ -38,7 +47,7 @@ class MainHomeViewController: UIViewController {
         button.addTarget(self, action: #selector(petButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     private lazy var uploadButton: UIButton = {
         let button = UIButton()
         button.setTitle("울 애기 사진 업로드하기", for: .normal)
@@ -65,22 +74,48 @@ class MainHomeViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var feedLabel: UILabel = {
+        let label = UILabel()
+        
+        let fullString = NSMutableAttributedString(string: "\n친구들 게시글 보러가기")
+        
+        label.attributedText = fullString
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
+    // Pan Gesture Recognizer 추가
+    private let panGestureRecognizer = UIPanGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = CustomColors.softBlue
         
-        setupLayout() 
+        setupLayout()
+        
+        // Pan Gesture Recognizer 설정
+        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
+        view.addGestureRecognizer(panGestureRecognizer)
     }
-
+    
+    deinit {
+           print("MainHomeViewController 디이닛")
+       }
+    
     private func setupLayout() {
         view.addSubview(petButton)
         view.addSubview(uploadButton)
         view.addSubview(collectionView)
+        view.addSubview(feedLabel)
+        view.addSubview(arrowupLottieAnimationView)  // 애니메이션 추가
         
         setupConstraints()
     }
-
+    
     private func setupConstraints() {
         petButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -100,17 +135,77 @@ class MainHomeViewController: UIViewController {
             make.left.right.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-    }
+        
+        
+        arrowupLottieAnimationView.snp.makeConstraints { make in
+            make.centerX.equalTo(feedLabel)
+            make.bottom.equalTo(feedLabel.snp.top).offset(10)
+            make.width.equalTo(30)
+            make.height.equalTo(arrowupLottieAnimationView.snp.width).multipliedBy(1.0)  // 비율 유지
+        }
 
+        
+        feedLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+        
+      
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        arrowupLottieAnimationView.isHidden = false
+        arrowupLottieAnimationView.play()
+    }
+    
+    
     @objc private func petButtonTapped() {
         print("반려동물 이미지 탭")
         AnimationZip.animateButtonPress(petButton)
     }
+    
+    @objc private func uploadButtonTapped() {
+        print("울 애기 사진 업로드하기 버튼 탭")
+    }
+    
+    // Pan Gesture 처리
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        
+        if gesture.state == .changed {
+            if translation.y < 0 { // 아래로 드래그 중이면 (y가 음수)
+                view.transform = CGAffineTransform(translationX: 0, y: translation.y)
+            }
+        } else if gesture.state == .ended {
+            if translation.y < -100 { // 사용자가 충분히 아래로 스와이프했을 때
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: -self.view.frame.height)
+                }) { _ in
+                    let allPostHomeVC = AllPostHomeViewController()
+                    let navController = UINavigationController(rootViewController: allPostHomeVC)
 
-  
+                    navController.modalPresentationStyle = .overCurrentContext
+                    navController.modalTransitionStyle = .coverVertical
 
-   
+                    self.present(navController, animated: true) {
+                        self.view.transform = .identity
+                    }
+
+                }
+            } else {
+                // 드래그 거리가 짧아 원래 위치로 복귀
+                UIView.animate(withDuration: 0.3) {
+                    self.view.transform = .identity
+                }
+            }
+        }
+    }
+    
 }
+
+
+
 
 
 extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
@@ -155,13 +250,6 @@ extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDe
         }
     }
 
-
-
-    @objc private func uploadButtonTapped() {
-        print("업로드 버튼 탭")
-        AnimationZip.animateButtonPress(uploadButton)
-    }
-    
     
 }
 

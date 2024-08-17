@@ -26,6 +26,8 @@ class DetailViewController: BaseDetailView {
         UIImage(named: "기본냥멍6")!
     ]
     
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.lightBeige
@@ -36,7 +38,11 @@ class DetailViewController: BaseDetailView {
         configureHierarchy()
         configureConstraints()
    
+        
+        
     }
+
+    
 }
 
 

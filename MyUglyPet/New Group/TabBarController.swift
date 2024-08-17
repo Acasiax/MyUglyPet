@@ -41,11 +41,11 @@ enum MainTab: CaseIterable {
     var viewController: UIViewController {
         let viewController: UIViewController
         switch self {
-        case .music: viewController = CreatePostViewController()
-        case .movies: viewController = MainHomeViewController()
+        case .music: viewController = MainHomeViewController()
+        case .movies: viewController = AllPostHomeViewController()
         case .podcast: viewController = DetailViewController()
-        case .books: viewController = AllPostHomeViewController()
-        case .search: viewController =  GameViewController()
+        case .books: viewController = CreatePostViewController()
+        case .search: viewController = GameViewController()
         }
         let navController = UINavigationController(rootViewController: viewController)
                navController.tabBarItem = UITabBarItem(title: self.title, image: self.image, tag: self.hashValue)
@@ -68,5 +68,26 @@ class TabBarControllerFactory {
 
         tabBarController.viewControllers = viewControllers
         return tabBarController
+    }
+}
+
+
+// MARK: - Appearance 스트럭트
+struct Appearance {
+    static func setupTabBarAppearance() {
+        UITabBar.appearance().tintColor = .black
+        UITabBar.appearance().barTintColor = .white
+        UITabBar.appearance().backgroundColor = .white
+    }
+    
+    static func setupNavigationBarAppearance() {
+        UINavigationBar.appearance().barTintColor = CustomColors.softBlue
+        UINavigationBar.appearance().tintColor = .black
+        UINavigationBar.appearance().backgroundColor = CustomColors.softPurple
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: CustomColors.softPink]
+        
+        let backBarButtonItem = UIBarButtonItem.appearance()
+        backBarButtonItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.clear], for: .normal)
+        backBarButtonItem.title = ""
     }
 }

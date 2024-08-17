@@ -77,6 +77,21 @@ class BaseGameView: UIViewController {
         return label
     }()
     
+    
+    let submitWinnerButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("실시간 랭킹에 반영 할래요", for: .normal)
+        button.backgroundColor = CustomColors.softPink
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        button.layer.cornerRadius = 17
+        button.clipsToBounds = true
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+        button.isHidden = true
+        return button
+    }()
+
+    
     let firstContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColors.softPurple
@@ -226,6 +241,8 @@ class BaseGameView: UIViewController {
         view.addSubview(secondContainerView)
         view.addSubview(vsLabel)
         view.addSubview(winnerTitleLabel)
+        view.addSubview(submitWinnerButton)
+        
         firstContainerView.addSubview(firstImageView)
         firstContainerView.addSubview(firstNameLabel)
         firstContainerView.addSubview(firstPriceLabel)
@@ -327,7 +344,7 @@ class BaseGameView: UIViewController {
                 }
         
         congratulationAnimationView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(-30) 
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(-30)
             make.centerX.equalToSuperview() // X축(가로축)에서 가운데 정렬
         }
 
@@ -357,6 +374,11 @@ class BaseGameView: UIViewController {
            }
         
         
+        submitWinnerButton.snp.makeConstraints { make in
+            make.top.equalTo(winnerContainerView.snp.bottom).offset(30)
+            make.centerX.equalToSuperview()
+        }
+
         
     }
 }

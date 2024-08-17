@@ -40,6 +40,10 @@
 		AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273022C70287B007551C4 /* AnimationZip.swift */; };
 		AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273042C70403D007551C4 /* IndexMenuCollectionCell.swift */; };
 		AA72730C2C70419A007551C4 /* Protocol+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72730B2C70419A007551C4 /* Protocol+.swift */; };
+		AA72730F2C705EFC007551C4 /* BaseAllPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72730E2C705EFC007551C4 /* BaseAllPostView.swift */; };
+		AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273102C7065C3007551C4 /* ScrollViewController.swift */; };
+		AA72731B2C7078D9007551C4 /* arrowup.json in Resources */ = {isa = PBXBuildFile; fileRef = AA72731A2C7078D8007551C4 /* arrowup.json */; };
+		AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +76,10 @@
 		AA7273022C70287B007551C4 /* AnimationZip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationZip.swift; sourceTree = "<group>"; };
 		AA7273042C70403D007551C4 /* IndexMenuCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexMenuCollectionCell.swift; sourceTree = "<group>"; };
 		AA72730B2C70419A007551C4 /* Protocol+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Protocol+.swift"; sourceTree = "<group>"; };
+		AA72730E2C705EFC007551C4 /* BaseAllPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAllPostView.swift; sourceTree = "<group>"; };
+		AA7273102C7065C3007551C4 /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		AA72731A2C7078D8007551C4 /* arrowup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = arrowup.json; sourceTree = "<group>"; };
+		AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,11 +158,12 @@
 		AA7272E82C6DD8BF007551C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AA72730D2C705ED9007551C4 /* DetailPost */,
 				AA7273092C704145007551C4 /* HomeView */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
 				AA7273072C704079007551C4 /* Gameview */,
 				AA7273062C704075007551C4 /* CreatePost */,
-				AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */,
+				AA7273102C7065C3007551C4 /* ScrollViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -162,6 +171,7 @@
 		AA7272F62C6F85B2007551C4 /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				AA72731A2C7078D8007551C4 /* arrowup.json */,
 				AA7272F12C6F82E1007551C4 /* LightEffectAnimation.json */,
 				AA7272F72C6F8668007551C4 /* PinkLightEffect.json */,
 				AA7272F92C6F923F007551C4 /* yellowani.json */,
@@ -199,9 +209,9 @@
 		AA7273082C7040F1007551C4 /* ReadingPostView */ = {
 			isa = PBXGroup;
 			children = (
-				AA7272DB2C6CE55B007551C4 /* DetailViewController.swift */,
-				AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */,
-				AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */,
+				AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */,
+				AA72730E2C705EFC007551C4 /* BaseAllPostView.swift */,
+				AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */,
 			);
 			path = ReadingPostView;
 			sourceTree = "<group>";
@@ -220,6 +230,16 @@
 				AA72730B2C70419A007551C4 /* Protocol+.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		AA72730D2C705ED9007551C4 /* DetailPost */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272DB2C6CE55B007551C4 /* DetailViewController.swift */,
+				AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */,
+				AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */,
+			);
+			path = DetailPost;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,6 +319,7 @@
 				AA7272F82C6F8668007551C4 /* PinkLightEffect.json in Resources */,
 				AA7272E02C6D860E007551C4 /* .gitignore in Resources */,
 				AA7272BE2C6C967E007551C4 /* Assets.xcassets in Resources */,
+				AA72731B2C7078D9007551C4 /* arrowup.json in Resources */,
 				AA7272F22C6F82E2007551C4 /* LightEffectAnimation.json in Resources */,
 				AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */,
 				AA7272C12C6C967E007551C4 /* Base in Resources */,
@@ -323,9 +344,12 @@
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
+				AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
 				AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */,
+				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
+				AA72730F2C705EFC007551C4 /* BaseAllPostView.swift in Sources */,
 				AA72730C2C70419A007551C4 /* Protocol+.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,

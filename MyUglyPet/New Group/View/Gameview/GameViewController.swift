@@ -14,9 +14,6 @@ struct Pet {
     let image: UIImage
 }
 
-
-
-
 class GameViewController: BaseGameView {
 
     let pets: [Pet] = [
@@ -119,6 +116,7 @@ class GameViewController: BaseGameView {
 
         winnerTitleLabel.isHidden = false
         winnerContainerView.isHidden = false
+        submitWinnerButton.isHidden = false
 
         winnerContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
         
