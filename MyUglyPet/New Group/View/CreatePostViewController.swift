@@ -4,24 +4,14 @@
 //
 //  Created by 이윤지 on 8/14/24.
 //
-//    let reviewTextView: UITextField = {
-//        let textField = UITextField()
-//        textField.layer.borderColor = UIColor.lightGray.cgColor
-//        textField.layer.borderWidth = 1
-//        textField.layer.cornerRadius = 5
-//        textField.font = UIFont.systemFont(ofSize: 16)
-//        textField.placeholder = "여기에 내용을 입력하세요..."
-//        textField.contentVerticalAlignment = .top // 커서를 상단에 맞춤
-//        return textField
-//    }()
 
 
 import UIKit
 import SnapKit
+import PhotosUI
 
 class CreatePostViewController: UIViewController, UITextViewDelegate {
 
-    // 요소를 클로저 형태로 정의
     let submitButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("작성 완료", for: .normal)
@@ -47,6 +37,20 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .lightGray
         return label
+    }()
+    
+    let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        return scrollView
+    }()
+    
+    let imageContainerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.alignment = .center
+        return stackView
     }()
     
     let photoAttachmentButton: UIButton = {
@@ -98,7 +102,23 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         textView.font = UIFont.systemFont(ofSize: 16)
         return textView
     }()
-
+    
+    //    let reviewTextView: UITextField = {
+    //        let textField = UITextField()
+    //        textField.layer.borderColor = UIColor.lightGray.cgColor
+    //        textField.layer.borderWidth = 1
+    //        textField.layer.cornerRadius = 5
+    //        textField.font = UIFont.systemFont(ofSize: 16)
+    //        textField.placeholder = "여기에 내용을 입력하세요..."
+    //        textField.contentVerticalAlignment = .top // 커서를 상단에 맞춤
+    //        return textField
+    //    }()
+    
+    var selectedImageData: Data?
+    
+    // 선택된 이미지를 담을 배열
+    var selectedImages: [UIView] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.lightBeige
@@ -108,7 +128,10 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
     }
     
     func addSubviews() {
-        view.addSubview(photoAttachmentButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(imageContainerStackView)
+        
+        imageContainerStackView.addArrangedSubview(photoAttachmentButton)
         photoAttachmentButton.addSubview(cameraIcon)
         photoAttachmentButton.addSubview(photoCountLabel)
         
@@ -121,9 +144,18 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
     }
     
     func setupConstraints() {
-        photoAttachmentButton.snp.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.leading.equalTo(view).offset(20)
+            make.leading.trailing.equalTo(view).inset(20)
+            make.height.equalTo(90)
+        }
+        
+        imageContainerStackView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView)
+            make.height.equalTo(scrollView)
+        }
+        
+        photoAttachmentButton.snp.makeConstraints { make in
             make.width.height.equalTo(90)
         }
         
@@ -138,7 +170,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         }
         
         rewardLabel.snp.makeConstraints { make in
-            make.top.equalTo(photoAttachmentButton.snp.bottom).offset(10)
+            make.top.equalTo(scrollView.snp.bottom).offset(10)
             make.leading.equalTo(view).offset(20)
         }
         
@@ -172,15 +204,23 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(50)
         }
     }
- 
     
     @objc func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
         AnimationUtility.animateButtonPress(photoAttachmentButton)
+
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
     }
     
     @objc func submitButtonTapped() {
         print("작성완료 버튼 탭")
+        AnimationUtility.animateButtonPress(submitButton)
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -193,6 +233,73 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
             } else {
                 submitButton.isEnabled = false
                 submitButton.backgroundColor = .lightGray
+            }
+        }
+    }
+    
+    func addSelectedImage(_ image: UIImage) {
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 10
+        
+        let container = UIView()
+        container.layer.cornerRadius = 10
+        container.layer.borderColor = UIColor.lightGray.cgColor
+        container.layer.borderWidth = 1
+        container.addSubview(imageView)
+        
+        imageView.snp.makeConstraints { make in
+            make.edges.equalTo(container)
+            make.width.height.equalTo(90)
+        }
+        
+        let deleteButton = UIButton()
+        deleteButton.setTitle("x", for: .normal)
+        deleteButton.setTitleColor(.white, for: .normal)
+        deleteButton.backgroundColor = .black.withAlphaComponent(0.7)
+        deleteButton.layer.cornerRadius = 10
+        deleteButton.addTarget(self, action: #selector(deleteImage(_:)), for: .touchUpInside)
+        container.addSubview(deleteButton)
+        
+        deleteButton.snp.makeConstraints { make in
+            make.top.right.equalTo(container).inset(5)
+            make.width.height.equalTo(20)
+        }
+        
+        imageContainerStackView.addArrangedSubview(container)
+        selectedImages.append(container)
+        updatePhotoCountLabel()
+    }
+    
+    @objc func deleteImage(_ sender: UIButton) {
+        if let container = sender.superview, let index = selectedImages.firstIndex(of: container) {
+            selectedImages[index].removeFromSuperview()
+            selectedImages.remove(at: index)
+            updatePhotoCountLabel()
+        }
+    }
+    
+    func updatePhotoCountLabel() {
+        let count = selectedImages.count
+        photoCountLabel.text = "\(count)/5"
+    }
+}
+
+// MARK: - PHPicker 사진 선택
+extension CreatePostViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        if let itemProvider = results.first?.itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard let self = self else { return }
+                
+                if let image = image as? UIImage {
+                    DispatchQueue.main.async {
+                        self.addSelectedImage(image)
+                    }
+                }
             }
         }
     }

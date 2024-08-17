@@ -167,46 +167,8 @@ class GameViewController: BaseGameView {
 
 ////애니메이션 코드
 extension GameViewController {
-//    
-//    func startAnimations() {
-//        // 처음 위치를 화면 아래로 설정
-//        firstContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-//        secondContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-//        
-//        // 첫 번째 컨테이너 애니메이션
-//        UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-//            self.firstContainerView.transform = .identity  // 첫 번째 컨테이너 원래 위치로 복원
-//        }, completion: nil)
-//        
-//        // 두 번째 컨테이너 애니메이션 (첫 번째 컨테이너 시작 후 0.2초 지연)
-//        UIView.animate(withDuration: 1.5, delay: 0.08, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
-//            self.secondContainerView.transform = .identity  // 두 번째 컨테이너 원래 위치로 복원
-//        }, completion: nil)
-//        
-//        // titleLabel과 worldCupLabel 애니메이션 (첫 번째 컨테이너와 동시에 시작)
-//        titleLabel.transform = CGAffineTransform(translationX: 0, y: 10)
-//        worldCupLabel.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-//        
-//        UIView.animate(withDuration: 1.0, delay: 0.3, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-//            self.titleLabel.transform = .identity
-//            self.worldCupLabel.transform = .identity
-//        }, completion: nil)
-//    }
-//
-//    
-//    // 살짝 확대된 후 복원하는 애니메이션
-//    func animateContainerView(_ view: UIView) {
-//        UIView.animate(withDuration: 0.1, animations: {
-//            view.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-//        }) { (_) in
-//            UIView.animate(withDuration: 0.1) {
-//                view.transform = CGAffineTransform.identity
-//            }
-//        }
-//    }
-//    
-//    
-//    //우승자 카드 회전해서 나오는 애니메이션
+    
+    //우승자 카드 회전해서 나오는 애니메이션
     func animateWinnerContainerView() {
         // 카드 회전 전에 Lottie 애니메이션 숨기기
         self.pinklottieAnimationView.isHidden = true
@@ -231,22 +193,6 @@ extension GameViewController {
             }
         }
     }
-//
-//
-//    
-//    
-//    //몇강 라운드인지 알려주는 애니메이션
-//    func animateDescriptionLabel() {
-//        // 확대 시작 상태 (1.2배로 확대)
-//        descriptionLabel.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-//        
-//        // 애니메이션 적용
-//        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut, animations: {
-//            // 확대된 상태에서 원래 상태로 되돌립니다.
-//            self.descriptionLabel.transform = .identity
-//        }, completion: nil)
-//    }
-//
-//    
+
 }
 
