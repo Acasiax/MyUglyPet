@@ -5,7 +5,6 @@
 //  Created by 이윤지 on 8/14/24.
 //
 
-
 import UIKit
 import SnapKit
 import PhotosUI
@@ -53,7 +52,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         return stackView
     }()
     
-    let photoAttachmentButton: UIButton = {
+    let sendButton: UIButton = {
         let button = UIButton()
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
@@ -103,17 +102,6 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         return textView
     }()
     
-    //    let reviewTextView: UITextField = {
-    //        let textField = UITextField()
-    //        textField.layer.borderColor = UIColor.lightGray.cgColor
-    //        textField.layer.borderWidth = 1
-    //        textField.layer.cornerRadius = 5
-    //        textField.font = UIFont.systemFont(ofSize: 16)
-    //        textField.placeholder = "여기에 내용을 입력하세요..."
-    //        textField.contentVerticalAlignment = .top // 커서를 상단에 맞춤
-    //        return textField
-    //    }()
-    
     var selectedImageData: Data?
     
     // 선택된 이미지를 담을 배열
@@ -131,9 +119,9 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         view.addSubview(scrollView)
         scrollView.addSubview(imageContainerStackView)
         
-        imageContainerStackView.addArrangedSubview(photoAttachmentButton)
-        photoAttachmentButton.addSubview(cameraIcon)
-        photoAttachmentButton.addSubview(photoCountLabel)
+        imageContainerStackView.addArrangedSubview(sendButton)
+        sendButton.addSubview(cameraIcon)
+        sendButton.addSubview(photoCountLabel)
         
         view.addSubview(rewardLabel)
         view.addSubview(guidelineLabel)
@@ -155,18 +143,18 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(scrollView)
         }
         
-        photoAttachmentButton.snp.makeConstraints { make in
+        sendButton.snp.makeConstraints { make in
             make.width.height.equalTo(90)
         }
         
         cameraIcon.snp.makeConstraints { make in
-            make.center.equalTo(photoAttachmentButton)
+            make.center.equalTo(sendButton)
             make.width.height.equalTo(40)
         }
         
         photoCountLabel.snp.makeConstraints { make in
             make.top.equalTo(cameraIcon.snp.bottom).offset(8)
-            make.centerX.equalTo(photoAttachmentButton)
+            make.centerX.equalTo(sendButton)
         }
         
         rewardLabel.snp.makeConstraints { make in
@@ -207,7 +195,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
     
     @objc func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
-        AnimationUtility.animateButtonPress(photoAttachmentButton)
+        AnimationZip.animateButtonPress(sendButton)
 
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -219,8 +207,19 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func submitButtonTapped() {
-        print("작성완료 버튼 탭")
-        AnimationUtility.animateButtonPress(submitButton)
+        // reviewTextView의 텍스트 출력
+        print("작성한 글: \(reviewTextView.text ?? "")")
+        
+        // 추가된 이미지 정보 출력
+        print("추가한 이미지 갯수: \(selectedImages.count)")
+        for (index, imageViewContainer) in selectedImages.enumerated() {
+            if let imageView = imageViewContainer.subviews.first as? UIImageView, let image = imageView.image {
+                print("이미지 - 인덱스 \(index + 1): 사이즈 \(image.size)")
+            }
+        }
+
+        // 애니메이션 추가
+        AnimationZip.animateButtonPress(submitButton)
     }
     
     func textViewDidChange(_ textView: UITextView) {

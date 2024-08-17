@@ -15,6 +15,8 @@ struct Pet {
 }
 
 
+
+
 class GameViewController: BaseGameView {
 
     let pets: [Pet] = [
@@ -34,7 +36,7 @@ class GameViewController: BaseGameView {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        AnimationUtility.startAnimations(firstContainerView: firstContainerView, secondContainerView: secondContainerView, titleLabel: titleLabel, worldCupLabel: worldCupLabel, in: view)
+        AnimationZip.startAnimations(firstContainerView: firstContainerView, secondContainerView: secondContainerView, titleLabel: titleLabel, worldCupLabel: worldCupLabel, in: view)
         showInitialPets()
     }
     
@@ -128,14 +130,14 @@ class GameViewController: BaseGameView {
         let selectedPet = pets[currentPetIndex]
         checkForFinalWinner(selectedPet: selectedPet)
         
-        AnimationUtility.animateContainerView(firstContainerView)
+        AnimationZip.animateContainerView(firstContainerView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.updateRound()
             if self.currentRoundIndex < self.rounds.count - 1 {
-                AnimationUtility.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
+                AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
                 self.showNextPet(in: self.secondContainerView)
-                AnimationUtility.animateDescriptionLabel(self.descriptionLabel)
+                AnimationZip.animateDescriptionLabel(self.descriptionLabel)
             }
         }
     }
@@ -145,14 +147,14 @@ class GameViewController: BaseGameView {
         let selectedPet = pets[lastPetIndex!]
         checkForFinalWinner(selectedPet: selectedPet)
         
-        AnimationUtility.animateContainerView(secondContainerView)
+        AnimationZip.animateContainerView(secondContainerView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.updateRound()
             if self.currentRoundIndex < self.rounds.count - 1 {
-                AnimationUtility.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
+                AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
                 self.showNextPet(in: self.firstContainerView)
-                AnimationUtility.animateDescriptionLabel(self.descriptionLabel)
+                AnimationZip.animateDescriptionLabel(self.descriptionLabel)
             }
         }
     }

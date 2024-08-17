@@ -8,20 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - ReusableIdentifier 프로토콜
-protocol ReusableIdentifier {
-    static var identifier: String { get }
-}
-
-// MARK: - UIView 확장
-extension UIView: ReusableIdentifier {
-    static var identifier: String {
-        return String(describing: self)
-    }
-}
-
-
-
 class AllPostHomeViewController: UIViewController {
     
     let plusButton: UIButton = {
@@ -32,6 +18,7 @@ class AllPostHomeViewController: UIViewController {
         button.backgroundColor = .orange
         button.layer.cornerRadius = 30
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -50,7 +37,7 @@ class AllPostHomeViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         configureConstraints()
-        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+       
         
     }
     
@@ -66,9 +53,16 @@ class AllPostHomeViewController: UIViewController {
     }
     
     @objc private func plusButtonTapped() {
-        print("Plus button tapped")
-        let postCreationVC = CreatePostViewController()
-        self.navigationController?.pushViewController(postCreationVC, animated: true)
+        print("게시글추가 +버튼 탭")
+        AnimationZip.animateButtonPress(plusButton)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            
+            let postCreationVC = CreatePostViewController()
+            self.navigationController?.pushViewController(postCreationVC, animated: true)
+        }
+        
+       
     }
 }
 
@@ -150,6 +144,7 @@ class AllPostTableViewCell: UITableViewCell {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -159,8 +154,13 @@ class AllPostTableViewCell: UITableViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
+
+        collectionView.layer.cornerRadius = 10
+        collectionView.clipsToBounds = true
+
         return collectionView
     }()
+
     
     lazy var contentLabel: UILabel = {
         let label = UILabel()
@@ -307,6 +307,13 @@ class AllPostTableViewCell: UITableViewCell {
         print("댓글 버튼이 눌렸습니다.")
         
     }
+    
+    @objc func followButtonTapped() {
+        print("팔로우 버튼 탭")
+        AnimationZip.animateButtonPress(followButton)
+        
+    }
+    
 
 }
 

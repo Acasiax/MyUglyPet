@@ -4,9 +4,6 @@
 //
 //  Created by 이윤지 on 8/15/24.
 //
-//베이지 UIColor(red: 1.00, green: 0.98, blue: 0.88, alpha: 1.00)
-//블루  UIColor(red: 0.74, green: 0.88, blue: 1.00, alpha: 1.00)
-
 
 import UIKit
 import SnapKit
@@ -38,7 +35,7 @@ class MainHomeViewController: UIViewController {
         button.layer.cornerRadius = 75
         button.layer.borderColor = UIColor.orange.cgColor
         button.layer.borderWidth = 2
-        button.addTarget(self, action: #selector(dogButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(petButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -63,7 +60,7 @@ class MainHomeViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
-        collectionView.register(MissionCell.self, forCellWithReuseIdentifier: MissionCell.identifier)
+        collectionView.register(IndexMenuCollectionCell.self, forCellWithReuseIdentifier: IndexMenuCollectionCell.identifier)
         
         return collectionView
     }()
@@ -105,8 +102,9 @@ class MainHomeViewController: UIViewController {
         }
     }
 
-    @objc private func dogButtonTapped() {
+    @objc private func petButtonTapped() {
         print("반려동물 이미지 탭")
+        AnimationZip.animateButtonPress(petButton)
     }
 
   
@@ -122,7 +120,7 @@ extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MissionCell.identifier, for: indexPath) as! MissionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IndexMenuCollectionCell.identifier, for: indexPath) as! IndexMenuCollectionCell
         let mission = missions[indexPath.item]
         cell.configure(iconName: mission.iconName, title: mission.title, carrotCount: mission.carrotCount)
         cell.actionButton.addTarget(self, action: #selector(missionButtonTapped), for: .touchUpInside)
@@ -131,84 +129,40 @@ extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("인덱스 \(indexPath.item) 눌렀지요")
+        // guard let cell = sender.superview?.superview as? MissionCell else { return }
+       
     }
     
-    @objc private func missionButtonTapped() {
-        print("하러가기 버튼 탭")
+    @objc private func missionButtonTapped(_ sender: UIButton) {
+        // 어떤 셀의 버튼이 눌렸는지 확인하기 위해 sender를 이용
+        guard let cell = sender.superview?.superview as? IndexMenuCollectionCell else { return }
+        
+        // 해당 셀의 인덱스를 찾기 위해 collectionView에서 인덱스 가져오기
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+
+        print("하러가기 버튼 탭, 인덱스: \(indexPath.item)")
+
+        // 버튼 애니메이션 실행
+        AnimationZip.animateButtonPress(sender)
+        
+        // 애니메이션이 끝난 후에 화면 전환을 하기 위해 비동기 작업 추가
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // 0.3초 후에 실행
+            // 인덱스가 0일 경우 GameViewController로 이동
+            if indexPath.item == 0 {
+                let gameViewController = GameViewController()
+                self.navigationController?.pushViewController(gameViewController, animated: true)
+            }
+        }
     }
+
+
+
     @objc private func uploadButtonTapped() {
         print("업로드 버튼 탭")
+        AnimationZip.animateButtonPress(uploadButton)
     }
     
     
 }
 
 
-class MissionCell: UICollectionViewCell {
-    
-    private let iconImageView = UIImageView()
-    private let titleLabel = UILabel()
-    private let carrotLabel = UILabel()
-    let actionButton = UIButton()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupCell()
-        setupConstraints()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(iconName: String, title: String, carrotCount: Int) {
-        iconImageView.image = UIImage(named: "기본냥멍1")
-        iconImageView.backgroundColor = .yellow
-        titleLabel.text = title
-        carrotLabel.text = "🥕 당근 \(carrotCount)개"
-        actionButton.setTitle("하러가기", for: .normal)
-    }
-    
-    private func setupCell() {
-        contentView.backgroundColor = CustomColors.lightBeige
-        contentView.layer.cornerRadius = 10
-        contentView.addSubview(iconImageView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(carrotLabel)
-        contentView.addSubview(actionButton)
-        
-        iconImageView.contentMode = .scaleAspectFit
-        titleLabel.font = UIFont.systemFont(ofSize: 16)
-        carrotLabel.font = UIFont.systemFont(ofSize: 14)
-        carrotLabel.textColor = .orange
-        actionButton.setTitleColor(.white, for: .normal)
-        actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        actionButton.backgroundColor = CustomColors.softPink
-        actionButton.layer.cornerRadius = 10
-    }
-    
-    private func setupConstraints() {
-        iconImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(10)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(40)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(iconImageView.snp.right).offset(10)
-            make.top.equalToSuperview().offset(10)
-        }
-        
-        carrotLabel.snp.makeConstraints { make in
-            make.left.equalTo(iconImageView.snp.right).offset(10)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-        }
-        
-        actionButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-10)
-            make.centerY.equalToSuperview()
-            make.width.equalTo(70)
-            make.height.equalTo(30)
-        }
-    }
-}

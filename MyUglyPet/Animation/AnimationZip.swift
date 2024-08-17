@@ -8,7 +8,7 @@
 import UIKit
 import Lottie
 
-class AnimationUtility {
+class AnimationZip {
     
     // 버튼에 작아졌다 복구되는 애니메이션을 적용하는 함수
     static func animateButtonPress(_ button: UIButton, scale: CGFloat = 0.9, duration: TimeInterval = 0.1) {
@@ -20,6 +20,8 @@ class AnimationUtility {
             }
         }
     }
+    
+    
     
     //MARK: -
 

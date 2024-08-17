@@ -39,7 +39,7 @@ class BaseDetailView: UIViewController {
 
     lazy var locationTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "경기도 고양시 일산서구"
+        label.text = "경기도 김포시 운양동"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .lightGray
         return label
@@ -61,6 +61,7 @@ class BaseDetailView: UIViewController {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -135,15 +136,19 @@ class BaseDetailView: UIViewController {
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0  // 줄 간격을 0으로 설정해보세요
-        layout.minimumInteritemSpacing = 0  // 셀 간 간격을 0으로 설정해보세요
-        layout.sectionInset = .zero  // 섹션 인셋을 0으로 설정해보세요
+        layout.minimumLineSpacing = 0  // 줄 간격을
+        layout.minimumInteritemSpacing = 0  // 셀 간 간격
+        layout.sectionInset = .zero  // 섹션 인셋
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(DetailPhotoCollectionViewCell.self, forCellWithReuseIdentifier: DetailPhotoCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = true
         collectionView.isScrollEnabled = false // 스크롤 비활성화
         collectionView.backgroundColor = .yellow
+        // 모서리를 둥글게 설정
+        collectionView.layer.cornerRadius = 10 // 원하는 반지름 값으로 설정
+        collectionView.clipsToBounds = true
+        
        
         return collectionView
     }()
@@ -330,6 +335,12 @@ class BaseDetailView: UIViewController {
         commentTextField.text = ""
         noCommentsLabel.isHidden = true
         tableView.reloadData()
+    }
+    
+    @objc func followButtonTapped() {
+        print("팔로우 버튼 탭")
+        AnimationZip.animateButtonPress(followButton)
+        
     }
     
     
