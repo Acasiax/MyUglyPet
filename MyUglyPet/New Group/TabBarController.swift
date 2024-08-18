@@ -41,11 +41,11 @@ enum MainTab: CaseIterable {
     var viewController: UIViewController {
         let viewController: UIViewController
         switch self {
-        case .music: viewController = NameInputViewController()
-        case .movies: viewController = EmailInputViewController()
-        case .podcast: viewController = PasswordInputViewController()
-        case .books: viewController = PhoneNumberInputViewController()
-        case .search: viewController = BirthdayInputViewController()
+        case .music: viewController = MainHomeViewController()
+        case .movies: viewController = AllPostHomeViewController()
+        case .podcast: viewController = DetailViewController()
+        case .books: viewController = GameViewController()
+        case .search: viewController = CreatePostViewController()
         }
         
         let navController = UINavigationController(rootViewController: viewController)

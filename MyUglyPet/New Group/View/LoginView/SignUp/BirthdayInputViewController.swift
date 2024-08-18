@@ -40,7 +40,7 @@ class BirthdayInputViewController: UIViewController {
         picker.preferredDatePickerStyle = .wheels
         picker.locale = Locale(identifier: "ko_KR") // 한국어 로케일 설정
         picker.maximumDate = Date() // 오늘 날짜까지만 선택 가능
-        picker.date = Calendar.current.date(byAdding: .year, value: -15, to: Date())! 
+        picker.date = Calendar.current.date(byAdding: .year, value: -10, to: Date())! // 초기값을 20년 전 날짜로 설정
         return picker
     }()
     

@@ -56,19 +56,18 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupActions()
     }
     
     func setupUI() {
         view.backgroundColor = CustomColors.softBlue
         
-      
         view.addSubview(welcomeLabel)
         view.addSubview(idTextField)
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
         view.addSubview(signupButton)
         
-    
         welcomeLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
             make.left.right.equalTo(view).inset(20)
@@ -97,4 +96,36 @@ class LoginViewController: UIViewController {
             make.centerX.equalTo(view)
         }
     }
+    
+    func setupActions() {
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func loginButtonTapped() {
+        print("로그인버튼탭")
+        
+        // 입력된 아이디와 비밀번호를 가져와 출력
+        let enteredUsername = idTextField.text ?? ""
+        let enteredPassword = passwordTextField.text ?? ""
+        
+        print("입력된 아이디: \(enteredUsername)")
+        print("입력된 비밀번호: \(enteredPassword)")
+        
+        let mainTabBarController = TabBarControllerFactory.createMainTabBarController()
+        
+        // Modal Presentation 설정
+        mainTabBarController.modalPresentationStyle = .fullScreen
+        mainTabBarController.modalTransitionStyle = .crossDissolve
+        
+        // 모달 방식으로 화면 전환
+        self.present(mainTabBarController, animated: true, completion: nil)
+    }
+
+        
+        @objc func signupButtonTapped() {
+            print("회원가입버튼탭")
+            let nameInputViewController = NameInputViewController()
+            navigationController?.pushViewController(nameInputViewController, animated: true)
+        }
 }

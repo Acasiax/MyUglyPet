@@ -18,7 +18,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 5
         button.isEnabled = false
-        button.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
+        button.addTarget(CreatePostViewController.self, action: #selector(submitButtonTapped), for: .touchUpInside)
         return button
     }()
     
