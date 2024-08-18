@@ -102,8 +102,10 @@ class PasswordInputViewController: UIViewController {
     
     @objc func nextButtonTapped() {
         print("다음버튼탭")
-           let phoneNumberInputVC = PhoneNumberInputViewController()
-           navigationController?.pushViewController(phoneNumberInputVC, animated: true)
+//           let phoneNumberInputVC = PhoneNumberInputViewController()
+//           navigationController?.pushViewController(phoneNumberInputVC, animated: true)
+        let welcomeVC = WelcomeViewController()
+        navigationController?.pushViewController(welcomeVC, animated: true)
        }
     
     @objc func textFieldDidChange(_ textField: UITextField) {

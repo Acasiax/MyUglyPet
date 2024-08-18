@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 //import IQKeyboardManagerSwift
 
-struct Comment {
+struct DummyComment {
     let profileImage: UIImage?
     let username: String
     let date: String

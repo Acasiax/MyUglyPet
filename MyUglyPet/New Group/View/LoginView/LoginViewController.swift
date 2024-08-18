@@ -103,29 +103,35 @@ class LoginViewController: UIViewController {
     }
     
     @objc func loginButtonTapped() {
+        handleLogin()
+    }
+
+    @objc func signupButtonTapped() {
+        print("회원가입버튼탭")
+        let nameInputViewController = NameInputViewController()
+        navigationController?.pushViewController(nameInputViewController, animated: true)
+    }
+    
+    func handleLogin() {
         print("로그인버튼탭")
         
-        // 입력된 아이디와 비밀번호를 가져와 출력
         let enteredUsername = idTextField.text ?? ""
         let enteredPassword = passwordTextField.text ?? ""
         
         print("입력된 아이디: \(enteredUsername)")
         print("입력된 비밀번호: \(enteredPassword)")
         
-        let mainTabBarController = TabBarControllerFactory.createMainTabBarController()
-        
-        // Modal Presentation 설정
-        mainTabBarController.modalPresentationStyle = .fullScreen
-        mainTabBarController.modalTransitionStyle = .crossDissolve
-        
-        // 모달 방식으로 화면 전환
-        self.present(mainTabBarController, animated: true, completion: nil)
-    }
-
-        
-        @objc func signupButtonTapped() {
-            print("회원가입버튼탭")
-            let nameInputViewController = NameInputViewController()
-            navigationController?.pushViewController(nameInputViewController, animated: true)
+        MyLoginNetworkManager.shared.createLogin(email: enteredUsername, password: enteredPassword) { success in
+               if success {
+                   let mainTabBarController = TabBarControllerFactory.createMainTabBarController()
+                   mainTabBarController.modalPresentationStyle = .fullScreen
+                   mainTabBarController.modalTransitionStyle = .crossDissolve
+                   self.present(mainTabBarController, animated: true, completion: nil)
+               } else {
+                   print("로그인 실패")
+                   // 여기서 로그인 실패에 대한 UI를 업데이트하거나 알림을 표시할 수 있습니다.
+               }
         }
+    }
 }
+

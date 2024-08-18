@@ -7,9 +7,43 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 import PhotosUI
 
-class CreatePostViewController: UIViewController, UITextViewDelegate {
+
+struct PostImageModel: Decodable{
+    let files: [String]
+}
+
+
+
+
+struct PostsModel: Decodable {
+    let title: String?        // 게시글 제목 (선택적)
+    let content: String?      // 게시글 본문 (선택적)
+    let content1: String?     // 추가 콘텐츠 필드 (선택적)
+    let content2: String?     // 추가 콘텐츠 필드 (선택적)
+    let content3: String?     // 추가 콘텐츠 필드 (선택적)
+    let content4: String?     // 추가 콘텐츠 필드 (선택적)
+    let content5: String?     // 추가 콘텐츠 필드 (선택적)
+    let productId: String?    // 제품 ID (선택적)
+    let files: [String]?      // 이미지 파일 경로 목록 (선택적)
+    
+    enum CodingKeys: String, CodingKey {
+        case title
+        case content
+        case content1
+        case content2
+        case content3
+        case content4
+        case content5
+        case productId = "product_id"
+        case files
+    }
+}
+
+
+final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
     let submitButton: UIButton = {
         let button = UIButton(type: .system)
@@ -18,7 +52,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 5
         button.isEnabled = false
-        button.addTarget(CreatePostViewController.self, action: #selector(submitButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -52,7 +86,7 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         return stackView
     }()
     
-    let sendButton: UIButton = {
+    let photoAttachmentButton: UIButton = {
         let button = UIButton()
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
@@ -115,87 +149,11 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         setupConstraints()
     }
     
-    func addSubviews() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(imageContainerStackView)
-        
-        imageContainerStackView.addArrangedSubview(sendButton)
-        sendButton.addSubview(cameraIcon)
-        sendButton.addSubview(photoCountLabel)
-        
-        view.addSubview(rewardLabel)
-        view.addSubview(guidelineLabel)
-        view.addSubview(reviewTextView)
-        view.addSubview(characterCountLabel)
-        view.addSubview(minimumTextLabel)
-        view.addSubview(submitButton)
-    }
-    
-    func setupConstraints() {
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.leading.trailing.equalTo(view).inset(20)
-            make.height.equalTo(90)
-        }
-        
-        imageContainerStackView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView)
-            make.height.equalTo(scrollView)
-        }
-        
-        sendButton.snp.makeConstraints { make in
-            make.width.height.equalTo(90)
-        }
-        
-        cameraIcon.snp.makeConstraints { make in
-            make.center.equalTo(sendButton)
-            make.width.height.equalTo(40)
-        }
-        
-        photoCountLabel.snp.makeConstraints { make in
-            make.top.equalTo(cameraIcon.snp.bottom).offset(8)
-            make.centerX.equalTo(sendButton)
-        }
-        
-        rewardLabel.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.bottom).offset(10)
-            make.leading.equalTo(view).offset(20)
-        }
-        
-        guidelineLabel.snp.makeConstraints { make in
-            make.top.equalTo(rewardLabel.snp.bottom).offset(10)
-            make.leading.equalTo(view).offset(20)
-            make.trailing.equalTo(view).offset(-20)
-        }
-        
-        reviewTextView.snp.makeConstraints { make in
-            make.top.equalTo(guidelineLabel.snp.bottom).offset(20)
-            make.leading.equalTo(view).offset(20)
-            make.trailing.equalTo(view).offset(-20)
-            make.height.equalTo(150)
-        }
-        
-        characterCountLabel.snp.makeConstraints { make in
-            make.top.equalTo(reviewTextView.snp.bottom).offset(8)
-            make.trailing.equalTo(reviewTextView.snp.trailing).offset(-50)
-        }
-        
-        minimumTextLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(characterCountLabel)
-            make.leading.equalTo(characterCountLabel.snp.trailing)
-        }
-        
-        submitButton.snp.makeConstraints { make in
-            make.top.equalTo(characterCountLabel.snp.bottom).offset(20)
-            make.leading.equalTo(view).offset(20)
-            make.trailing.equalTo(view).offset(-20)
-            make.height.equalTo(50)
-        }
-    }
+  
     
     @objc func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
-        AnimationZip.animateButtonPress(sendButton)
+        AnimationZip.animateButtonPress(photoAttachmentButton)
 
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -207,20 +165,32 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func submitButtonTapped() {
-        // reviewTextView의 텍스트 출력
-        print("작성한 글: \(reviewTextView.text ?? "")")
-        
-        // 추가된 이미지 정보 출력
-        print("추가한 이미지 갯수: \(selectedImages.count)")
-        for (index, imageViewContainer) in selectedImages.enumerated() {
-            if let imageView = imageViewContainer.subviews.first as? UIImageView, let image = imageView.image {
-                print("이미지 - 인덱스 \(index + 1): 사이즈 \(image.size)")
-            }
+        guard let text = reviewTextView.text, !text.isEmpty else {
+            print("게시글 내용이 없습니다.")
+            return
         }
 
         // 애니메이션 추가
         AnimationZip.animateButtonPress(submitButton)
+        
+        // 이미지 업로드가 필요한 경우
+        if selectedImages.isEmpty {
+            // 이미지가 없는 경우 게시글만 업로드
+            uploadPost(withImageURLs: [])
+        } else {
+            // 이미지가 있는 경우 이미지부터 업로드
+            uploadImages { [weak self] result in
+                switch result {
+                case .success(let imageUrls):
+                    self?.uploadPost(withImageURLs: imageUrls)
+                case .failure(let error):
+                    print("이미지 업로드 실패: \(error.localizedDescription)")
+                }
+            }
+        }
     }
+
+    
     
     func textViewDidChange(_ textView: UITextView) {
         if let text = textView.text {
@@ -283,6 +253,63 @@ class CreatePostViewController: UIViewController, UITextViewDelegate {
         let count = selectedImages.count
         photoCountLabel.text = "\(count)/5"
     }
+    
+    func uploadImages(completion: @escaping (Result<[String], Error>) -> Void) {
+        let dispatchGroup = DispatchGroup()
+        var uploadedImageUrls: [String] = []
+        var uploadError: Error?
+        
+        for imageViewContainer in selectedImages {
+            guard let imageView = imageViewContainer.subviews.first as? UIImageView,
+                  let image = imageView.image,
+                  let imageData = image.jpegData(compressionQuality: 0.8) else { continue }
+            
+            dispatchGroup.enter()
+            
+            PostNetworkManager.shared.uploadPostImage(imageData: imageData) { result in
+                switch result {
+                case .success(let urls):
+                    uploadedImageUrls.append(contentsOf: urls)
+                case .failure(let error):
+                    uploadError = error
+                }
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            if let error = uploadError {
+                completion(.failure(error))
+            } else {
+                completion(.success(uploadedImageUrls))
+            }
+        }
+    }
+
+    
+    func uploadPost(withImageURLs imageUrls: [String]) {
+        let title = "게시글 제목"
+        let content = reviewTextView.text
+        let content1: String? = nil
+        let content2: String? = nil
+        let content3: String? = nil
+        let content4: String? = nil
+        let content5: String? = nil
+        let productId: String? = nil
+
+        print("업로드할 이미지 URL: \(imageUrls)")
+
+        PostNetworkManager.shared.createPost(title: title, content: content, content1: content1, content2: content2, content3: content3, content4: content4, content5: content5, productId: productId, fileURLs: imageUrls) { result in
+            switch result {
+            case .success:
+                print("게시글 업로드 성공")
+            case .failure(let error):
+                print("게시글 업로드 실패: \(error.localizedDescription)")
+            }
+        }
+    }
+
+
 }
 
 // MARK: - PHPicker 사진 선택
@@ -302,4 +329,66 @@ extension CreatePostViewController: PHPickerViewControllerDelegate {
             }
         }
     }
+}
+
+
+class PostNetworkManager {
+    
+    static let shared = PostNetworkManager()
+    
+    private init() {}
+    
+    //MARK: - 이미지 업로드
+    func uploadPostImage(imageData: Data, completion: @escaping (Result<[String], Error>) -> Void) {
+        let request = Router.uploadPostImage(imageData: imageData).asURLRequest
+        
+        AF.request(request)
+            .responseDecodable(of: PostImageModel.self) { response in
+                switch response.result {
+                case .success(let result):
+                    completion(.success(result.files))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    
+    
+    //MARK: - 게시글 업로드
+    func createPost(title: String?, content: String?, content1: String?, content2: String?, content3: String?, content4: String?, content5: String?, productId: String?, fileURLs: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let parameters: [String: Any] = [
+            "title": title ?? "",
+            "content": content ?? "",
+            "content1": content1 ?? "",
+            "content2": content2 ?? "",
+            "content3": content3 ?? "",
+            "content4": content4 ?? "",
+            "content5": content5 ?? "",
+            "product_id": productId ?? "",
+            "files": fileURLs
+        ]
+        
+        let request = Router.createPost(parameters: parameters).asURLRequest
+        
+        AF.request(request)
+            .response { response in
+                switch response.result {
+                case .success:
+                    if response.response?.statusCode == 200 {
+                        completion(.success(()))
+                    } else {
+                        let error = NSError(domain: "", code: response.response?.statusCode ?? 500, userInfo: [NSLocalizedDescriptionKey: "포스트 작성 실패"])
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    
+    
+    
 }

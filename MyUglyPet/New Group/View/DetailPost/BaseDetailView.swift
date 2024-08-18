@@ -10,7 +10,7 @@ import SnapKit
 
 class BaseDetailView: UIViewController {
     
-    var comments: [Comment] = []  // 댓글을 저장하는 배열
+    var comments: [DummyComment] = []  // 댓글을 저장하는 배열
     
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -329,7 +329,7 @@ class BaseDetailView: UIViewController {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // Customize the date format as needed
         let currentDate = dateFormatter.string(from: Date())
         
-        let newComment = Comment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
+        let newComment = DummyComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
         comments.append(newComment)
         
         commentTextField.text = ""
