@@ -10,7 +10,6 @@ import SnapKit
 
 class BirthdayInputViewController: UIViewController {
     
-    // UI Components
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progress = 1.00
@@ -35,31 +34,14 @@ class BirthdayInputViewController: UIViewController {
         return label
     }()
     
-    let yearTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "0000년"
-        textField.borderStyle = .none
-        textField.textAlignment = .center
-        textField.font = UIFont.systemFont(ofSize: 20)
-        return textField
-    }()
-    
-    let monthTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "00월"
-        textField.borderStyle = .none
-        textField.textAlignment = .center
-        textField.font = UIFont.systemFont(ofSize: 20)
-        return textField
-    }()
-    
-    let dayTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "00일"
-        textField.borderStyle = .none
-        textField.textAlignment = .center
-        textField.font = UIFont.systemFont(ofSize: 20)
-        return textField
+    let datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .wheels
+        picker.locale = Locale(identifier: "ko_KR") // 한국어 로케일 설정
+        picker.maximumDate = Date() // 오늘 날짜까지만 선택 가능
+        picker.date = Calendar.current.date(byAdding: .year, value: -15, to: Date())! 
+        return picker
     }()
     
     let nextButton: UIButton = {
@@ -68,7 +50,7 @@ class BirthdayInputViewController: UIViewController {
         button.backgroundColor = UIColor.lightGray
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
-        button.isEnabled = false
+        button.isEnabled = false // 초기에는 비활성화 상태
         return button
     }()
     
@@ -83,6 +65,8 @@ class BirthdayInputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
     func setupUI() {
@@ -92,9 +76,7 @@ class BirthdayInputViewController: UIViewController {
         view.addSubview(progressBar)
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
-        view.addSubview(yearTextField)
-        view.addSubview(monthTextField)
-        view.addSubview(dayTextField)
+        view.addSubview(datePicker)
         view.addSubview(nextButton)
         view.addSubview(skipButton)
         
@@ -115,26 +97,13 @@ class BirthdayInputViewController: UIViewController {
             make.left.right.equalTo(view).inset(20)
         }
         
-        yearTextField.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(40)
-            make.left.equalTo(view.snp.left).offset(40)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        monthTextField.snp.makeConstraints { make in
-            make.top.equalTo(yearTextField)
-            make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        dayTextField.snp.makeConstraints { make in
-            make.top.equalTo(yearTextField)
-            make.right.equalTo(view.snp.right).offset(-40)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        datePicker.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(30)
+            make.left.right.equalTo(view).inset(20)
         }
         
         nextButton.snp.makeConstraints { make in
-            make.top.equalTo(dayTextField.snp.bottom).offset(40)
+            make.top.equalTo(datePicker.snp.bottom).offset(40)
             make.left.right.equalTo(view).inset(40)
             make.height.equalTo(50)
         }
@@ -144,4 +113,21 @@ class BirthdayInputViewController: UIViewController {
             make.centerX.equalTo(view)
         }
     }
+    
+    @objc func datePickerValueChanged() {
+        nextButton.isEnabled = true
+        nextButton.backgroundColor = UIColor.orange
+    }
+    
+    @objc func nextButtonTapped() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+        let selectedDate = dateFormatter.string(from: datePicker.date)
+        
+        print("선택한 생년월일: \(selectedDate)")
+        
+        let welcomeVC = WelcomeViewController()
+        navigationController?.pushViewController(welcomeVC, animated: true)
+    }
 }
+

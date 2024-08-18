@@ -10,7 +10,6 @@ import SnapKit
 
 class PhoneNumberInputViewController: UIViewController {
     
-    // UI Components
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progress = 0.80
@@ -60,6 +59,7 @@ class PhoneNumberInputViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.isEnabled = false
+        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -126,6 +126,13 @@ class PhoneNumberInputViewController: UIViewController {
     func configureTextField() {
         phoneNumberTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
+    
+    
+    @objc func nextButtonTapped() {
+        print("다음버튼탭")
+           let birthdayInputtVC = BirthdayInputViewController()
+           navigationController?.pushViewController(birthdayInputtVC, animated: true)
+       }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {

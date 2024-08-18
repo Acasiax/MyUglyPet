@@ -50,6 +50,7 @@ class NameInputViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.isEnabled = false
+        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -62,13 +63,13 @@ class NameInputViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .white
         
-        // Add subviews
+     
         view.addSubview(progressBar)
         view.addSubview(titleLabel)
         view.addSubview(nameTextField)
         view.addSubview(nextButton)
         
-        // Set up SnapKit constraints
+      
         progressBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.left.right.equalTo(view).inset(40)
@@ -96,6 +97,12 @@ class NameInputViewController: UIViewController {
     func configureTextField() {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
+    
+    @objc func nextButtonTapped() {
+        print("다음버튼탭")
+           let emailInputVC = EmailInputViewController()
+           navigationController?.pushViewController(emailInputVC, animated: true)
+       }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {

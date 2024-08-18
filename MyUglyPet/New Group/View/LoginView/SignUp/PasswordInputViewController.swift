@@ -10,7 +10,6 @@ import SnapKit
 
 class PasswordInputViewController: UIViewController {
     
-    // UI Components
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progress = 0.66
@@ -52,6 +51,7 @@ class PasswordInputViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.isEnabled = false
+        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -98,6 +98,13 @@ class PasswordInputViewController: UIViewController {
     func configureTextField() {
         passwordTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
+    
+    
+    @objc func nextButtonTapped() {
+        print("다음버튼탭")
+           let phoneNumberInputVC = PhoneNumberInputViewController()
+           navigationController?.pushViewController(phoneNumberInputVC, animated: true)
+       }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
