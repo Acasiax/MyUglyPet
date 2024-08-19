@@ -65,6 +65,9 @@
 		AA7273672C71FFB7007551C4 /* MyLoginNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */; };
 		AA7273692C720420007551C4 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273682C720420007551C4 /* Router.swift */; };
 		AA72736B2C72CDB8007551C4 /* PostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */; };
+		AA7273742C72DB4A007551C4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA7273732C72DB49007551C4 /* GoogleService-Info.plist */; };
+		AA7273772C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = AA7273762C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		AA7273792C72DBC3007551C4 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = AA7273782C72DBC3007551C4 /* FirebaseCrashlytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,6 +124,7 @@
 		AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLoginNetworkManager.swift; sourceTree = "<group>"; };
 		AA7273682C720420007551C4 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNetworkManager.swift; sourceTree = "<group>"; };
+		AA7273732C72DB49007551C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,7 +138,9 @@
 				AA7272DA2C6CA0B0007551C4 /* RxSwift in Frameworks */,
 				AA7272D82C6CA0B0007551C4 /* RxCocoa in Frameworks */,
 				AA7272D22C6CA091007551C4 /* Alamofire in Frameworks */,
+				AA7273792C72DBC3007551C4 /* FirebaseCrashlytics in Frameworks */,
 				AA7272F52C6F8389007551C4 /* Lottie in Frameworks */,
+				AA7273772C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +150,7 @@
 		AA7272A82C6C967C007551C4 = {
 			isa = PBXGroup;
 			children = (
+				AA7273732C72DB49007551C4 /* GoogleService-Info.plist */,
 				AA7272E12C6D861F007551C4 /* APIKey.swift */,
 				AA7272DF2C6D860E007551C4 /* .gitignore */,
 				AA7272B32C6C967C007551C4 /* MyUglyPet */,
@@ -354,6 +361,7 @@
 				AA7272AD2C6C967C007551C4 /* Sources */,
 				AA7272AE2C6C967C007551C4 /* Frameworks */,
 				AA7272AF2C6C967C007551C4 /* Resources */,
+				AA72737B2C72F405007551C4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -368,6 +376,8 @@
 				AA7272D92C6CA0B0007551C4 /* RxSwift */,
 				AA7272F42C6F8389007551C4 /* Lottie */,
 				AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */,
+				AA7273762C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				AA7273782C72DBC3007551C4 /* FirebaseCrashlytics */,
 			);
 			productName = MyUglyPet;
 			productReference = AA7272B12C6C967C007551C4 /* MyUglyPet.app */;
@@ -404,6 +414,7 @@
 				AA7272D62C6CA0B0007551C4 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				AA72731E2C70E03A007551C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				AA7273752C72DBC3007551C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = AA7272B22C6C967C007551C4 /* Products */;
 			projectDirPath = "";
@@ -419,6 +430,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7273742C72DB4A007551C4 /* GoogleService-Info.plist in Resources */,
 				AA7272FA2C6F923F007551C4 /* yellowani.json in Resources */,
 				AA7272F82C6F8668007551C4 /* PinkLightEffect.json in Resources */,
 				AA7272E02C6D860E007551C4 /* .gitignore in Resources */,
@@ -432,6 +444,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AA72737B2C72F405007551C4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AA7272AD2C6C967C007551C4 /* Sources */ = {
@@ -631,6 +668,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 4KLMMMFY4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyUglyPet/Info.plist;
@@ -645,6 +683,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.acasia.MyUglyPet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -678,6 +717,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.acasia.MyUglyPet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -762,6 +802,14 @@
 				minimumVersion = 7.1.1;
 			};
 		};
+		AA7273752C72DBC3007551C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -799,6 +847,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA72731E2C70E03A007551C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		AA7273762C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA7273752C72DBC3007551C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		AA7273782C72DBC3007551C4 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA7273752C72DBC3007551C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

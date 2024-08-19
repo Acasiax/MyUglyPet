@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class AllPostTableViewCell: UITableViewCell {
+final class AllPostTableViewCell: UITableViewCell {
 
     weak var delegate: AllPostTableViewCellDelegate?
 

@@ -14,7 +14,7 @@ struct Pet {
     let image: UIImage
 }
 
-class GameViewController: BaseGameView {
+final class GameViewController: BaseGameView {
 
     let pets: [Pet] = [
         Pet(name: "벼루님", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),

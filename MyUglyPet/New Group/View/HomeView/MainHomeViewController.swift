@@ -23,7 +23,7 @@ struct MissionData {
 }
 
 
-class MainHomeViewController: UIViewController {
+final class MainHomeViewController: UIViewController {
     
     private let missions: [Mission] = MissionData.missions
     

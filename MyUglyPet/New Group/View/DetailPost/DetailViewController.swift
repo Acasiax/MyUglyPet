@@ -16,7 +16,7 @@ struct DummyComment {
     let text: String
 }
 
-class DetailViewController: BaseDetailView {
+final class DetailViewController: BaseDetailView {
 
     var photos: [UIImage] = [
         UIImage(named: "기본냥멍1")!,

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
     
     let welcomeLabel: UILabel = {
         let label = UILabel()

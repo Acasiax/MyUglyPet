@@ -13,7 +13,7 @@ protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapCommentButton(in cell: AllPostTableViewCell)
 }
 
-class AllPostHomeViewController: UIViewController {
+final class AllPostHomeViewController: UIViewController {
     
     let colors: [UIColor] = [
            CustomColors.deepPurple,
