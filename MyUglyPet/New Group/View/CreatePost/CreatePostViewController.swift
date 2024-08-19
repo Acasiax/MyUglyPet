@@ -11,15 +11,15 @@ import Alamofire
 import PhotosUI
 
 //MARK: -  포스트 조회
-struct Post: Codable {
-    let postId: String
-    let title: String
-    let content: String
-    // 필요한 다른 필드들 추가
-}
+//struct Post: Codable {
+//    let postId: String
+//    let title: String
+//    let content: String
+//    // 필요한 다른 필드들 추가
+//}
 
 struct PostsResponse: Codable {
-    let data: [Post]
+    let data: [PostsModel]
     let nextCursor: String?
 }
 
@@ -43,7 +43,7 @@ struct PostQuery: Encodable {
     let files: [String]
 }
 
-struct PostsModel: Decodable {
+struct PostsModel: Codable {
     let title: String?        // 게시글 제목 (선택적)
     let content: String?      // 게시글 본문 (선택적)
     let content1: String?     // 추가 콘텐츠 필드 (선택적)

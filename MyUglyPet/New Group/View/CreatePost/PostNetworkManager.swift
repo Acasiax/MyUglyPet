@@ -15,8 +15,8 @@ class PostNetworkManager {
     private init() {}
     
     //MARK: - 포스트 조희
-    func fetchPosts(nextCursor: String?, limit: Int?, completion: @escaping (Result<[Post], Error>) -> Void) {
-        let request = Router.fetchPosts(nextCursor: nextCursor, limit: limit).asURLRequest
+    func fetchPosts(query: FetchReadingPostQuery, completion: @escaping (Result<[PostsModel], Error>) -> Void) {
+        let request = Router.fetchPosts(query: query).asURLRequest
         
         AF.request(request)
             .responseData { response in
@@ -33,6 +33,8 @@ class PostNetworkManager {
                 }
             }
     }
+
+
 
     
     

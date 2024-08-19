@@ -7,11 +7,14 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class AllPostTableViewCell: UITableViewCell {
 
     weak var delegate: AllPostTableViewCellDelegate?
 
+      
+    
     // containerView 생성
     let containerView: UIView = {
         let view = UIView()
@@ -86,6 +89,13 @@ final class AllPostTableViewCell: UITableViewCell {
         return collectionView
     }()
 
+    let titleLabel: UILabel = {
+          let label = UILabel()
+          label.font = UIFont.boldSystemFont(ofSize: 16)
+          label.textColor = .black
+          return label
+      }()
+    
     lazy var contentLabel: UILabel = {
         let label = UILabel()
         label.text = "우리집 강쥐 오늘 해피하게 뻗음"
@@ -126,6 +136,13 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .black
         return label
     }()
+    
+    var imageFiles: [String] = [] {
+            didSet {
+                collectionView.reloadData()
+            }
+        }
+    
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -141,6 +158,10 @@ final class AllPostTableViewCell: UITableViewCell {
         // containerView에 나머지 UI 요소들 추가
         configureHierarchy()
         configureConstraints()
+        
+        // 컬렉션 뷰 데이터 소스 및 델리게이트 설정
+                collectionView.dataSource = self
+                collectionView.delegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -236,5 +257,57 @@ final class AllPostTableViewCell: UITableViewCell {
     @objc func followButtonTapped() {
         print("팔로우 버튼 탭")
         AnimationZip.animateButtonPress(followButton)
+    }
+}
+
+
+extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return imageFiles.count
+    }
+    
+    
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
+        
+        let imageURLString = imageFiles[indexPath.item]
+        let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString
+        
+        if let imageURL = URL(string: fullImageURLString) {
+            let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "10", product_id: "")).headersForImageRequest
+            
+            let modifier = AnyModifier { request in
+                var r = request
+                r.allHTTPHeaderFields = headers
+                return r
+            }
+            
+            cell.imageView.kf.setImage(
+                with: imageURL,
+                placeholder: UIImage(named: "placeholder"),
+                options: [.requestModifier(modifier)]
+            ) { result in
+                switch result {
+                case .success(let value):
+                    print("이미지 로드 성공: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("이미지 로드 실패: \(error.localizedDescription)")
+                }
+            }
+        } else {
+            print("URL 변환에 실패했습니다: \(fullImageURLString)")
+        }
+        
+        return cell
+    }
+
+
+
+
+        
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
     }
 }

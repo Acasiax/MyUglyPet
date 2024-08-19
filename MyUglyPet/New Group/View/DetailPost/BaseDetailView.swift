@@ -10,6 +10,9 @@ import SnapKit
 
 class BaseDetailView: UIViewController {
     
+    
+    var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티
+    
     var comments: [DummyComment] = []  // 댓글을 저장하는 배열
     
     lazy var userProfileImageView: UIImageView = {

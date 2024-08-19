@@ -36,7 +36,13 @@ final class DetailViewController: BaseDetailView {
         tableView.dataSource = self
         configureHierarchy()
         configureConstraints()
-    } 
+        
+        // 전달받은 포스트 데이터를 UI에 반영
+               if let post = post {
+                   contentLabel.text = post.content
+                   // 추가적으로 titleLabel, userNameLabel 등에도 포스트 데이터를 반영할 수 있음
+               }
+    }
 }
 
 
