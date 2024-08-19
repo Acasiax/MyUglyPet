@@ -10,6 +10,22 @@ import SnapKit
 import Alamofire
 import PhotosUI
 
+//MARK: -  포스트 조회
+struct Post: Codable {
+    let postId: String
+    let title: String
+    let content: String
+    // 필요한 다른 필드들 추가
+}
+
+struct PostsResponse: Codable {
+    let data: [Post]
+    let nextCursor: String?
+}
+
+
+//MARK: - 포스트 이미지 업로드
+
 struct PostImageModel: Decodable {
     let files: [String]
 }
@@ -50,6 +66,8 @@ struct PostsModel: Decodable {
         case files
     }
 }
+
+
 
 final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
@@ -199,7 +217,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
 
 
-// MARK: - 게시글 업로드 함수
+// MARK: - 이미지, 게시글 업로드 함수
 extension CreatePostViewController {
     
     func uploadImagesAndPost() {
@@ -241,6 +259,9 @@ extension CreatePostViewController {
         dispatchGroup.notify(queue: .main) {
             if uploadedImageUrls.isEmpty {
                 print("모든 이미지 업로드 실패")
+                let alert = UIAlertController(title: "오류", message: "모든 이미지 업로드에 실패했습니다.", preferredStyle: .alert)
+                   alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                   self.present(alert, animated: true, completion: nil)
             } else {
                 print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
                 self.uploadPost(withImageURLs: uploadedImageUrls)
@@ -266,6 +287,8 @@ extension CreatePostViewController {
             switch result {
             case .success:
                 print("게시글 업로드 성공")
+                let readingAllPostHomeVC = AllPostHomeViewController()
+                self.navigationController?.pushViewController(readingAllPostHomeVC, animated: true)
             case .failure(let error):
                 print("게시글 업로드 실패: \(error.localizedDescription)")
             }

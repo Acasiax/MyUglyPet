@@ -14,6 +14,30 @@ class PostNetworkManager {
     
     private init() {}
     
+    //MARK: - 포스트 조희
+    func fetchPosts(nextCursor: String?, limit: Int?, completion: @escaping (Result<[Post], Error>) -> Void) {
+        let request = Router.fetchPosts(nextCursor: nextCursor, limit: limit).asURLRequest
+        
+        AF.request(request)
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    do {
+                        let result = try JSONDecoder().decode(PostsResponse.self, from: data)
+                        completion(.success(result.data))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+
+    
+    
+    
+    
     //MARK: - 이미지 업로드
     func uploadPostImage(query: ImageUploadQuery, completion: @escaping (Result<[String], Error>) -> Void) {
         let router = Router.uploadPostImage(imageData: query.files)
