@@ -27,6 +27,7 @@ extension CreatePostViewController {
         view.addSubview(characterCountLabel)
         view.addSubview(minimumTextLabel)
         view.addSubview(submitButton)
+        view.addSubview(activityIndicator)
     }
     
     func setupConstraints() {

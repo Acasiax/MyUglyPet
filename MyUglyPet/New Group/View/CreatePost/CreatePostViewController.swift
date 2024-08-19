@@ -162,6 +162,15 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         return textView
     }()
     
+    
+    let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        indicator.color = .gray
+        return indicator
+    }()
+
+    
     var selectedImageData: Data?
     
     // 선택된 이미지를 담을 배열
@@ -173,6 +182,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         reviewTextView.delegate = self
         addSubviews()
         setupConstraints()
+        activityIndicator.center = view.center
     }
     
     @objc func photoAttachmentButtonTapped() {
@@ -270,8 +280,9 @@ extension CreatePostViewController {
     }
 
     
-    
     func uploadPost(withImageURLs imageUrls: [String]) {
+        activityIndicator.startAnimating() // 로딩 시작
+
         let title = "우아아아아앙ㅇ아아"
         let content = reviewTextView.text ?? ""
         let productId: String? = nil
@@ -284,9 +295,16 @@ extension CreatePostViewController {
             productId: productId,
             fileURLs: imageUrls
         ) { result in
+            self.activityIndicator.stopAnimating() // 로딩 종료
+            
             switch result {
             case .success:
                 print("게시글 업로드 성공")
+                self.reviewTextView.text = "" // 입력 필드 초기화
+                self.selectedImages.removeAll() // 이미지 목록 초기화
+                self.updatePhotoCountLabel() // 이미지 카운트 라벨 업데이트
+                self.updateSubmitButtonState() // 제출 버튼 상태 업데이트
+                
                 let readingAllPostHomeVC = AllPostHomeViewController()
                 self.navigationController?.pushViewController(readingAllPostHomeVC, animated: true)
             case .failure(let error):
@@ -294,8 +312,14 @@ extension CreatePostViewController {
             }
         }
     }
+
     
-    
+    func updateSubmitButtonState() {
+        let isTextValid = reviewTextView.text.count >= 5
+        submitButton.isEnabled = isTextValid
+        submitButton.backgroundColor = isTextValid ? .orange : .lightGray
+    }
+
     
 }
 
