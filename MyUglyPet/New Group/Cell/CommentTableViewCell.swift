@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class CommentTableViewCell: UITableViewCell {
+final class CommentTableViewCell: UITableViewCell {
     
-    // Profile Image View
+
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -19,7 +19,7 @@ class CommentTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    // Username Label
+
     let usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 14)
@@ -27,7 +27,7 @@ class CommentTableViewCell: UITableViewCell {
         return label
     }()
     
-    // Date Label
+
     let dateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
@@ -35,7 +35,7 @@ class CommentTableViewCell: UITableViewCell {
         return label
     }()
     
-    // Comment Label
+
     let commentLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
@@ -44,10 +44,10 @@ class CommentTableViewCell: UITableViewCell {
         return label
     }()
     
-    // Reply Button
+  
     let replyButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("댓글달기", for: .normal)
+        button.setTitle("댓글수정", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         button.setTitleColor(.gray, for: .normal)
         return button

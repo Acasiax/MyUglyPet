@@ -105,7 +105,7 @@ class PostNetworkManager {
                         return
                     }
                     
-                    let result = try JSONDecoder().decode(PostsModel.self, from: data)
+                    let result = try JSONDecoder().decode(PostImageModel.self, from: data)
                     print("이미지 업로드 성공: \(result.files ?? [])")  // 성공 메시지 출력
                     completion(.success(result.files ?? []))
                 } catch {
