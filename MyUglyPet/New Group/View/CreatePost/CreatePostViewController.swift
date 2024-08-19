@@ -10,13 +10,22 @@ import SnapKit
 import Alamofire
 import PhotosUI
 
-
-struct PostImageModel: Decodable{
+struct PostImageModel: Decodable {
     let files: [String]
 }
 
 
+struct ImageUploadQuery: Encodable {
+    let files: Data
+}
 
+struct PostQuery: Encodable {
+    let title: String
+    let content: String
+    let content1: String
+    let product_id: String
+    let files: [String]
+}
 
 struct PostsModel: Decodable {
     let title: String?        // 게시글 제목 (선택적)
@@ -41,7 +50,6 @@ struct PostsModel: Decodable {
         case files
     }
 }
-
 
 final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
@@ -149,8 +157,6 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         setupConstraints()
     }
     
-  
-    
     @objc func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
         AnimationZip.animateButtonPress(photoAttachmentButton)
@@ -164,7 +170,11 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         present(picker, animated: true, completion: nil)
     }
     
+    
+    
     @objc func submitButtonTapped() {
+        print(selectedImages.count)
+        print(selectedImages.debugDescription)
         guard let text = reviewTextView.text, !text.isEmpty else {
             print("게시글 내용이 없습니다.")
             return
@@ -173,133 +183,86 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         // 애니메이션 추가
         AnimationZip.animateButtonPress(submitButton)
         
-        // 이미지 업로드가 필요한 경우
         if selectedImages.isEmpty {
             // 이미지가 없는 경우 게시글만 업로드
             uploadPost(withImageURLs: [])
         } else {
-            // 이미지가 있는 경우 이미지부터 업로드
-            uploadImages { [weak self] result in
-                switch result {
-                case .success(let imageUrls):
-                    self?.uploadPost(withImageURLs: imageUrls)
-                case .failure(let error):
-                    print("이미지 업로드 실패: \(error.localizedDescription)")
-                }
-            }
+            // 이미지를 하나씩 업로드하고 결과를 사용하여 게시글 업로드
+            uploadImagesAndPost()
         }
     }
 
+
     
     
-    func textViewDidChange(_ textView: UITextView) {
-        if let text = textView.text {
-            characterCountLabel.text = "\(text.count)"
-            
-            if text.count >= 5 {
-                submitButton.isEnabled = true
-                submitButton.backgroundColor = .orange
-            } else {
-                submitButton.isEnabled = false
-                submitButton.backgroundColor = .lightGray
-            }
-        }
-    }
+}
+
+
+
+// MARK: - 게시글 업로드 함수
+extension CreatePostViewController {
     
-    func addSelectedImage(_ image: UIImage) {
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
-        
-        let container = UIView()
-        container.layer.cornerRadius = 10
-        container.layer.borderColor = UIColor.lightGray.cgColor
-        container.layer.borderWidth = 1
-        container.addSubview(imageView)
-        
-        imageView.snp.makeConstraints { make in
-            make.edges.equalTo(container)
-            make.width.height.equalTo(90)
-        }
-        
-        let deleteButton = UIButton()
-        deleteButton.setTitle("x", for: .normal)
-        deleteButton.setTitleColor(.white, for: .normal)
-        deleteButton.backgroundColor = .black.withAlphaComponent(0.7)
-        deleteButton.layer.cornerRadius = 10
-        deleteButton.addTarget(self, action: #selector(deleteImage(_:)), for: .touchUpInside)
-        container.addSubview(deleteButton)
-        
-        deleteButton.snp.makeConstraints { make in
-            make.top.right.equalTo(container).inset(5)
-            make.width.height.equalTo(20)
-        }
-        
-        imageContainerStackView.addArrangedSubview(container)
-        selectedImages.append(container)
-        updatePhotoCountLabel()
-    }
-    
-    @objc func deleteImage(_ sender: UIButton) {
-        if let container = sender.superview, let index = selectedImages.firstIndex(of: container) {
-            selectedImages[index].removeFromSuperview()
-            selectedImages.remove(at: index)
-            updatePhotoCountLabel()
-        }
-    }
-    
-    func updatePhotoCountLabel() {
-        let count = selectedImages.count
-        photoCountLabel.text = "\(count)/5"
-    }
-    
-    func uploadImages(completion: @escaping (Result<[String], Error>) -> Void) {
-        let dispatchGroup = DispatchGroup()
+    func uploadImagesAndPost() {
         var uploadedImageUrls: [String] = []
-        var uploadError: Error?
-        
-        for imageViewContainer in selectedImages {
+        let dispatchGroup = DispatchGroup()
+
+        for (index, imageViewContainer) in selectedImages.enumerated() {
+            print("처리 중인 이미지 인덱스: \(index)")
+            
             guard let imageView = imageViewContainer.subviews.first as? UIImageView,
                   let image = imageView.image,
-                  let imageData = image.jpegData(compressionQuality: 0.8) else { continue }
+                  let imageData = image.jpegData(compressionQuality: 0.8) else {
+                print("이미지 데이터 생성 실패")
+                continue
+            }
+            
+            print("이미지 데이터 크기: \(imageData.count) bytes") // 이미지 데이터 크기 확인
             
             dispatchGroup.enter()
             
-            PostNetworkManager.shared.uploadPostImage(imageData: imageData) { result in
+            let imageUploadQuery = ImageUploadQuery(files: imageData)
+            
+            PostNetworkManager.shared.uploadPostImage(query: imageUploadQuery) { result in
                 switch result {
-                case .success(let urls):
-                    uploadedImageUrls.append(contentsOf: urls)
+                case .success(let imageUrls):
+                    if imageUrls.isEmpty {
+                        print("서버에서 빈 이미지 URL 배열을 반환했습니다.")
+                    } else {
+                        print("이미지 업로드 성공!!: \(imageUrls)")
+                        uploadedImageUrls.append(contentsOf: imageUrls)
+                    }
                 case .failure(let error):
-                    uploadError = error
+                    print("이미지 업로드 실패: \(error.localizedDescription)")
                 }
                 dispatchGroup.leave()
             }
         }
-        
+
         dispatchGroup.notify(queue: .main) {
-            if let error = uploadError {
-                completion(.failure(error))
+            if uploadedImageUrls.isEmpty {
+                print("모든 이미지 업로드 실패")
             } else {
-                completion(.success(uploadedImageUrls))
+                print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
+                self.uploadPost(withImageURLs: uploadedImageUrls)
             }
         }
     }
 
     
+    
     func uploadPost(withImageURLs imageUrls: [String]) {
-        let title = "게시글 제목"
-        let content = reviewTextView.text
-        let content1: String? = nil
-        let content2: String? = nil
-        let content3: String? = nil
-        let content4: String? = nil
-        let content5: String? = nil
+        let title = "우아아아아앙ㅇ아아"
+        let content = reviewTextView.text ?? ""
         let productId: String? = nil
 
         print("업로드할 이미지 URL: \(imageUrls)")
 
-        PostNetworkManager.shared.createPost(title: title, content: content, content1: content1, content2: content2, content3: content3, content4: content4, content5: content5, productId: productId, fileURLs: imageUrls) { result in
+        PostNetworkManager.shared.createPost(
+            title: title,
+            content: content,
+            productId: productId,
+            fileURLs: imageUrls
+        ) { result in
             switch result {
             case .success:
                 print("게시글 업로드 성공")
@@ -308,9 +271,11 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
-
-
+    
+    
+    
 }
+
 
 // MARK: - PHPicker 사진 선택
 extension CreatePostViewController: PHPickerViewControllerDelegate {
@@ -331,64 +296,3 @@ extension CreatePostViewController: PHPickerViewControllerDelegate {
     }
 }
 
-
-class PostNetworkManager {
-    
-    static let shared = PostNetworkManager()
-    
-    private init() {}
-    
-    //MARK: - 이미지 업로드
-    func uploadPostImage(imageData: Data, completion: @escaping (Result<[String], Error>) -> Void) {
-        let request = Router.uploadPostImage(imageData: imageData).asURLRequest
-        
-        AF.request(request)
-            .responseDecodable(of: PostImageModel.self) { response in
-                switch response.result {
-                case .success(let result):
-                    completion(.success(result.files))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-    }
-    
-    
-    
-    //MARK: - 게시글 업로드
-    func createPost(title: String?, content: String?, content1: String?, content2: String?, content3: String?, content4: String?, content5: String?, productId: String?, fileURLs: [String], completion: @escaping (Result<Void, Error>) -> Void) {
-        
-        let parameters: [String: Any] = [
-            "title": title ?? "",
-            "content": content ?? "",
-            "content1": content1 ?? "",
-            "content2": content2 ?? "",
-            "content3": content3 ?? "",
-            "content4": content4 ?? "",
-            "content5": content5 ?? "",
-            "product_id": productId ?? "",
-            "files": fileURLs
-        ]
-        
-        let request = Router.createPost(parameters: parameters).asURLRequest
-        
-        AF.request(request)
-            .response { response in
-                switch response.result {
-                case .success:
-                    if response.response?.statusCode == 200 {
-                        completion(.success(()))
-                    } else {
-                        let error = NSError(domain: "", code: response.response?.statusCode ?? 500, userInfo: [NSLocalizedDescriptionKey: "포스트 작성 실패"])
-                        completion(.failure(error))
-                    }
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-    }
-    
-    
-    
-    
-}

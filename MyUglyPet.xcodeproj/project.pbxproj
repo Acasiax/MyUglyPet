@@ -64,6 +64,7 @@
 		AA72735A2C71DA95007551C4 /* BaseCreatePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273592C71DA95007551C4 /* BaseCreatePost.swift */; };
 		AA7273672C71FFB7007551C4 /* MyLoginNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */; };
 		AA7273692C720420007551C4 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273682C720420007551C4 /* Router.swift */; };
+		AA72736B2C72CDB8007551C4 /* PostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +120,7 @@
 		AA7273592C71DA95007551C4 /* BaseCreatePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCreatePost.swift; sourceTree = "<group>"; };
 		AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLoginNetworkManager.swift; sourceTree = "<group>"; };
 		AA7273682C720420007551C4 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 			children = (
 				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
 				AA7273592C71DA95007551C4 /* BaseCreatePost.swift */,
+				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
 			);
 			path = CreatePost;
 			sourceTree = "<group>";
@@ -443,6 +446,7 @@
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
 				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,
 				AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */,
+				AA72736B2C72CDB8007551C4 /* PostNetworkManager.swift in Sources */,
 				AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */,
 				AA7273672C71FFB7007551C4 /* MyLoginNetworkManager.swift in Sources */,
 				AA7273572C71D032007551C4 /* TargetType.swift in Sources */,
