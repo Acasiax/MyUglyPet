@@ -181,12 +181,18 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         return cell
     }
     
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailViewController = DetailViewController()
-        detailViewController.title = posts[indexPath.row].title // 제목 설정
-        detailViewController.post = posts[indexPath.row]
-        navigationController?.pushViewController(detailViewController, animated: true)
-    }
+            let detailViewController = DetailViewController()
+            let selectedPost = posts[indexPath.row]
+            
+            detailViewController.title = selectedPost.title // 제목 설정
+            detailViewController.post = selectedPost
+            detailViewController.imageFiles = selectedPost.files ?? [] // 이미지 URL 배열 전달
+
+            navigationController?.pushViewController(detailViewController, animated: true)
+        }
 }
 
 
@@ -207,7 +213,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.image = UIImage(named: "기본냥멍2")
         return imageView
@@ -237,28 +243,3 @@ class PostCollectionViewCell: UICollectionViewCell {
 }
 
 
-//extension AllPostHomeViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 1
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
-//        
-//      
-//        cell.imageView.backgroundColor = .blue
-//        
-//        let imageURLString = imageFiles[indexPath.item]
-//               if let imageURL = URL(string: imageURLString) {
-//                   // Kingfisher를 사용하여 이미지 로드
-//                   cell.imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder"))
-//               }
-//        
-//        return cell
-//    }
-//    
-//    // 셀의 크기를 컬렉션 뷰의 크기에 맞춤
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
-//    }
-//}

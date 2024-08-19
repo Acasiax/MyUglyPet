@@ -10,7 +10,7 @@ import SnapKit
 
 class BaseDetailView: UIViewController {
     
-    
+    var imageFiles: [String] = [] // 이미지 URL 배열을 저장할 프로퍼티
     var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티
     
     var comments: [DummyComment] = []  // 댓글을 저장하는 배열

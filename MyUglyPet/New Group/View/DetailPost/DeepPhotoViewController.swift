@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class CustomPageControl: UIView {
     
@@ -76,7 +77,7 @@ class CustomPageControl: UIView {
 
 class DeepPhotoViewController: UIViewController {
     
-    var photos: [UIImage] = []
+    var photos: [String] = []
     var selectedIndex: Int = 0
     
     private let collectionView: UICollectionView = {
@@ -126,8 +127,11 @@ class DeepPhotoViewController: UIViewController {
         
         setupConstraints()
         
-        // 처음 선택된 이미지로 스크롤
-        collectionView.scrollToItem(at: IndexPath(item: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
+        
+               // 처음 선택된 이미지로 스크롤
+               if selectedIndex < photos.count {
+                   collectionView.scrollToItem(at: IndexPath(item: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
+               }
     }
     
     private func setupConstraints() {
@@ -156,14 +160,42 @@ class DeepPhotoViewController: UIViewController {
 extension DeepPhotoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("무야호: \(photos.count)")
         return photos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
-        cell.imageView.image = photos[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
+        
+        // 이미지 URL을 가져옴
+        let imageURLString = photos[indexPath.item]
+        
+        if let imageURL = URL(string: imageURLString) {
+            // Kingfisher를 사용하여 이미지를 비동기로 로드
+            cell.imageView.kf.setImage(
+                with: imageURL,
+                placeholder: UIImage(named: "placeholder"),
+                options: [.requestModifier(AnyModifier { request in
+                    var r = request
+                    r.setValue(UserDefaultsManager.shared.token, forHTTPHeaderField: "Authorization")
+                    r.setValue(APIKey.key, forHTTPHeaderField: "SesacKey")
+                    return r
+                })]
+            ) { result in
+                switch result {
+                case .success(let value):
+                    print("이미지 로드 성공: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("이미지 로드 실패🔥: \(error.localizedDescription)")
+                }
+            }
+        } else {
+            print("URL 변환에 실패했습니다: \(imageURLString)")
+        }
+        
         return cell
     }
+
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
