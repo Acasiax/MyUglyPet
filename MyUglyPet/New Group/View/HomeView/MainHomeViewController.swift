@@ -25,6 +25,9 @@ struct MissionData {
 
 final class MainHomeViewController: UIViewController {
     
+    private let allPostHomeVC = AllPostHomeViewController()
+
+    
     private let missions: [Mission] = MissionData.missions
     
     let arrowupLottieAnimationView: LottieAnimationView = {
@@ -174,24 +177,21 @@ final class MainHomeViewController: UIViewController {
         let translation = gesture.translation(in: view)
         
         if gesture.state == .changed {
-            if translation.y < 0 { // 아래로 드래그 중이면 (y가 음수)
+            if translation.y < 0 { // 위로 드래그 중이면 (y가 음수)
                 view.transform = CGAffineTransform(translationX: 0, y: translation.y)
             }
         } else if gesture.state == .ended {
-            if translation.y < -100 { // 사용자가 충분히 아래로 스와이프했을 때
+            if translation.y < -100 { // 사용자가 충분히 위로 스와이프했을 때
                 UIView.animate(withDuration: 0.3, animations: {
                     self.view.transform = CGAffineTransform(translationX: 0, y: -self.view.frame.height)
                 }) { _ in
                     let allPostHomeVC = AllPostHomeViewController()
-                    let navController = UINavigationController(rootViewController: allPostHomeVC)
 
-                    navController.modalPresentationStyle = .overCurrentContext
-                    navController.modalTransitionStyle = .coverVertical
-
-                    self.present(navController, animated: true) {
-                        self.view.transform = .identity
-                    }
-
+                    // 푸쉬 방식으로 화면 전환
+                    self.navigationController?.pushViewController(allPostHomeVC, animated: true)
+                    
+                    // 현재 뷰의 변환을 초기 상태로 복귀
+                    self.view.transform = .identity
                 }
             } else {
                 // 드래그 거리가 짧아 원래 위치로 복귀
@@ -201,6 +201,7 @@ final class MainHomeViewController: UIViewController {
             }
         }
     }
+
     
 }
 

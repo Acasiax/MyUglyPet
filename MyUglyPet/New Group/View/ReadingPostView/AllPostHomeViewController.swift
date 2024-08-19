@@ -124,28 +124,7 @@ final class AllPostHomeViewController: UIViewController {
 
     // Pan Gesture 처리
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: view)
-        
-        if gesture.state == .changed {
-            if translation.y > 0 { // 아래로 스와이프 중이면 (y가 양수)
-                view.transform = CGAffineTransform(translationX: 0, y: translation.y)
-            }
-        } else if gesture.state == .ended {
-            if translation.y > 100 { // 사용자가 충분히 아래로 스와이프했을 때
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.view.transform = CGAffineTransform(translationX: 0, y: self.view.frame.height)
-                }) { _ in
-                    // 현재 뷰 컨트롤러를 닫고 이전 화면으로 돌아갑니다.
-                    self.dismiss(animated: true) {
-                        self.view.transform = .identity
-                    }
-                }
-            } else {
-                UIView.animate(withDuration: 0.3) {
-                    self.view.transform = .identity
-                }
-            }
-        }
+//기능 지웠음
     }
 
     

@@ -257,6 +257,11 @@ final class AllPostTableViewCell: UITableViewCell {
     @objc func followButtonTapped() {
         print("팔로우 버튼 탭")
         AnimationZip.animateButtonPress(followButton)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.followButton.setTitle("팔로잉", for: .normal)
+            self.followButton.backgroundColor = .orange
+        }
     }
 }
 
