@@ -75,6 +75,9 @@ class CustomPageControl: UIView {
     }
 }
 
+
+
+
 class DeepPhotoViewController: UIViewController {
     
     var photos: [String] = []

@@ -327,19 +327,37 @@ class BaseDetailView: UIViewController {
     @objc func sendButtonTapped() {
         guard let text = commentTextField.text, !text.isEmpty else { return }
         
-        // Get the current date and time
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // Customize the date format as needed
-        let currentDate = dateFormatter.string(from: Date())
-        
-        let newComment = DummyComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
-        comments.append(newComment)
-        
-        commentTextField.text = ""
-        noCommentsLabel.isHidden = true
-        tableView.reloadData()
+        // 댓글 작성 메서드를 호출하기 위해 postID가 필요합니다.
+        guard let postID = post?.postId else {
+            print("Post ID를 찾을 수 없습니다.")
+            return
+        }
+        print("사용할 Post ID: \(postID)")
+
+        // PostNetworkManager의 postComment 메서드를 호출하여 댓글을 서버에 전송
+        PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
+            switch result {
+            case .success:
+                print("댓글 작성 성공!")
+                
+                // UI 업데이트: 작성된 댓글을 로컬에서도 추가
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let currentDate = dateFormatter.string(from: Date())
+                
+                let newComment = DummyComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
+                self?.comments.append(newComment)
+                
+                self?.commentTextField.text = ""
+                self?.noCommentsLabel.isHidden = true
+                self?.tableView.reloadData()
+                
+            case .failure(let error):
+                print("댓 ㅍ!: \(error.localizedDescription)")
+            }
+        }
     }
-    
+
     @objc func followButtonTapped() {
         print("팔로우 버튼 탭")
         AnimationZip.animateButtonPress(followButton)

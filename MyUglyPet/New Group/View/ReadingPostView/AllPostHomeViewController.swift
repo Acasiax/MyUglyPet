@@ -24,7 +24,7 @@ protocol AllPostTableViewCellDelegate: AnyObject {
 
 final class AllPostHomeViewController: UIViewController {
     
-    private var posts: [PostsModel] = []
+    private var serverPosts: [PostsModel] = []
     
     let colors: [UIColor] = [
            CustomColors.deepPurple,
@@ -95,13 +95,13 @@ final class AllPostHomeViewController: UIViewController {
     
     private func fetchPosts() {
         // 쿼리 파라미터 생성
-        let query = FetchReadingPostQuery(next: nil, limit: "20", product_id: "")
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "")
 
         // 네트워크 요청 예시 (PostNetworkManager 사용)
         PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
             switch result {
             case .success(let posts):
-                self?.posts = posts
+                self?.serverPosts = posts
                 self?.tableView.reloadData() // 데이터 로드 후 테이블뷰 리로드
                 print("포스팅을 가져오는데 성공했어요🥰")
             case .failure(let error):
@@ -163,13 +163,13 @@ extension AllPostHomeViewController: UIGestureRecognizerDelegate {
 extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        // print("헬로우 포스트 갯수: \(posts.count)")
-        return posts.count // 포스트 개수만큼 반환
+        return serverPosts.count // 포스트 개수만큼 반환
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllPostTableViewCell.identifier, for: indexPath) as! AllPostTableViewCell
         
-        let post = posts[indexPath.row]
+        let post = serverPosts[indexPath.row]
         cell.titleLabel.text = post.title // 포스트 제목 설정
         cell.contentLabel.text = post.content // 포스트 내용 설정
         cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
@@ -185,7 +185,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let detailViewController = DetailViewController()
-            let selectedPost = posts[indexPath.row]
+            let selectedPost = serverPosts[indexPath.row]
             
             detailViewController.title = selectedPost.title // 제목 설정
             detailViewController.post = selectedPost

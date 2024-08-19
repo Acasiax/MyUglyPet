@@ -14,5 +14,9 @@ struct LoginQuery: Encodable {
 
 
 
+struct CommentQuery: Encodable {
+    let content: String
+}
+
 
 

@@ -66,7 +66,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         // 이미지 URL을 가져옴
         let imageURLString = imageFiles[indexPath.item]
         let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString
-        
+        print("이미지스트링: \(fullImageURLString)")
         if let imageURL = URL(string: fullImageURLString) {
             // Kingfisher를 사용하여 이미지를 비동기로 로드
             cell.imageView.kf.setImage(
@@ -81,7 +81,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
             ) { result in
                 switch result {
                 case .success(let value):
-                    print("이미지 로드 성공: \(value.source.url?.absoluteString ?? "")")
+                    print("이미지 로드 성공📍: \(value.source.url?.absoluteString ?? "")")
                 case .failure(let error):
                     print("이미지 로드 실패📍: \(error.localizedDescription)")
                 }
@@ -104,12 +104,18 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("따르릉릉🤚🏻")
         let deepPhotoVC = DeepPhotoViewController()
         
         // 이미지 파일의 전체 URL을 생성하여 deepPhotoVC에 전달
         deepPhotoVC.photos = imageFiles.map { file in
             return APIKey.baseURL + "v1/" + file
         }
+        
+        
+      
+             
+        
         
         // 선택한 인덱스를 deepPhotoVC에 전달
         deepPhotoVC.selectedIndex = indexPath.item

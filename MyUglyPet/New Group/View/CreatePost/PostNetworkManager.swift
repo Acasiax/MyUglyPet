@@ -14,6 +14,49 @@ class PostNetworkManager {
     
     private init() {}
     
+    
+    //MARK: - 댓글 작성/등록
+    func postComment(toPostWithID postID: String, content: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let query = CommentQuery(content: content) // CommentQuery 생성
+            let request = Router.postComment(postID: postID, query: query).asURLRequest
+            
+      
+        print("Request URL: \(request.url?.absoluteString ?? "No URL")")
+        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+        print("Request Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "No Body")")
+
+        
+        
+        AF.request(request)
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    // 응답 데이터를 확인해보세요
+                    if let jsonString = String(data: data, encoding: .utf8) {
+                        print("Response JSON String: \(jsonString)")
+                    } else {
+                        print("Response data could not be converted to a string.")
+                    }
+
+                    do {
+                        let result = try JSONDecoder().decode(CommentResponse.self, from: data)
+                        completion(.success(()))
+                    } catch {
+                        print("Decoding error: \(error.localizedDescription)")
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            }
+
+        }
+    
+
+    
+    
+    
     //MARK: - 포스트 조희
     func fetchPosts(query: FetchReadingPostQuery, completion: @escaping (Result<[PostsModel], Error>) -> Void) {
         let request = Router.fetchPosts(query: query).asURLRequest

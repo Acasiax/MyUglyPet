@@ -268,11 +268,45 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
     
     
 
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
+//        
+//        let imageURLString = imageFiles[indexPath.item] //🌟남이 게시한 사진은 baseURL이 있음.
+//      //  let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString
+//        
+//        if let imageURL = URL(string: imageURLString) {
+//            let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "20", product_id: "")).headersForImageRequest
+//            
+//            let modifier = AnyModifier { request in
+//                var r = request
+//                r.allHTTPHeaderFields = headers
+//                return r
+//            }
+//            
+//            cell.imageView.kf.setImage(
+//                with: imageURL,
+//                placeholder: UIImage(named: "placeholder"),
+//                options: [.requestModifier(modifier)]
+//            ) { result in
+//                switch result {
+//                case .success(let value):
+//                    print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
+//                case .failure(let error):
+//                    print("이미지 로드 실패📩: \(error.localizedDescription)")
+//                }
+//            }
+//        } else {
+//            print("URL 변환에 실패했습니다📩: \(imageURLString)")
+//        }
+//        
+//        return cell
+//    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
         
         let imageURLString = imageFiles[indexPath.item]
-        let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString
+        let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString //🌟내가 게시한 사진은 baseURL이 없음!
         
         if let imageURL = URL(string: fullImageURLString) {
             let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "10", product_id: "")).headersForImageRequest
@@ -290,19 +324,17 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
             ) { result in
                 switch result {
                 case .success(let value):
-                    print("이미지 로드 성공: \(value.source.url?.absoluteString ?? "")")
+                    print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
                 case .failure(let error):
-                    print("이미지 로드 실패: \(error.localizedDescription)")
+                    print("이미지 로드 실패📩: \(error.localizedDescription)")
                 }
             }
         } else {
-            print("URL 변환에 실패했습니다: \(fullImageURLString)")
+            print("URL 변환에 실패했습니다📩: \(fullImageURLString)")
         }
         
         return cell
     }
-
-
 
 
         
