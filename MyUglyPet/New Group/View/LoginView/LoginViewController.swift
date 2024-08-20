@@ -24,6 +24,7 @@ final class LoginViewController: UIViewController {
         textField.placeholder = "아이디"
         textField.borderStyle = .roundedRect
         textField.autocapitalizationType = .none
+        textField.text = "asdf"
         return textField
     }()
     
@@ -32,6 +33,7 @@ final class LoginViewController: UIViewController {
         textField.placeholder = "비밀번호"
         textField.borderStyle = .roundedRect
         textField.isSecureTextEntry = true
+        textField.text = "asdf"
         return textField
     }()
     

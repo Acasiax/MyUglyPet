@@ -56,7 +56,7 @@
 		AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273442C71CC5D007551C4 /* LoginModel.swift */; };
 		AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273452C71CC5D007551C4 /* ProfileModel.swift */; };
 		AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273462C71CC5D007551C4 /* RefreshModel.swift */; };
-		AA72734D2C71CC6E007551C4 /* LoginQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734B2C71CC6E007551C4 /* LoginQuery.swift */; };
+		AA72734D2C71CC6E007551C4 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734B2C71CC6E007551C4 /* Query.swift */; };
 		AA7273542C71D032007551C4 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734E2C71D032007551C4 /* Header.swift */; };
 		AA7273552C71D032007551C4 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734F2C71D032007551C4 /* NetworkManager.swift */; };
 		AA7273572C71D032007551C4 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273512C71D032007551C4 /* TargetType.swift */; };
@@ -68,6 +68,9 @@
 		AA7273742C72DB4A007551C4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA7273732C72DB49007551C4 /* GoogleService-Info.plist */; };
 		AA7273772C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = AA7273762C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		AA7273792C72DBC3007551C4 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = AA7273782C72DBC3007551C4 /* FirebaseCrashlytics */; };
+		AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72737F2C7397BE007551C4 /* DashboardViewController.swift */; };
+		AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */; };
+		AA7273842C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -115,7 +118,7 @@
 		AA7273442C71CC5D007551C4 /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		AA7273452C71CC5D007551C4 /* ProfileModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		AA7273462C71CC5D007551C4 /* RefreshModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
-		AA72734B2C71CC6E007551C4 /* LoginQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginQuery.swift; sourceTree = "<group>"; };
+		AA72734B2C71CC6E007551C4 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		AA72734E2C71D032007551C4 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		AA72734F2C71D032007551C4 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		AA7273512C71D032007551C4 /* TargetType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
@@ -125,6 +128,9 @@
 		AA7273682C720420007551C4 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNetworkManager.swift; sourceTree = "<group>"; };
 		AA7273732C72DB49007551C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		AA72737F2C7397BE007551C4 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HobbyCardCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +215,7 @@
 		AA7272E82C6DD8BF007551C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AA72737E2C739784007551C4 /* DashboardView */,
 				AA7273212C70F891007551C4 /* LoginView */,
 				AA72730D2C705ED9007551C4 /* DetailPost */,
 				AA7273092C704145007551C4 /* HomeView */,
@@ -246,7 +253,6 @@
 			children = (
 				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
 				AA7273592C71DA95007551C4 /* BaseCreatePost.swift */,
-				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
 			);
 			path = CreatePost;
 			sourceTree = "<group>";
@@ -334,7 +340,7 @@
 		AA72734C2C71CC6E007551C4 /* RequestModel */ = {
 			isa = PBXGroup;
 			children = (
-				AA72734B2C71CC6E007551C4 /* LoginQuery.swift */,
+				AA72734B2C71CC6E007551C4 /* Query.swift */,
 			);
 			path = RequestModel;
 			sourceTree = "<group>";
@@ -346,9 +352,20 @@
 				AA72734F2C71D032007551C4 /* NetworkManager.swift */,
 				AA7273512C71D032007551C4 /* TargetType.swift */,
 				AA7273522C71D032007551C4 /* UserDefaultsManager.swift */,
+				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
 				AA7273682C720420007551C4 /* Router.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		AA72737E2C739784007551C4 /* DashboardView */ = {
+			isa = PBXGroup;
+			children = (
+				AA72737F2C7397BE007551C4 /* DashboardViewController.swift */,
+				AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */,
+				AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */,
+			);
+			path = DashboardView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -483,6 +500,8 @@
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
 				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,
 				AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */,
+				AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */,
+				AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */,
 				AA72736B2C72CDB8007551C4 /* PostNetworkManager.swift in Sources */,
 				AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */,
 				AA7273672C71FFB7007551C4 /* MyLoginNetworkManager.swift in Sources */,
@@ -497,7 +516,7 @@
 				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
 				AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */,
-				AA72734D2C71CC6E007551C4 /* LoginQuery.swift in Sources */,
+				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
 				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,
 				AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */,
@@ -517,6 +536,7 @@
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
 				AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,
+				AA7273842C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

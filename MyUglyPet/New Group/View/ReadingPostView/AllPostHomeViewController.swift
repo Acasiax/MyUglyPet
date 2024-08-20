@@ -9,12 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-struct FetchReadingPostQuery: Encodable {
-    let next: String?
-    let limit: String
-    let product_id: String
-    
-}
+
 
 
 // 델리게이트 프로토콜 정의
