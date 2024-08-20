@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -73,6 +74,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			children = (
 				AA7272E12C6D861F007551C4 /* APIKey.swift */,
 				AA7272DF2C6D860E007551C4 /* .gitignore */,
+				AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */,
 				AA7272B32C6C967C007551C4 /* MyUglyPet */,
 				AA7272B22C6C967C007551C4 /* Products */,
 			);
@@ -451,6 +454,7 @@
 				AA72731B2C7078D9007551C4 /* arrowup.json in Resources */,
 				AA7272F22C6F82E2007551C4 /* LightEffectAnimation.json in Resources */,
 				AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */,
+				AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */,
 				AA7272C12C6C967E007551C4 /* Base in Resources */,
 				AA7272BC2C6C967C007551C4 /* Base in Resources */,
 			);
