@@ -170,6 +170,11 @@ final class MainHomeViewController: UIViewController {
     
     @objc private func uploadButtonTapped() {
         print("울 애기 사진 업로드하기 버튼 탭")
+        AnimationZip.animateButtonPress(uploadButton)
+        let uglyCandidateVC = UglyCandidateViewController()
+        self.navigationController?.pushViewController(uglyCandidateVC, animated: true)
+        
+        
     }
     
     // Pan Gesture 처리

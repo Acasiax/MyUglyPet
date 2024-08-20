@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */; };
+		AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -75,6 +76,7 @@
 
 /* Begin PBXFileReference section */
 		AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
+				AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -521,6 +524,7 @@
 				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,
 				AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */,
 				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
+				AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA72730F2C705EFC007551C4 /* BaseAllPostView.swift in Sources */,
 				AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */,

@@ -4,9 +4,12 @@
 //
 //  Created by 이윤지 on 8/20/24.
 //
+//
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 // 더미 데이터 배열
 let bannerData: [(image: UIImage, title: String)] = [
@@ -15,14 +18,13 @@ let bannerData: [(image: UIImage, title: String)] = [
     (image: UIImage(named: "기본냥멍3")!, title: "배너 제목 3")
 ]
 
-
-
 class DashboardViewController: UIViewController {
+    
+    private let disposeBag = DisposeBag()
     
     let scrollView = UIScrollView()
     let contentStackView = UIStackView()
     
-
     let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "냥멍난이"
@@ -30,7 +32,6 @@ class DashboardViewController: UIViewController {
         return label
     }()
     
-
     let searchButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
@@ -66,7 +67,6 @@ class DashboardViewController: UIViewController {
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = .black
-        pageControl.addTarget(self, action: #selector(pageControlValueChanged(_:)), for: .valueChanged)
         return pageControl
     }()
     
@@ -115,25 +115,14 @@ class DashboardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bannerCollectionView.dataSource = self
-        rankCollectionView.dataSource = self
-        hobbyCardCollectionView.dataSource = self
-        
-        bannerCollectionView.delegate = self
-        rankCollectionView.delegate = self
-        hobbyCardCollectionView.delegate = self
-        
-        // 배너의 페이지 수에 맞춰 페이지 컨트롤 설정
-        pageControl.numberOfPages = bannerData.count
-        
         setupSubviews()
         setupConstraints()
+        bindData()
     }
     
     func setupSubviews() {
         view.backgroundColor = CustomColors.lightBeige
         
-
         view.addSubview(scrollView)
         scrollView.addSubview(contentStackView)
         
@@ -142,28 +131,23 @@ class DashboardViewController: UIViewController {
         contentStackView.isLayoutMarginsRelativeArrangement = true
         contentStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0) // 좌측에 10pt 여백 추가
         
-        // 로고 및 검색 버튼 추가
         let headerStackView = UIStackView(arrangedSubviews: [logoLabel, searchButton])
         headerStackView.axis = .horizontal
         headerStackView.spacing = 16
         contentStackView.addArrangedSubview(headerStackView)
         
-        // 배너 섹션 추가
         contentStackView.addArrangedSubview(bannerHeaderLabel)
         contentStackView.addArrangedSubview(bannerCollectionView)
         contentStackView.addArrangedSubview(pageControl)
         
-        // 순위 섹션 추가
         contentStackView.addArrangedSubview(rankHeaderLabel)
         contentStackView.addArrangedSubview(rankCollectionView)
         
-        // 취미 카드 섹션 추가
         contentStackView.addArrangedSubview(hobbyCardHeaderLabel)
         contentStackView.addArrangedSubview(hobbyCardCollectionView)
     }
     
     func setupConstraints() {
-        // ScrollView 제약 조건
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -186,69 +170,49 @@ class DashboardViewController: UIViewController {
         }
     }
     
-    // 페이지 컨트롤 값 변경 시 호출되는 메서드
-    @objc func pageControlValueChanged(_ sender: UIPageControl) {
-        let indexPath = IndexPath(item: sender.currentPage, section: 0)
-        bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    func bindData() {
+        // 배너 데이터 바인딩
+        Observable.just(bannerData)
+            .bind(to: bannerCollectionView.rx.items(cellIdentifier: BannerCollectionViewCell.identifier, cellType: BannerCollectionViewCell.self)) { index, model, cell in
+                cell.configure(with: model.image, title: model.title)
+            }
+            .disposed(by: disposeBag)
+        
+        // 페이지 컨트롤과 컬렉션 뷰의 스크롤 바인딩
+        bannerCollectionView.rx.contentOffset
+            .map { Int($0.x / UIScreen.main.bounds.width) }
+            .bind(to: pageControl.rx.currentPage)
+            .disposed(by: disposeBag)
+        
+        // 페이지 컨트롤의 값 변화에 따른 컬렉션 뷰 스크롤
+        pageControl.rx.controlEvent(.valueChanged)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                let indexPath = IndexPath(item: self.pageControl.currentPage, section: 0)
+                self.bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        // 순위 섹션 데이터 바인딩
+        Observable.just(Array(1...5))
+            .bind(to: rankCollectionView.rx.items(cellIdentifier: RankCollectionViewCell.identifier, cellType: RankCollectionViewCell.self)) { index, model, cell in
+                let image = UIImage(named: "기본냥멍1")!
+                cell.bindData(image: Observable.just(image), name: Observable.just("하하 \(model)"), description: Observable.just("호호"))
+            }
+            .disposed(by: disposeBag)
+        
+        // 취미 카드 섹션 데이터 바인딩
+        Observable.just(Array(1...10))
+            .bind(to: hobbyCardCollectionView.rx.items(cellIdentifier: HobbyCardCollectionViewCell.identifier, cellType: HobbyCardCollectionViewCell.self)) { index, model, cell in
+                let image = UIImage(named: "기본냥멍1")!
+                cell.bindData(image: Observable.just(image), title: Observable.just("유저 \(model)"), description: Observable.just("이것은 취미 카드 설명입니다."))
+            }
+            .disposed(by: disposeBag)
     }
 }
-
-
-
-
-extension DashboardViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView {
-        case bannerCollectionView:
-            return bannerData.count
-        case rankCollectionView:
-            return 5
-        case hobbyCardCollectionView:
-            return 10
-        default:
-            return 0
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch collectionView {
-        case bannerCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.identifier, for: indexPath) as! BannerCollectionViewCell
-            let data = bannerData[indexPath.item]
-            cell.configure(with: data.image, title: data.title)
-            return cell
-            
-        case rankCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as! RankCollectionViewCell
-            cell.configure(with: UIImage(named: "기본냥멍1")!, name: "하하 \(indexPath.row + 1)", description: "호호")
-            return cell
-            
-        case hobbyCardCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HobbyCardCollectionViewCell.identifier, for: indexPath) as! HobbyCardCollectionViewCell
-            cell.configure(with: UIImage(named: "기본냥멍1")!, title: "유저 \(indexPath.row + 1)", description: "이것은 취미 카드 설명입니다.")
-            return cell
-            
-        default:
-            return UICollectionViewCell()
-        }
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == bannerCollectionView {
-            let page = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
-            pageControl.currentPage = page
-        }
-    }
-}
-
 
 class BannerCollectionViewCell: UICollectionViewCell {
 
-    
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -274,7 +238,7 @@ class BannerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
+    private func setupUI() {
         contentView.addSubview(imageView)
         imageView.addSubview(titleLabel)
         
@@ -293,14 +257,4 @@ class BannerCollectionViewCell: UICollectionViewCell {
         titleLabel.text = title
     }
 }
-
-
-
-
-
-
-
-
-
-
 

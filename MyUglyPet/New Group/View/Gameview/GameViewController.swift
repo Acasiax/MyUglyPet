@@ -8,6 +8,8 @@
 //firstContainerView와 secondContainerView를 선택할 때
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 struct Pet {
     let name: String
@@ -17,6 +19,8 @@ struct Pet {
 
 final class GameViewController: BaseGameView {
 
+    let disposeBag = DisposeBag()
+
     let pets: [Pet] = [
         Pet(name: "벼루님", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),
         Pet(name: "꼬질이님", hello: "퇴근후 기절각", image: UIImage(named: "기본냥멍2")!),
@@ -25,16 +29,6 @@ final class GameViewController: BaseGameView {
         Pet(name: "5님", hello: "식칼어딨어멍멍", image: UIImage(named: "기본냥멍5")!),
         Pet(name: "6님", hello: "왔냐?", image: UIImage(named: "기본냥멍6")!),
         Pet(name: "7님", hello: "주인아밥줘라", image: UIImage(named: "기본냥멍7")!),
-        
-//        Pet(name: "뭘보냥?", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),
-//        Pet(name: "퇴근후 기절각", hello: "퇴근후 기절각", image: UIImage(named: "기본냥멍2")!),
-//        Pet(name: "꿀잠이다멍", hello: "꿀잠이다멍", image: UIImage(named: "기본냥멍3")!),
-//        Pet(name: "멈칫", hello: "멈칫", image: UIImage(named: "기본냥멍4")!),
-//        Pet(name: "식칼어딨어멍멍", hello: "식칼어딨어멍멍", image: UIImage(named: "기본냥멍5")!),
-//        Pet(name: "왔냐?", hello: "왔냐?", image: UIImage(named: "기본냥멍6")!),
-//        Pet(name: "주인아ㅂ", hello: "주인아밥줘라", image: UIImage(named: "기본냥멍7")!),
-
-        
     ]
     
     let rounds: [String] = ["망한 사진 월드컵 32강", "망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
@@ -53,16 +47,66 @@ final class GameViewController: BaseGameView {
         view.backgroundColor = CustomColors.lightBeige
         addsub()
         setupUI()
-        tapGest()
+        setupBindings()
         basiclottieAnimationView.play()
     }
     
-    func tapGest() {
-        let firstTapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
+    private func setupBindings() {
+        // 첫 번째 컨테이너 탭 이벤트 처리
+        let firstTapGesture = UITapGestureRecognizer()
         firstContainerView.addGestureRecognizer(firstTapGesture)
         
-        let secondTapGesture = UITapGestureRecognizer(target: self, action: #selector(secondContainerTapped))
+        firstTapGesture.rx.event
+            .bind { [weak self] _ in
+                self?.handleFirstContainerTap()
+            }
+            .disposed(by: disposeBag)
+        
+        // 두 번째 컨테이너 탭 이벤트 처리
+        let secondTapGesture = UITapGestureRecognizer()
         secondContainerView.addGestureRecognizer(secondTapGesture)
+        
+        secondTapGesture.rx.event
+            .bind { [weak self] _ in
+                self?.handleSecondContainerTap()
+            }
+            .disposed(by: disposeBag)
+    }
+
+    private func handleFirstContainerTap() {
+        print("첫번째 컨테이너가 선택되었습니다.")
+        let selectedPet = pets[currentPetIndex]
+        checkForFinalWinner(selectedPet: selectedPet)
+        
+        AnimationZip.animateContainerView(firstContainerView)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.updateRound()
+            if self.currentRoundIndex < self.rounds.count - 1 {
+                AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
+                self.showNextPet(in: self.secondContainerView)
+                AnimationZip.animateDescriptionLabel(self.descriptionLabel)
+            }
+        }
+    }
+
+    private func handleSecondContainerTap() {
+        print("두번째 컨테이너가 선택되었습니다.")
+        if let lastPetIndex = lastPetIndex {
+            let selectedPet = pets[lastPetIndex]
+            checkForFinalWinner(selectedPet: selectedPet)
+            
+            AnimationZip.animateContainerView(secondContainerView)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.updateRound()
+                if self.currentRoundIndex < self.rounds.count - 1 {
+                    AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
+                    self.showNextPet(in: self.firstContainerView)
+                    AnimationZip.animateDescriptionLabel(self.descriptionLabel)
+                }
+            }
+        }
     }
     
     func showInitialPets() {
@@ -99,7 +143,7 @@ final class GameViewController: BaseGameView {
     }
 
     func checkForFinalWinner(selectedPet: Pet) {
-        if currentRoundIndex == 3 { // 현재 라운드가 4강인지 확인
+        if currentRoundIndex == 3 {
             print("4강 우승자: \(selectedPet.name), 나이: \(selectedPet.hello)")
             
             UIView.animate(withDuration: 0.5, animations: {
@@ -133,42 +177,7 @@ final class GameViewController: BaseGameView {
         
         animateWinnerContainerView()
     }
-
-    @objc func firstContainerTapped() {
-        print("첫번째 컨테이너가 선택되었습니다.")
-        let selectedPet = pets[currentPetIndex]
-        checkForFinalWinner(selectedPet: selectedPet)
-        
-        AnimationZip.animateContainerView(firstContainerView)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.updateRound()
-            if self.currentRoundIndex < self.rounds.count - 1 {
-                AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
-                self.showNextPet(in: self.secondContainerView)
-                AnimationZip.animateDescriptionLabel(self.descriptionLabel)
-            }
-        }
-    }
-    
-    @objc func secondContainerTapped() {
-        print("두번째 컨테이너가 선택되었습니다.")
-        let selectedPet = pets[lastPetIndex!]
-        checkForFinalWinner(selectedPet: selectedPet)
-        
-        AnimationZip.animateContainerView(secondContainerView)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.updateRound()
-            if self.currentRoundIndex < self.rounds.count - 1 {
-                AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
-                self.showNextPet(in: self.firstContainerView)
-                AnimationZip.animateDescriptionLabel(self.descriptionLabel)
-            }
-        }
-    }
 }
-
 
 
 

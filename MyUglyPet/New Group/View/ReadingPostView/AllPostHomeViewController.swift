@@ -87,7 +87,8 @@ final class AllPostHomeViewController: UIViewController {
     
     private func fetchPosts() {
         // 쿼리 파라미터 생성
-        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "")
+
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed") //🌟
 
         // 네트워크 요청 예시 (PostNetworkManager 사용)
         PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in

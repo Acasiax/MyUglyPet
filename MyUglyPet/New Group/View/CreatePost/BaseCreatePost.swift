@@ -10,9 +10,7 @@ import SnapKit
 import PhotosUI
 
 extension CreatePostViewController {
-    
-    
-    
+
     func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageContainerStackView)
@@ -23,6 +21,7 @@ extension CreatePostViewController {
         
         view.addSubview(rewardLabel)
         view.addSubview(guidelineLabel)
+        view.addSubview(titleTextField)
         view.addSubview(reviewTextView)
         view.addSubview(characterCountLabel)
         view.addSubview(minimumTextLabel)
@@ -67,8 +66,15 @@ extension CreatePostViewController {
             make.trailing.equalTo(view).offset(-20)
         }
         
-        reviewTextView.snp.makeConstraints { make in
+        titleTextField.snp.makeConstraints { make in
             make.top.equalTo(guidelineLabel.snp.bottom).offset(20)
+            make.leading.equalTo(view).offset(20)
+            make.trailing.equalTo(view).offset(-20)
+            make.height.equalTo(40)
+        }
+        
+        reviewTextView.snp.makeConstraints { make in
+            make.top.equalTo(titleTextField.snp.bottom).offset(10)
             make.leading.equalTo(view).offset(20)
             make.trailing.equalTo(view).offset(-20)
             make.height.equalTo(150)
@@ -91,6 +97,7 @@ extension CreatePostViewController {
             make.height.equalTo(50)
         }
     }
+
     func textViewDidChange(_ textView: UITextView) {
         if let text = textView.text {
             characterCountLabel.text = "\(text.count)"
@@ -152,5 +159,5 @@ extension CreatePostViewController {
         let count = selectedImages.count
         photoCountLabel.text = "\(count)/5"
     }
-    
 }
+

@@ -7,12 +7,15 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 import Alamofire
 import PhotosUI
 
-
 final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
+    let disposeBag = DisposeBag()  // DisposeBag 초기화
+    
     let submitButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("작성 완료", for: .normal)
@@ -20,7 +23,6 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 5
         button.isEnabled = false
-        button.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -60,7 +62,6 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 10
         button.backgroundColor = CustomColors.softPink.withAlphaComponent(0.5)
-        button.addTarget(self, action: #selector(photoAttachmentButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -95,6 +96,18 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         return label
     }()
     
+    let titleTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "게시글 제목을 입력하세요(필수*)"
+        textField.borderStyle = .none
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.layer.borderWidth = 1
+        textField.layer.cornerRadius = 5
+        textField.backgroundColor = .white
+        return textField
+    }()
+    
     let reviewTextView: UITextView = {
         let textView = UITextView()
         textView.layer.borderColor = UIColor.lightGray.cgColor
@@ -104,7 +117,6 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         return textView
     }()
     
-    
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
@@ -112,10 +124,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         return indicator
     }()
 
-    
     var selectedImageData: Data?
-    
-    // 선택된 이미지를 담을 배열
     var selectedImages: [UIView] = []
     
     override func viewDidLoad() {
@@ -125,7 +134,41 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         addSubviews()
         setupConstraints()
         activityIndicator.center = view.center
+        
+        setupBindings()
     }
+    
+    private func setupBindings() {
+        // 텍스트 뷰의 입력을 관찰하고 캐릭터 수 업데이트
+        reviewTextView.rx.text.orEmpty
+            .map { "\($0.count)" }
+            .bind(to: characterCountLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        // 텍스트 뷰의 입력을 관찰하여 버튼 활성화 상태 업데이트
+        reviewTextView.rx.text.orEmpty
+            .map { $0.count >= 5 }
+            .subscribe(onNext: { [weak self] isEnabled in
+                self?.submitButton.isEnabled = isEnabled
+                self?.submitButton.backgroundColor = isEnabled ? .orange : .lightGray
+            })
+            .disposed(by: disposeBag)
+        
+        // 사진 첨부 버튼 클릭 이벤트 처리
+        photoAttachmentButton.rx.tap
+            .bind { [weak self] in
+                self?.photoAttachmentButtonTapped()
+            }
+            .disposed(by: disposeBag)
+        
+        // 작성 완료 버튼 클릭 이벤트 처리
+        submitButton.rx.tap
+            .bind { [weak self] in
+                self?.submitButtonTapped()
+            }
+            .disposed(by: disposeBag)
+    }
+
     
     @objc func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
@@ -140,8 +183,6 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         present(picker, animated: true, completion: nil)
     }
     
-    
-    
     @objc func submitButtonTapped() {
         print(selectedImages.count)
         print(selectedImages.debugDescription)
@@ -150,24 +191,15 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             return
         }
 
-        // 애니메이션 추가
         AnimationZip.animateButtonPress(submitButton)
         
         if selectedImages.isEmpty {
-            // 이미지가 없는 경우 게시글만 업로드
             uploadPost(withImageURLs: [])
         } else {
-            // 이미지를 하나씩 업로드하고 결과를 사용하여 게시글 업로드
             uploadImagesAndPost()
         }
     }
-
-
-    
-    
 }
-
-
 
 // MARK: - 이미지, 게시글 업로드 함수
 extension CreatePostViewController {
@@ -186,7 +218,7 @@ extension CreatePostViewController {
                 continue
             }
             
-            print("이미지 데이터 크기: \(imageData.count) bytes") // 이미지 데이터 크기 확인
+            print("이미지 데이터 크기: \(imageData.count) bytes")
             
             dispatchGroup.enter()
             
@@ -221,13 +253,16 @@ extension CreatePostViewController {
         }
     }
 
-    
     func uploadPost(withImageURLs imageUrls: [String]) {
-        activityIndicator.startAnimating() // 로딩 시작
-
-        let title = "우아아아아앙ㅇ아아"
+        activityIndicator.startAnimating()
+        
+        guard let title = titleTextField.text, !title.isEmpty else {
+                print("게시글 제목: \(title)")
+                return
+            }
         let content = reviewTextView.text ?? ""
-        let productId: String? = nil
+       // let productId: String? = nil
+        let productId: String? = "allFeed" //🌟
 
         print("업로드할 이미지 URL: \(imageUrls)")
 
@@ -237,15 +272,15 @@ extension CreatePostViewController {
             productId: productId,
             fileURLs: imageUrls
         ) { result in
-            self.activityIndicator.stopAnimating() // 로딩 종료
+            self.activityIndicator.stopAnimating()
             
             switch result {
             case .success:
                 print("게시글 업로드 성공")
-                self.reviewTextView.text = "" // 입력 필드 초기화
-                self.selectedImages.removeAll() // 이미지 목록 초기화
-                self.updatePhotoCountLabel() // 이미지 카운트 라벨 업데이트
-                self.updateSubmitButtonState() // 제출 버튼 상태 업데이트
+                self.reviewTextView.text = ""
+                self.selectedImages.removeAll()
+                self.updatePhotoCountLabel()
+                self.updateSubmitButtonState()
                 
                 let readingAllPostHomeVC = AllPostHomeViewController()
                 self.navigationController?.pushViewController(readingAllPostHomeVC, animated: true)
@@ -254,17 +289,13 @@ extension CreatePostViewController {
             }
         }
     }
-
     
     func updateSubmitButtonState() {
         let isTextValid = reviewTextView.text.count >= 5
         submitButton.isEnabled = isTextValid
         submitButton.backgroundColor = isTextValid ? .orange : .lightGray
     }
-
-    
 }
-
 
 // MARK: - PHPicker 사진 선택
 extension CreatePostViewController: PHPickerViewControllerDelegate {
