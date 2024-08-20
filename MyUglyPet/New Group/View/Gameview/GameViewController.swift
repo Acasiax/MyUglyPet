@@ -6,115 +6,83 @@
 //
 //컬렋션뷰 prepatch items
 //firstContainerView와 secondContainerView를 선택할 때
+
 import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 struct Pet {
     let name: String
     let hello: String
-    let image: UIImage
+    let imageURL: String
 }
 
 final class GameViewController: BaseGameView {
 
     let disposeBag = DisposeBag()
+    var pets: [Pet] = []
 
-    let pets: [Pet] = [
-        Pet(name: "벼루님", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),
-        Pet(name: "꼬질이님", hello: "퇴근후 기절각", image: UIImage(named: "기본냥멍2")!),
-        Pet(name: "3님", hello: "꿀잠이다멍", image: UIImage(named: "기본냥멍3")!),
-        Pet(name: "4님", hello: "멈칫", image: UIImage(named: "기본냥멍4")!),
-        Pet(name: "5님", hello: "식칼어딨어멍멍", image: UIImage(named: "기본냥멍5")!),
-        Pet(name: "6님", hello: "왔냐?", image: UIImage(named: "기본냥멍6")!),
-        Pet(name: "7님", hello: "주인아밥줘라", image: UIImage(named: "기본냥멍7")!),
-    ]
+    var currentPetIndex: Int = 0
+    var lastPetIndex: Int?
     
     let rounds: [String] = ["망한 사진 월드컵 32강", "망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
     var currentRoundIndex: Int = 0
-    var currentPetIndex: Int = 0
-    var lastPetIndex: Int?
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        AnimationZip.startAnimations(firstContainerView: firstContainerView, secondContainerView: secondContainerView, titleLabel: titleLabel, worldCupLabel: worldCupLabel, in: view)
-        showInitialPets()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = CustomColors.lightBeige
         addsub()
         setupUI()
-        setupBindings()
-        basiclottieAnimationView.play()
+        fetchPosts()
     }
     
-    private func setupBindings() {
-        // 첫 번째 컨테이너 탭 이벤트 처리
-        let firstTapGesture = UITapGestureRecognizer()
-        firstContainerView.addGestureRecognizer(firstTapGesture)
-        
-        firstTapGesture.rx.event
-            .bind { [weak self] _ in
-                self?.handleFirstContainerTap()
-            }
-            .disposed(by: disposeBag)
-        
-        // 두 번째 컨테이너 탭 이벤트 처리
-        let secondTapGesture = UITapGestureRecognizer()
-        secondContainerView.addGestureRecognizer(secondTapGesture)
-        
-        secondTapGesture.rx.event
-            .bind { [weak self] _ in
-                self?.handleSecondContainerTap()
-            }
-            .disposed(by: disposeBag)
-    }
+    private func fetchPosts() {
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "못난이후보등록")
 
-    private func handleFirstContainerTap() {
-        print("첫번째 컨테이너가 선택되었습니다.")
-        let selectedPet = pets[currentPetIndex]
-        checkForFinalWinner(selectedPet: selectedPet)
-        
-        AnimationZip.animateContainerView(firstContainerView)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.updateRound()
-            if self.currentRoundIndex < self.rounds.count - 1 {
-                AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
-                self.showNextPet(in: self.secondContainerView)
-                AnimationZip.animateDescriptionLabel(self.descriptionLabel)
+        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.handleFetchedPosts(posts)
+                print("🎮게임후보 포스팅을 가져오는데 성공했어요")
+            case .failure(let error):
+                print("🎮게임후보 포스팅을 가져오는데 실패했어요ㅠㅜ: \(error.localizedDescription)")
             }
         }
     }
 
-    private func handleSecondContainerTap() {
-        print("두번째 컨테이너가 선택되었습니다.")
-        if let lastPetIndex = lastPetIndex {
-            let selectedPet = pets[lastPetIndex]
-            checkForFinalWinner(selectedPet: selectedPet)
-            
-            AnimationZip.animateContainerView(secondContainerView)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.updateRound()
-                if self.currentRoundIndex < self.rounds.count - 1 {
-                    AnimationZip.startAnimations(firstContainerView: self.firstContainerView, secondContainerView: self.secondContainerView, titleLabel: self.titleLabel, worldCupLabel: self.worldCupLabel, in: self.view)
-                    self.showNextPet(in: self.firstContainerView)
-                    AnimationZip.animateDescriptionLabel(self.descriptionLabel)
-                }
+    private func handleFetchedPosts(_ posts: [PostsModel]) {
+        let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "10", product_id: "")).headersForImageRequest
+        
+        pets = posts.compactMap { post in
+            guard let imageUrlString = post.files?.first else {
+                print("타이틀이 없는 포스트에 대한 이미지 URL을 찾을 수 없습니다: \(post.title ?? "제목 없음")")
+                return Pet(
+                    name: post.title ?? "기본 이름",
+                    hello: post.content ?? "기본 내용",
+                    imageURL: "" // 이미지 URL이 없는 경우 빈 문자열로 설정
+                )
             }
+            
+            let fullImageURLString = APIKey.baseURL + "v1/" + imageUrlString
+            return Pet(
+                name: post.title ?? "기본 이름",
+                hello: post.content ?? "기본 내용",
+                imageURL: fullImageURLString
+            )
         }
+        
+        showInitialPets()
     }
-    
-    func showInitialPets() {
+
+    private func showInitialPets() {
         showNextPet(in: firstContainerView)
         showNextPet(in: secondContainerView)
     }
-    
-    func showNextPet(in containerView: UIView) {
+
+    private func showNextPet(in containerView: UIView) {
+        guard pets.count > 0 else { return }
+
         var newPetIndex: Int
         repeat {
             newPetIndex = Int.random(in: 0..<pets.count)
@@ -123,23 +91,81 @@ final class GameViewController: BaseGameView {
         let pet = pets[newPetIndex]
         
         if containerView == firstContainerView {
-            firstImageView.image = pet.image
             firstNameLabel.text = pet.name
             firstPriceLabel.text = pet.hello
+            loadImage(for: pet, into: firstImageView)
             currentPetIndex = newPetIndex
         } else if containerView == secondContainerView {
-            secondImageView.image = pet.image
             secondNameLabel.text = pet.name
             secondPriceLabel.text = pet.hello
+            loadImage(for: pet, into: secondImageView)
             lastPetIndex = newPetIndex
         }
     }
-    
-    func updateRound() {
-        currentRoundIndex += 1
-        if currentRoundIndex < rounds.count {
-            descriptionLabel.text = rounds[currentRoundIndex]
+
+    private func loadImage(for pet: Pet, into imageView: UIImageView) {
+        guard let imageURL = URL(string: pet.imageURL) else {
+            print("잘못된 URL 문자열: \(pet.imageURL)")
+            imageView.image = UIImage(named: "placeholder")
+            return
         }
+
+        let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "10", product_id: "")).headersForImageRequest
+
+        let modifier = AnyModifier { request in
+            var r = request
+            r.allHTTPHeaderFields = headers
+            return r
+        }
+        
+        imageView.kf.setImage(
+            with: imageURL,
+            placeholder: UIImage(named: "placeholder"),
+            options: [.requestModifier(modifier)]
+        ) { result in
+            switch result {
+            case .success(let value):
+                print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
+            case .failure(let error):
+                print("이미지 로드 실패📩: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func handleFirstContainerTap() {
+        print("첫번째 컨테이너가 선택되었습니다.")
+        let selectedPet = pets[currentPetIndex]
+        checkForFinalWinner(selectedPet: selectedPet)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.showNextPet(in: self.secondContainerView)
+        }
+    }
+
+    private func handleSecondContainerTap() {
+        print("두번째 컨테이너가 선택되었습니다.")
+        if let lastPetIndex = lastPetIndex {
+            let selectedPet = pets[lastPetIndex]
+            checkForFinalWinner(selectedPet: selectedPet)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.showNextPet(in: self.firstContainerView)
+            }
+        }
+    }
+
+    func showWinnerContainerView(with pet: Pet) {
+        winnerNameLabel.text = pet.name
+        winnerAgeLabel.text = pet.hello
+        winnerImageView.image = UIImage(named: "placeholder") // 기본 이미지를 설정해 두었습니다
+
+        basiclottieAnimationView.isHidden = true
+
+        winnerTitleLabel.isHidden = false
+        winnerContainerView.isHidden = false
+        submitWinnerButton.isHidden = false
+
+        winnerContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+        
+        animateWinnerContainerView()
     }
 
     func checkForFinalWinner(selectedPet: Pet) {
@@ -161,62 +187,25 @@ final class GameViewController: BaseGameView {
             }
         }
     }
-
-    func showWinnerContainerView(with pet: Pet) {
-        winnerNameLabel.text = pet.name
-        winnerAgeLabel.text = pet.hello
-        winnerImageView.image = pet.image
-
-        basiclottieAnimationView.isHidden = true
-
-        winnerTitleLabel.isHidden = false
-        winnerContainerView.isHidden = false
-        submitWinnerButton.isHidden = false
-
-        winnerContainerView.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-        
-        animateWinnerContainerView()
-    }
-    
-    
-
-
 }
 
-
-
-
-
-
-
-////애니메이션 코드
 extension GameViewController {
     
-    //우승자 카드 회전해서 나오는 애니메이션
     func animateWinnerContainerView() {
-        // 카드 회전 전에 Lottie 애니메이션 숨기기
         self.pinklottieAnimationView.isHidden = true
-      
         
-        // Y축 기준 90도 회전
         UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .curveEaseInOut, animations: {
             self.winnerContainerView.layer.transform = CATransform3DMakeRotation(CGFloat.pi / 2, 0, 1, 0)
         }) { _ in
-            // 회전 상태를 초기화하여 원래 상태로 되돌립니다.
             UIView.animate(withDuration: 1.0, animations: {
                 self.winnerContainerView.layer.transform = CATransform3DIdentity
             }) { _ in
-                // 카드 회전 후 Lottie 애니메이션 다시 표시 및 재생
                 self.congratulationAnimationView.isHidden = false
                 self.congratulationAnimationView.play()
                 
                 self.pinklottieAnimationView.isHidden = false
                 self.pinklottieAnimationView.play()
-                
-              
             }
         }
     }
-
 }
-
