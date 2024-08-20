@@ -4,6 +4,7 @@
 //
 //  Created by 이윤지 on 8/15/24.
 //
+//컬렋션뷰 prepatch items
 //firstContainerView와 secondContainerView를 선택할 때
 import UIKit
 import SnapKit
@@ -24,6 +25,16 @@ final class GameViewController: BaseGameView {
         Pet(name: "5님", hello: "식칼어딨어멍멍", image: UIImage(named: "기본냥멍5")!),
         Pet(name: "6님", hello: "왔냐?", image: UIImage(named: "기본냥멍6")!),
         Pet(name: "7님", hello: "주인아밥줘라", image: UIImage(named: "기본냥멍7")!),
+        
+//        Pet(name: "뭘보냥?", hello: "뭘보냥?", image: UIImage(named: "기본냥멍1")!),
+//        Pet(name: "퇴근후 기절각", hello: "퇴근후 기절각", image: UIImage(named: "기본냥멍2")!),
+//        Pet(name: "꿀잠이다멍", hello: "꿀잠이다멍", image: UIImage(named: "기본냥멍3")!),
+//        Pet(name: "멈칫", hello: "멈칫", image: UIImage(named: "기본냥멍4")!),
+//        Pet(name: "식칼어딨어멍멍", hello: "식칼어딨어멍멍", image: UIImage(named: "기본냥멍5")!),
+//        Pet(name: "왔냐?", hello: "왔냐?", image: UIImage(named: "기본냥멍6")!),
+//        Pet(name: "주인아ㅂ", hello: "주인아밥줘라", image: UIImage(named: "기본냥멍7")!),
+
+        
     ]
     
     let rounds: [String] = ["망한 사진 월드컵 32강", "망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]

@@ -9,9 +9,6 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-
-
-
 // 델리게이트 프로토콜 정의
 protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapCommentButton(in cell: AllPostTableViewCell)
@@ -55,7 +52,7 @@ final class AllPostHomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(red: 0.83, green: 0.84, blue: 0.00, alpha: 1.00)
         view.addSubview(tableView)
         view.addSubview(plusButton)
         tableView.delegate = self
