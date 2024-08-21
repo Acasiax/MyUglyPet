@@ -9,10 +9,11 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Alamofire
 
 struct Pet {
     let name: String
-    let hello: String
+    let userName: String
     let imageURL: String
 }
 
@@ -94,7 +95,7 @@ final class GameViewController: BaseGameView {
 
     @objc func submitWinnerButtonTapped() {
         if let winner = winnerPet {
-            print("우승자 이름: \(winner.name), 인사말: \(winner.hello), 이미지 URL: \(winner.imageURL)")
+            print("우승자 이름: \(winner.name), 인사말: \(winner.userName), 이미지 URL: \(winner.imageURL)")
         } else {
             print("우승자가 설정되지 않았습니다.")
         }
@@ -126,7 +127,7 @@ extension GameViewController {
                 print("타이틀이 없는 포스트에 대한 이미지 URL을 찾을 수 없습니다: \(post.title ?? "제목 없음")")
                 return Pet(
                     name: post.title ?? "기본 이름",
-                    hello: post.content ?? "기본 내용",
+                    userName: post.content ?? "기본 내용",
                     imageURL: "" // 이미지 URL이 없는 경우 빈 문자열로 설정
                 )
             }
@@ -134,7 +135,7 @@ extension GameViewController {
             let fullImageURLString = APIKey.baseURL + "v1/" + imageUrlString
             return Pet(
                 name: post.title ?? "기본 이름",
-                hello: post.content ?? "기본 내용",
+                userName: post.content ?? "기본 내용",
                 imageURL: fullImageURLString
             )
         }
@@ -196,12 +197,12 @@ extension GameViewController {
 
         if containerView == firstContainerView {
             firstNameLabel.text = pet.name
-            firstPriceLabel.text = pet.hello
+            firstPriceLabel.text = pet.userName
             loadImage(for: pet, into: firstImageView)
             currentPetIndex = newPetIndex
         } else if containerView == secondContainerView {
             secondNameLabel.text = pet.name
-            secondPriceLabel.text = pet.hello
+            secondPriceLabel.text = pet.userName
             loadImage(for: pet, into: secondImageView)
             lastPetIndex = newPetIndex
         }
@@ -214,9 +215,10 @@ extension GameViewController {
         }
     }
 
+    //🌟
     func checkForFinalWinner(selectedPet: Pet) {
         if currentRoundIndex == 3 { // 현재 라운드가 4강인지 확인
-            print("4강 우승자: \(selectedPet.name), 나이: \(selectedPet.hello)")
+            print("4강 우승자(사진제목): \(selectedPet.name), 사용자이름: \(selectedPet.userName)")
             
             UIView.animate(withDuration: 0.5, animations: {
                 self.titleLabel.alpha = 0
@@ -236,7 +238,7 @@ extension GameViewController {
 
     func showWinnerContainerView(with pet: Pet) {
         winnerNameLabel.text = pet.name
-        winnerAgeLabel.text = pet.hello
+        winnerAgeLabel.text = pet.userName
         
         // 우승자 이미지 로드
         loadImage(for: pet, into: winnerImageView)
@@ -253,17 +255,100 @@ extension GameViewController {
         winnerPet = pet
 
         animateWinnerContainerView()
+        
+        // 우승자 정보를 서버에 업로드
+        uploadWinnerImageAndPost() // 변경된 부분
     }
 }
+
 
 
 
 // MARK: - 1등한 우승자를 서버에 포스팅하기
 extension GameViewController {
     
-    
-    
+    // MARK: - 우승자 이미지 및 게시글 업로드 함수
+       func uploadWinnerImageAndPost() {
+           guard let winnerPet = winnerPet else {
+               print("우승자가 설정되지 않았습니다.")
+               return
+           }
+
+           guard let url = URL(string: winnerPet.imageURL) else {
+               print("우승자 이미지 URL이 잘못되었습니다.")
+               return
+           }
+
+           let dispatchGroup = DispatchGroup()
+           var uploadedImageUrls: [String] = []
+
+           dispatchGroup.enter()
+           
+           // Alamofire를 사용하여 비동기적으로 이미지 데이터를 가져옴
+           AF.request(url).responseData { [weak self] response in
+               guard let self = self else { return }
+
+               switch response.result {
+               case .success(let imageData):
+                   let imageUploadQuery = ImageUploadQuery(files: imageData)
+                   
+                   PostNetworkManager.shared.uploadPostImage(query: imageUploadQuery) { result in
+                       switch result {
+                       case .success(let imageUrls):
+                           if imageUrls.isEmpty {
+                               print("서버에서 빈 이미지 URL 배열을 반환했습니다.")
+                           } else {
+                               print("이미지 업로드 성공!!: \(imageUrls)")
+                               uploadedImageUrls.append(contentsOf: imageUrls)
+                           }
+                       case .failure(let error):
+                           print("이미지 업로드 실패: \(error.localizedDescription)")
+                       }
+                       dispatchGroup.leave()
+                   }
+
+               case .failure(let error):
+                   print("이미지 데이터를 가져오는데 실패했습니다: \(error.localizedDescription)")
+                   dispatchGroup.leave()
+               }
+           }
+
+           dispatchGroup.notify(queue: .main) {
+               if uploadedImageUrls.isEmpty {
+                   print("모든 이미지 업로드 실패")
+                   let alert = UIAlertController(title: "오류", message: "이미지 업로드에 실패했습니다.", preferredStyle: .alert)
+                   alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                   self.present(alert, animated: true, completion: nil)
+               } else {
+                   print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
+                   self.uploadWinnerPost(withImageURLs: uploadedImageUrls, pet: winnerPet)
+               }
+           }
+       }
+
+    // 우승자 게시글 업로드 함수
+    private func uploadWinnerPost(withImageURLs imageUrls: [String], pet: Pet) {
+        let title = pet.name
+        let content = pet.userName
+
+        print("우승자 업로드 정보: 제목 - \(title), 내용 - \(content), 이미지 URL - \(imageUrls)")
+
+        PostNetworkManager.shared.createPost(
+            title: title,
+            content: content,
+            productId: "각유저가고른1등우승자",
+            fileURLs: imageUrls
+        ) { result in
+            switch result {
+            case .success:
+                print("우승자 게시글 업로드 성공")
+            case .failure(let error):
+                print("우승자 게시글 업로드 실패: \(error.localizedDescription)")
+            }
+        }
+    }
 }
+
 
 // MARK: - 애니메이션
 extension GameViewController {
