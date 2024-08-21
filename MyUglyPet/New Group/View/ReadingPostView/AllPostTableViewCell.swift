@@ -68,7 +68,7 @@ final class AllPostTableViewCell: UITableViewCell {
 
     lazy var followButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("팔로우", for: .normal)
+        button.setTitle("수정", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
@@ -259,7 +259,7 @@ final class AllPostTableViewCell: UITableViewCell {
         AnimationZip.animateButtonPress(followButton)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.followButton.setTitle("팔로잉", for: .normal)
+            self.followButton.setTitle("수정하기", for: .normal)
             self.followButton.backgroundColor = .orange
         }
     }

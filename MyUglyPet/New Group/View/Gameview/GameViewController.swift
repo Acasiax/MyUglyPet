@@ -30,11 +30,25 @@ final class GameViewController: BaseGameView {
     let rounds: [String] = ["망한 사진 월드컵 32강", "망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
     var currentRoundIndex: Int = 0
 
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           AnimationZip.startAnimations(firstContainerView: firstContainerView, secondContainerView: secondContainerView, titleLabel: titleLabel, worldCupLabel: worldCupLabel, in: view)
+           showInitialPets()
+       }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addsub()
         setupUI()
         fetchPosts()
+        let firstContainerTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleFirstContainerTap))
+        firstContainerView.addGestureRecognizer(firstContainerTapGesture)
+
+        let secondContainerTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSecondContainerTap))
+        secondContainerView.addGestureRecognizer(secondContainerTapGesture)
+
+        
     }
     
     private func fetchPosts() {
@@ -132,7 +146,7 @@ final class GameViewController: BaseGameView {
         }
     }
 
-    private func handleFirstContainerTap() {
+   @objc func handleFirstContainerTap() {
         print("첫번째 컨테이너가 선택되었습니다.")
         let selectedPet = pets[currentPetIndex]
         checkForFinalWinner(selectedPet: selectedPet)
@@ -141,7 +155,7 @@ final class GameViewController: BaseGameView {
         }
     }
 
-    private func handleSecondContainerTap() {
+    @objc func handleSecondContainerTap() {
         print("두번째 컨테이너가 선택되었습니다.")
         if let lastPetIndex = lastPetIndex {
             let selectedPet = pets[lastPetIndex]
@@ -189,6 +203,7 @@ final class GameViewController: BaseGameView {
     }
 }
 
+//애니메이션
 extension GameViewController {
     
     func animateWinnerContainerView() {
