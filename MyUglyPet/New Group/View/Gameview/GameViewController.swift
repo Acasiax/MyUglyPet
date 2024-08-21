@@ -257,6 +257,14 @@ extension GameViewController {
 }
 
 
+
+// MARK: - 1등한 우승자를 서버에 포스팅하기
+extension GameViewController {
+    
+    
+    
+}
+
 // MARK: - 애니메이션
 extension GameViewController {
     func animateWinnerContainerView() {

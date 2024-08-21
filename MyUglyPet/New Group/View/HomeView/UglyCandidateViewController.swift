@@ -91,7 +91,7 @@ class UglyCandidateViewController: UIViewController {
 
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
             make.left.right.equalTo(view).inset(20)
         }
 
@@ -99,7 +99,7 @@ class UglyCandidateViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(250)
             make.height.equalTo(300)
-            make.centerY.equalToSuperview().offset(-30)
+            make.centerY.equalToSuperview().offset(-20)
         }
         
         imageButton.snp.makeConstraints { make in
@@ -159,17 +159,46 @@ class UglyCandidateViewController: UIViewController {
         print("후보등록 버튼 클릭!")
         AnimationZip.animateButtonPress(submitButton)
 
-        // 텍스트 필드와 선택된 이미지의 내용을 출력
-        if let photoTitle = helloNameTextField.text, let userName = subtitleTextField.text {
-            print("사진 제목: \(photoTitle)")
-            print("사용자 이름: \(userName)")
+        if validateFields() {
+            // 텍스트 필드와 선택된 이미지의 내용을 출력
+            if let photoTitle = helloNameTextField.text, let userName = subtitleTextField.text {
+                print("사진 제목: \(photoTitle)")
+                print("사용자 이름: \(userName)")
+            }
+            
+            if selectedImageViews.isEmpty {
+                uploadPost(withImageURLs: [])
+            } else {
+                uploadImagesAndPost()
+            }
         }
+    }
+
+    func validateFields() -> Bool {
+        var errorMessage = ""
         
         if selectedImageViews.isEmpty {
-            uploadPost(withImageURLs: [])
-        } else {
-            uploadImagesAndPost()
+            errorMessage += "이미지를 선택해주세요.\n"
         }
+        if helloNameTextField.text?.isEmpty ?? true {
+            errorMessage += "사진 제목을 입력해주세요.\n"
+        }
+        if subtitleTextField.text?.isEmpty ?? true {
+            errorMessage += "사용자 이름을 입력해주세요.\n"
+        }
+        
+        if !errorMessage.isEmpty {
+            showAlert(message: errorMessage)
+            return false
+        }
+        
+        return true
+    }
+
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "필수 입력 항목 누락", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
     func addSelectedCandidateImage(_ image: UIImage) {
