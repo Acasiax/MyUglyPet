@@ -19,13 +19,14 @@ struct FetchHashtagReadingPostQuery: Encodable {
 
 
 
-// 포스트 그룹을 정의하는 구조체
-struct PostGroup: Hashable {
-    let title: String
-    let content: String
-    let content1: String
-    // files는 비교에서 제외됩니다.
-}
+
+//// 포스트 그룹을 정의하는 구조체
+//struct PostGroup: Hashable {
+//    let title: String
+//    let content: String
+//    let content1: String
+//    // files는 비교에서 제외됩니다.
+//}
 
 class RankingCalculatorViewController: UIViewController {
 
