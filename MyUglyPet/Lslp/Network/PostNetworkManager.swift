@@ -79,6 +79,25 @@ class PostNetworkManager {
 
 
 
+    //MARK: - 해쉬태그 포스트 조회
+    func fetchHashtagPosts(query: FetchHashtagReadingPostQuery, completion: @escaping (Result<[PostsModel], Error>) -> Void) {
+           let request = Router.fetchHashtagPosts(query: query).asURLRequest
+           
+           AF.request(request)
+               .responseData { response in
+                   switch response.result {
+                   case .success(let data):
+                       do {
+                           let result = try JSONDecoder().decode(PostsResponse.self, from: data)
+                           completion(.success(result.data))
+                       } catch {
+                           completion(.failure(error))
+                       }
+                   case .failure(let error):
+                       completion(.failure(error))
+                   }
+               }
+       }
     
     
     
@@ -154,4 +173,9 @@ class PostNetworkManager {
                 }
             }
     }
+    
+    
+    
+  
+    
 }
