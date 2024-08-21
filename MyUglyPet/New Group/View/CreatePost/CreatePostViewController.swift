@@ -269,6 +269,7 @@ extension CreatePostViewController {
         PostNetworkManager.shared.createPost(
             title: title,
             content: content,
+            content1: "",
             productId: productId,
             fileURLs: imageUrls
         ) { result in

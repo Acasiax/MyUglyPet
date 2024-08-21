@@ -124,6 +124,7 @@ class PostNetworkManager {
     func createPost(
         title: String?,
         content: String?,
+        content1: String?,
         productId: String?,
         fileURLs: [String],
         completion: @escaping (Result<Void, Error>) -> Void
@@ -131,6 +132,7 @@ class PostNetworkManager {
         let parameters: [String: Any] = [
             "title": title ?? "",
             "content": content ?? "",
+            "content1": content1 ?? "",
             "product_id": productId ?? "",
             "files": fileURLs
         ]

@@ -10,6 +10,7 @@
 		AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */; };
 		AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */; };
 		AA0C87DD2C74EC1600C8A950 /* GameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */; };
+		AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -79,6 +80,7 @@
 		AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateViewController.swift; sourceTree = "<group>"; };
 		AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingViewController.swift; sourceTree = "<group>"; };
+		AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingCalculatorViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				AA72737F2C7397BE007551C4 /* DashboardViewController.swift */,
 				AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */,
 				AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */,
+				AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */,
 			);
 			path = DashboardView;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				AA7272E52C6DC7E2007551C4 /* CommentTableViewCell.swift in Sources */,
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
 				AA7273542C71D032007551C4 /* Header.swift in Sources */,
+				AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */,

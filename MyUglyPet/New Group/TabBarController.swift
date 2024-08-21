@@ -44,7 +44,7 @@ enum MainTab: CaseIterable {
         case .music: viewController = MainHomeViewController()
         case .movies: viewController = AllPostHomeViewController()
         case .podcast: viewController = DashboardViewController()
-        case .books: viewController = GameViewController()
+        case .books: viewController = RankingCalculatorViewController()
         case .search: viewController = UglyCandidateViewController()
         }
         

@@ -278,7 +278,8 @@ class UglyCandidateViewController: UIViewController {
 
         PostNetworkManager.shared.createPost(
             title: photoTitle,
-            content: userName,
+            content: "",
+            content1: userName,
             productId: productId,
             fileURLs: imageUrls
         ) { result in

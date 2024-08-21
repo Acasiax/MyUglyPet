@@ -25,6 +25,7 @@ struct FetchReadingPostQuery: Encodable {
     let limit: String
     let product_id: String
     
+    
 }
 
 

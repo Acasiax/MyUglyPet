@@ -329,13 +329,14 @@ extension GameViewController {
     // 우승자 게시글 업로드 함수
     private func uploadWinnerPost(withImageURLs imageUrls: [String], pet: Pet) {
         let title = pet.name
-        let content = pet.userName
+        let content1 = pet.userName
 
-        print("우승자 업로드 정보: 제목 - \(title), 내용 - \(content), 이미지 URL - \(imageUrls)")
+        print("우승자 업로드 정보: 제목 - \(title), 내용 - \(content1), 이미지 URL - \(imageUrls)")
 
         PostNetworkManager.shared.createPost(
             title: title,
-            content: content,
+            content: "#1등이닷", //해쉬태그
+            content1: content1,
             productId: "각유저가고른1등우승자",
             fileURLs: imageUrls
         ) { result in
