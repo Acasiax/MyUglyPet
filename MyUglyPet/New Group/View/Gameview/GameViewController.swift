@@ -272,60 +272,74 @@ extension GameViewController {
 // MARK: - 1등한 우승자를 서버에 포스팅하기
 extension GameViewController {
     
+    func removeBaseURL(from url: String) -> String {
+        let baseURL = "http://lslp.sesac.co.kr:31819/v1/"
+        if url.hasPrefix(baseURL) {
+            return String(url.dropFirst(baseURL.count))
+        } else {
+            return url // baseURL이 포함되지 않은 경우 전체 URL을 반환
+        }
+    }
+
+    
     // MARK: - 우승자 이미지 및 게시글 업로드 함수
-       func uploadWinnerImageAndPost() {
-           guard let winnerPet = winnerPet else {
-               print("우승자가 설정되지 않았습니다.")
-               return
-           }
+    func uploadWinnerImageAndPost() {
+        guard let winnerPet = winnerPet else {
+            print("우승자가 설정되지 않았습니다.")
+            return
+        }
 
-           guard let url = URL(string: winnerPet.imageURL) else {
-               print("우승자 이미지 URL이 잘못되었습니다.")
-               return
-           }
+        guard let url = URL(string: winnerPet.imageURL) else {
+            print("우승자 이미지 URL이 잘못되었습니다.")
+            return
+        }
 
-           let dispatchGroup = DispatchGroup()
-           var uploadedImageUrls: [String] = []
+        let dispatchGroup = DispatchGroup()
+        var uploadedImageUrls: [String] = []
 
-           dispatchGroup.enter()
-           
-           // Alamofire를 사용하여 비동기적으로 이미지 데이터를 가져옴
-           AF.request(url).responseData { [weak self] response in
-               guard let self = self else { return }
+        dispatchGroup.enter()
 
-               switch response.result {
-               case .success(let imageData):
-                   let imageUploadQuery = ImageUploadQuery(files: imageData)
-                   
-                   PostNetworkManager.shared.uploadPostImage(query: imageUploadQuery) { result in
-                       switch result {
-                          case .success(let imageUrls):
-                              print("💡이미지 업로드 성공!!: \(imageUrls)")  // 여전히 원래 URL 출력
-                              uploadedImageUrls.append(contentsOf: imageUrls)
-                          case .failure(let error):
-                              print("이미지 업로드 실패: \(error.localizedDescription)")
-                          }
-                          dispatchGroup.leave()
-                      }
+        // Alamofire를 사용하여 비동기적으로 이미지 데이터를 가져옴
+        AF.request(url).responseData { [weak self] response in
+            guard let self = self else { return }
 
-               case .failure(let error):
-                   print("이미지 데이터를 가져오는데 실패했습니다: \(error.localizedDescription)")
-                   dispatchGroup.leave()
-               }
-           }
+            switch response.result {
+            case .success(let imageData):
+                let imageUploadQuery = ImageUploadQuery(files: imageData)
 
-           dispatchGroup.notify(queue: .main) {
-               if uploadedImageUrls.isEmpty {
-                   print("모든 이미지 업로드 실패")
-                   let alert = UIAlertController(title: "오류", message: "이미지 업로드에 실패했습니다.", preferredStyle: .alert)
-                   alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                   self.present(alert, animated: true, completion: nil)
-               } else {
-                   print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
-                   self.uploadWinnerPost(withImageURLs: uploadedImageUrls, pet: winnerPet)
-               }
-           }
-       }
+                // baseURL을 제거한 후 uploadPostImage 메서드 호출
+                let strippedURL = removeBaseURL(from: winnerPet.imageURL)
+
+                WinnerPostNetworkManager.shared.uploadPostImage(query: imageUploadQuery, originalURL: strippedURL) { result in
+                    switch result {
+                    case .success(let imageUrls):
+                        print("💡이미지 업로드 성공!!: \(imageUrls)")  // 여전히 원래 URL 출력
+                        uploadedImageUrls.append(contentsOf: imageUrls)
+                    case .failure(let error):
+                        print("이미지 업로드 실패: \(error.localizedDescription)")
+                    }
+                    dispatchGroup.leave()
+                }
+
+            case .failure(let error):
+                print("이미지 데이터를 가져오는데 실패했습니다: \(error.localizedDescription)")
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            if uploadedImageUrls.isEmpty {
+                print("모든 이미지 업로드 실패")
+                let alert = UIAlertController(title: "오류", message: "이미지 업로드에 실패했습니다.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
+                self.uploadWinnerPost(withImageURLs: uploadedImageUrls, pet: winnerPet)
+            }
+        }
+    }
+
 
     // 우승자 게시글 업로드 함수
     private func uploadWinnerPost(withImageURLs imageUrls: [String], pet: Pet) {

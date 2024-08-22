@@ -219,7 +219,7 @@ class WinnerPostNetworkManager {
                     }
                     
                     let result = try JSONDecoder().decode(PostImageModel.self, from: data)
-                    print("🩵이미지 업로드 성공: \(result.files ?? [])")  // 성공 메시지 출력
+                    print("🩵🩵 이미지 업로드 성공: \(result.files)")  // 성공 메시지 출력
                     
                     // 기존 URL을 유지하여 completion으로 전달
                     completion(.success([originalURL]))

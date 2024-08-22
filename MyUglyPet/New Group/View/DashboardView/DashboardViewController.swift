@@ -269,7 +269,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                    let rank = indexPath.item + 1
                    
                    if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
-                       let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
+                       let fullImageURLString = APIKey.baseURL + firstFileUrl
                        
                        print("🙇‍♀️\(fullImageURLString)")
                        
@@ -294,13 +294,13 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                            ) { result in
                                switch result {
                                case .success(let value):
-                                   print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
+                                   print("이미지 로드 성공🥹: \(value.source.url?.absoluteString ?? "")")
                                case .failure(let error):
-                                   print("이미지 로드 실패📩: \(error.localizedDescription)")
+                                   print("이미지 로드 실패🥹: \(error.localizedDescription)")
                                }
                            }
                        } else {
-                           print("URL 변환에 실패했습니다📩: \(fullImageURLString)")
+                           print("URL 변환에 실패했습니다🥹: \(fullImageURLString)")
                        }
                    }
                    
