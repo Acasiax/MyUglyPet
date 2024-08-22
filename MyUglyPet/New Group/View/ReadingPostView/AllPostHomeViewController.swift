@@ -12,6 +12,7 @@ import SnapKit
 // 델리게이트 프로토콜 정의
 protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapCommentButton(in cell: AllPostTableViewCell)
+    func didTapDeleteButton(in cell: AllPostTableViewCell)
 }
 
 final class AllPostHomeViewController: UIViewController {
@@ -66,6 +67,8 @@ final class AllPostHomeViewController: UIViewController {
         panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
         panGestureRecognizer.delegate = self // 델리게이트 설정
         tableView.addGestureRecognizer(panGestureRecognizer)
+        
+        
     }
 
     deinit {
@@ -83,6 +86,7 @@ final class AllPostHomeViewController: UIViewController {
             make.bottom.right.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
+
     
     
     private func fetchPosts() {
@@ -142,6 +146,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: AllPostTableViewCell.identifier, for: indexPath) as! AllPostTableViewCell
         
         let post = serverPosts[indexPath.row]
+        cell.postID = post.postId
         cell.titleLabel.text = post.title // 포스트 제목 설정
         cell.contentLabel.text = post.content // 포스트 내용 설정
         cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
@@ -176,7 +181,18 @@ extension AllPostHomeViewController: AllPostTableViewCellDelegate {
         detailViewController.title = "Post Detail \(indexPath.row + 1)"
         navigationController?.pushViewController(detailViewController, animated: true)
     }
+    
+    func didTapDeleteButton(in cell: AllPostTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        
+        // 서버에서 해당 포스트를 삭제한 후, 로컬 데이터에서도 삭제
+        serverPosts.remove(at: indexPath.row)
+        
+        // 테이블뷰에서 셀 삭제
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
 }
+
 
 
 

@@ -68,7 +68,7 @@ final class AllPostTableViewCell: UITableViewCell {
 
     lazy var followButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("수정", for: .normal)
+        button.setTitle("삭제", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
@@ -137,12 +137,17 @@ final class AllPostTableViewCell: UITableViewCell {
         return label
     }()
     
+    // 각 셀의 포스트 ID를 저장하는 프로퍼티
+        var postID: String?
+    
     var imageFiles: [String] = [] {
             didSet {
                 collectionView.reloadData()
             }
         }
     
+    // 팔로우 상태를 추적하는 변수
+    private var isFollowing = false
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -255,14 +260,46 @@ final class AllPostTableViewCell: UITableViewCell {
     }
 
     @objc func followButtonTapped() {
-        print("팔로우 버튼 탭")
+        guard let postID = postID else {
+            print("postID가 없습니다.")
+            return
+        }
+        print("📍\(postID)")
+
+        isFollowing.toggle()
         AnimationZip.animateButtonPress(followButton)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.followButton.setTitle("수정하기", for: .normal)
-            self.followButton.backgroundColor = .orange
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self = self else { return }
+            if self.isFollowing {
+                self.followButton.setTitle("삭제완료", for: .normal)
+                self.followButton.backgroundColor = .red
+                self.deletePost(postID: postID)
+            } else {
+                self.followButton.setTitle("삭제", for: .normal)
+                self.followButton.backgroundColor = .systemBlue
+            }
         }
     }
+
+    func deletePost(postID: String) {
+        PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
+            switch result {
+            case .success:
+                print("포스트가 성공적으로 삭제되었습니다.")
+                // 해당 셀을 삭제하도록 delegate 호출
+                if let delegate = self?.delegate {
+                    delegate.didTapDeleteButton(in: self!)
+                }
+            case .failure(let error):
+                print("포스트 삭제 중 오류 발생: \(error.localizedDescription)")
+            }
+        }
+    }
+
+
+    
+    
 }
 
 
@@ -270,42 +307,7 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageFiles.count
     }
-    
-    
 
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
-//        
-//        let imageURLString = imageFiles[indexPath.item] //🌟남이 게시한 사진은 baseURL이 있음.
-//      //  let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString
-//        
-//        if let imageURL = URL(string: imageURLString) {
-//            let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "20", product_id: "")).headersForImageRequest
-//            
-//            let modifier = AnyModifier { request in
-//                var r = request
-//                r.allHTTPHeaderFields = headers
-//                return r
-//            }
-//            
-//            cell.imageView.kf.setImage(
-//                with: imageURL,
-//                placeholder: UIImage(named: "placeholder"),
-//                options: [.requestModifier(modifier)]
-//            ) { result in
-//                switch result {
-//                case .success(let value):
-//                    print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
-//                case .failure(let error):
-//                    print("이미지 로드 실패📩: \(error.localizedDescription)")
-//                }
-//            }
-//        } else {
-//            print("URL 변환에 실패했습니다📩: \(imageURLString)")
-//        }
-//        
-//        return cell
-//    }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell

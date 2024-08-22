@@ -13,6 +13,25 @@ class PostNetworkManager {
     static let shared = PostNetworkManager()
     
     private init() {}
+
+    //MARK: - 포스트 삭제
+       func deletePost(postID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+           let request = Router.deletePost(postID: postID).asURLRequest
+           print("👻포스트네트워크매니져의딜리트함수: \(postID)")
+           AF.request(request)
+                       .validate(statusCode: 200..<300) // 성공적인 응답 코드를 검증
+                       .response { response in           // responseData 대신 response로 변경
+                           if let error = response.error {
+                               print("포스트 삭제 실패: \(error)")
+                               completion(.failure(error))
+                           } else {
+                               print("포스트 삭제 성공")
+                               completion(.success(()))
+                           }
+                       }
+               
+       }
+
     
     
     //MARK: - 댓글 작성/등록
