@@ -93,12 +93,17 @@ final class GameViewController: BaseGameView {
         }
     }
 
+    
+    //여기 파일은 잘 로드됨🌟🔥
     @objc func submitWinnerButtonTapped() {
         if let winner = winnerPet {
-            print("우승자 이름: \(winner.name), 인사말: \(winner.userName), 이미지 URL: \(winner.imageURL)")
+            print("🔥우승자 이름: \(winner.name), 인사말: \(winner.userName), 이미지 URL: \(winner.imageURL)")
+            // 우승자 정보를 서버에 업로드
+            uploadWinnerImageAndPost() // 변경된 부분
         } else {
             print("우승자가 설정되지 않았습니다.")
         }
+        
     }
 
 }
@@ -257,7 +262,7 @@ extension GameViewController {
         animateWinnerContainerView()
         
         // 우승자 정보를 서버에 업로드
-        uploadWinnerImageAndPost() // 변경된 부분
+      //  uploadWinnerImageAndPost() // 변경된 부분
     }
 }
 
@@ -294,18 +299,14 @@ extension GameViewController {
                    
                    PostNetworkManager.shared.uploadPostImage(query: imageUploadQuery) { result in
                        switch result {
-                       case .success(let imageUrls):
-                           if imageUrls.isEmpty {
-                               print("서버에서 빈 이미지 URL 배열을 반환했습니다.")
-                           } else {
-                               print("이미지 업로드 성공!!: \(imageUrls)")
-                               uploadedImageUrls.append(contentsOf: imageUrls)
-                           }
-                       case .failure(let error):
-                           print("이미지 업로드 실패: \(error.localizedDescription)")
-                       }
-                       dispatchGroup.leave()
-                   }
+                          case .success(let imageUrls):
+                              print("💡이미지 업로드 성공!!: \(imageUrls)")  // 여전히 원래 URL 출력
+                              uploadedImageUrls.append(contentsOf: imageUrls)
+                          case .failure(let error):
+                              print("이미지 업로드 실패: \(error.localizedDescription)")
+                          }
+                          dispatchGroup.leave()
+                      }
 
                case .failure(let error):
                    print("이미지 데이터를 가져오는데 실패했습니다: \(error.localizedDescription)")
@@ -330,7 +331,7 @@ extension GameViewController {
     private func uploadWinnerPost(withImageURLs imageUrls: [String], pet: Pet) {
         let title = pet.name
         let content1 = pet.userName
-
+//근데 여기 파일은 로드가 안됨. 주소가 submitWinnerButtonTapped()하고 다름 미세하게
         print("우승자 업로드 정보: 제목 - \(title), 내용 - \(content1), 이미지 URL - \(imageUrls)")
 
         PostNetworkManager.shared.createPost(

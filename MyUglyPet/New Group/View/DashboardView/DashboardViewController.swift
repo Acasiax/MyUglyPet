@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 // 포스트 그룹을 정의하는 구조체 + 그룹화할때 3가지 조건이 맞으면 그룹화함
 struct PostGroup: Hashable {
@@ -246,6 +247,11 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
         }
     }
     
+    func imageURLString(_ path: String) -> String {
+        return path
+    }
+
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
         case bannerCollectionView:
@@ -255,13 +261,50 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             return cell
             
         case rankCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
+                   guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
                        return UICollectionViewCell()
                    }
 
                    let group = rankedGroups[indexPath.item]
                    let rank = indexPath.item + 1
-            cell.configure(with: group.key.files, name: "\(rank)등: \(group.key.title)", description: "\(group.key.content1)")
+                   
+                   if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
+                       let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
+                       
+                       print("🙇‍♀️\(fullImageURLString)")
+                       
+                       if let imageURL = URL(string: fullImageURLString) {
+                           // 헤더 설정
+                           let headers: [String: String] = [
+                               Header.sesacKey.rawValue: APIKey.key,
+                               Header.authorization.rawValue: UserDefaultsManager.shared.token ?? ""
+                           ]
+                           
+                           // Kingfisher의 AnyModifier를 사용하여 요청 수정
+                           let modifier = AnyModifier { request in
+                               var r = request
+                               r.allHTTPHeaderFields = headers
+                               return r
+                           }
+                           
+                           cell.profileImageView.kf.setImage(
+                               with: imageURL,
+                               placeholder: UIImage(systemName: "photo"), // 기본 placeholder 이미지
+                               options: [.requestModifier(modifier)]
+                           ) { result in
+                               switch result {
+                               case .success(let value):
+                                   print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
+                               case .failure(let error):
+                                   print("이미지 로드 실패📩: \(error.localizedDescription)")
+                               }
+                           }
+                       } else {
+                           print("URL 변환에 실패했습니다📩: \(fullImageURLString)")
+                       }
+                   }
+                   
+                   cell.configure(with: UIImage(systemName: "star"), name: "\(rank)등: \(group.key.title)", description: "\(group.key.content1)")
                    
                    return cell
             

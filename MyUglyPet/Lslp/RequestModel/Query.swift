@@ -136,7 +136,7 @@ struct Creator: Codable {
 }
 
 struct Comment: Codable {
-    let commentId: String          // 댓글 ID
+    let commentId: String          // 댓글 ID        // 댓글 ID
     let content: String            // 댓글 내용
     let createdAt: String          // 댓글 작성 날짜
     let creator: Creator           // 댓글 작성자 정보

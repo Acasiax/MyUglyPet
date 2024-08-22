@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import Kingfisher
+//import Kingfisher
 
 // 델리게이트 프로토콜 정의
 protocol AllPostTableViewCellDelegate: AnyObject {
