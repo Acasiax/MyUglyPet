@@ -11,6 +11,7 @@
 		AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */; };
 		AA0C87DD2C74EC1600C8A950 /* GameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */; };
 		AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */; };
+		AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -81,6 +82,7 @@
 		AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateViewController.swift; sourceTree = "<group>"; };
 		AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingViewController.swift; sourceTree = "<group>"; };
 		AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingCalculatorViewController.swift; sourceTree = "<group>"; };
+		AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroUglyCandidateViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			children = (
 				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
 				AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */,
+				AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */,
 				AA72735A2C71DA95007551C4 /* BaseCreatePost.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
+				AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */,
 				AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,
 				AA7273842C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift in Sources */,

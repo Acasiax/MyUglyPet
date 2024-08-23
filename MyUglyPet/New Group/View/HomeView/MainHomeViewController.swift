@@ -252,11 +252,17 @@ extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDe
             if indexPath.item == 0 {
                 let gameViewController = GameViewController()
                 self.navigationController?.pushViewController(gameViewController, animated: true)
+            } else if indexPath.item == 1 {
+                // 인덱스가 1일 경우 IntroUglyCandidateViewController로 이동
+                let introUglyCandidateVC = IntroUglyCandidateViewController()
+                self.navigationController?.pushViewController(introUglyCandidateVC, animated: true)
             }
         }
     }
 
     
 }
+
+
 
 

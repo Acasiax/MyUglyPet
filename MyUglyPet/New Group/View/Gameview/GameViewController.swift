@@ -26,7 +26,7 @@ final class GameViewController: BaseGameView {
     var lastPetIndex: Int?
     var currentRoundIndex: Int = 0
     var winnerPet: Pet?  // 우승자 정보를 저장하는 변수
-    let rounds: [String] = ["망한 사진 월드컵 32강", "망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
+    let rounds: [String] = ["망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
 
 
     override func viewWillAppear(_ animated: Bool) {
@@ -222,7 +222,7 @@ extension GameViewController {
 
     //🌟
     func checkForFinalWinner(selectedPet: Pet) {
-        if currentRoundIndex == 3 { // 현재 라운드가 4강인지 확인
+        if currentRoundIndex == 2 { // 현재 라운드가 4강인지 확인
             print("4강 우승자(사진제목): \(selectedPet.name), 사용자이름: \(selectedPet.userName)")
             
             UIView.animate(withDuration: 0.5, animations: {

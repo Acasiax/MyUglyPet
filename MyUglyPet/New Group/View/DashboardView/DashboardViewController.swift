@@ -269,7 +269,8 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                    let rank = indexPath.item + 1
                    
                    if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
-                       let fullImageURLString = APIKey.baseURL + firstFileUrl
+                       let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
+
                        
                        print("🙇‍♀️\(fullImageURLString)")
                        

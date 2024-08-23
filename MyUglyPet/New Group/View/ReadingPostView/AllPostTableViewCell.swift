@@ -259,16 +259,21 @@ final class AllPostTableViewCell: UITableViewCell {
         delegate?.didTapCommentButton(in: self)
     }
 
+    
     @objc func followButtonTapped() {
+        
         guard let postID = postID else {
             print("postID가 없습니다.")
             return
         }
+        
+      //  let postID = "66c4b1b697d02bf91e204107"
+     
         print("📍\(postID)")
-
+    
         isFollowing.toggle()
         AnimationZip.animateButtonPress(followButton)
-        
+    
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
             if self.isFollowing {
@@ -281,6 +286,8 @@ final class AllPostTableViewCell: UITableViewCell {
             }
         }
     }
+
+    
 
     func deletePost(postID: String) {
         PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
