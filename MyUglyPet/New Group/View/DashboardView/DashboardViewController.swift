@@ -265,53 +265,65 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             return cell
             
         case rankCollectionView:
-                   guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
-                       return UICollectionViewCell()
-                   }
+               guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
+                   return UICollectionViewCell()
+               }
 
-                   let group = rankedGroups[indexPath.item]
-                   let rank = indexPath.item + 1
-                   
-                   if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
-                       let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
+               let group = rankedGroups[indexPath.item]
+               let rank = indexPath.item + 1
 
-                       
-                       print("🙇‍♀️\(fullImageURLString)")
-                       
-                       if let imageURL = URL(string: fullImageURLString) {
-                           // 헤더 설정
-                           let headers: [String: String] = [
-                               Header.sesacKey.rawValue: APIKey.key,
-                               Header.authorization.rawValue: UserDefaultsManager.shared.token ?? ""
-                           ]
-                           
-                           // Kingfisher의 AnyModifier를 사용하여 요청 수정
-                           let modifier = AnyModifier { request in
-                               var r = request
-                               r.allHTTPHeaderFields = headers
-                               return r
-                           }
-                           
-                           cell.profileImageView.kf.setImage(
-                               with: imageURL,
-                               placeholder: UIImage(systemName: "photo"), // 기본 placeholder 이미지
-                               options: [.requestModifier(modifier)]
-                           ) { result in
-                               switch result {
-                               case .success(let value):
-                                   print("이미지 로드 성공🥹: \(value.source.url?.absoluteString ?? "")")
-                               case .failure(let error):
-                                   print("이미지 로드 실패🥹: \(error.localizedDescription)")
-                               }
-                           }
-                       } else {
-                           print("URL 변환에 실패했습니다🥹: \(fullImageURLString)")
+               // 셀의 기본 UI를 설정 (이미지 제외)
+               cell.configure(
+                   with: UIImage(systemName: "star"),  // 임시 또는 기본 이미지
+                   name: " \(group.key.title)",
+                   description: "\(group.key.content1)",
+                   rank: "\(rank)등"
+               )
+
+               // 비동기적으로 이미지를 로드
+               if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
+                   let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
+                   print("🙇‍♀️\(fullImageURLString)")
+
+                   if let imageURL = URL(string: fullImageURLString) {
+                       let headers: [String: String] = [
+                           Header.sesacKey.rawValue: APIKey.key,
+                           Header.authorization.rawValue: UserDefaultsManager.shared.token ?? ""
+                       ]
+
+                       let modifier = AnyModifier { request in
+                           var r = request
+                           r.allHTTPHeaderFields = headers
+                           return r
                        }
+
+                       cell.profileImageView.kf.setImage(
+                           with: imageURL,
+                           placeholder: UIImage(systemName: "photo"),  // 기본 placeholder 이미지
+                           options: [.requestModifier(modifier)]
+                       ) { result in
+                           switch result {
+                           case .success(let value):
+                               print("이미지 로드 성공😊: \(value.source.url?.absoluteString ?? "")")
+                               // 이미지 로드 성공 후, 셀의 UI를 다시 구성
+                               cell.configure(
+                                   with: value.image,  // 로드된 이미지로 업데이트
+                                   name: " \(group.key.title)",
+                                   description: "\(group.key.content1)",
+                                   rank: "\(rank)등"
+                               )
+
+                           case .failure(let error):
+                               print("이미지 로드 실패🥹: \(error.localizedDescription)")
+                               // 실패 시 기본 이미지를 설정할 수도 있습니다.
+                           }
+                       }
+                   } else {
+                       print("URL 변환에 실패했습니다🥹: \(fullImageURLString)")
                    }
-                   
-            cell.configure(with: UIImage(systemName: "star"), name: " \(group.key.title)", description: "\(group.key.content1)", rank: "\(rank)등")
-                   
-                   return cell
+               }
+
+               return cell
             
         case hobbyCardCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HobbyCardCollectionViewCell.identifier, for: indexPath) as! HobbyCardCollectionViewCell
@@ -336,6 +348,7 @@ extension DashboardViewController {
 
     // 해시태그를 사용하여 포스팅 가져오기
     private func fetchHashtagPosts(hashTag: String) {
+        print(#function)
         let query = FetchHashtagReadingPostQuery(next: nil, limit: "30", product_id: "각유저가고른1등우승자", hashTag: hashTag)
 
         PostNetworkManager.shared.fetchHashtagPosts(query: query) { [weak self] result in
@@ -365,6 +378,7 @@ extension DashboardViewController {
 
     // 가져온 포스트를 처리
     private func processFetchedPosts(_ posts: [PostsModel]) {
+        print(#function)
         // 포스트를 그룹화하여 개수를 계산
         let groupedPosts = groupPosts(posts: posts)
         
@@ -399,6 +413,7 @@ extension DashboardViewController {
 
     // 모든 순위 출력
     private func displayRankedGroups(_ rankedGroups: [(key: PostGroup, value: [PostsModel])]) {
+        print(#function)
         guard !rankedGroups.isEmpty else {
             print("랭킹에 표시할 그룹이 없습니다.")
             return
@@ -430,9 +445,8 @@ extension DashboardViewController {
     
 }
 
-
 final class RankCollectionViewCell: UICollectionViewCell {
-
+    
     let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColors.softBlue
@@ -444,12 +458,18 @@ final class RankCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    let profileImageContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.clipsToBounds = true
+        return view
+    }()
+    
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.image = UIImage(systemName: "figure.stand")
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 75 // Half of the height/width for a circular view
         return imageView
     }()
     
@@ -493,7 +513,8 @@ final class RankCollectionViewCell: UICollectionViewCell {
     
     func setupUI() {
         contentView.addSubview(containerView)
-        containerView.addSubview(profileImageView)
+        containerView.addSubview(profileImageContainerView)
+        profileImageContainerView.addSubview(profileImageView)
         containerView.addSubview(rankLabel)
         containerView.addSubview(nameLabel)
         containerView.addSubview(descriptionLabel)
@@ -502,10 +523,14 @@ final class RankCollectionViewCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
         
-        profileImageView.snp.makeConstraints { make in
+        profileImageContainerView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(-20)
             make.centerX.equalToSuperview()
             make.width.height.equalTo(120)
+        }
+        
+        profileImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         rankLabel.snp.makeConstraints { make in
@@ -516,7 +541,7 @@ final class RankCollectionViewCell: UICollectionViewCell {
         }
         
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
+            make.top.equalTo(profileImageContainerView.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
         }
         
@@ -524,6 +549,20 @@ final class RankCollectionViewCell: UICollectionViewCell {
             make.top.equalTo(nameLabel.snp.bottom).offset(5)
             make.centerX.equalToSuperview()
         }
+        
+        // 초기 cornerRadius 설정
+        profileImageContainerView.layer.cornerRadius = 60 // 120의 절반
+        profileImageView.layer.cornerRadius = 60 // 120의 절반
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateCornerRadius()
+    }
+    
+    private func updateCornerRadius() {
+        profileImageContainerView.layer.cornerRadius = profileImageContainerView.bounds.width / 2
+        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
     }
     
     func configure(with image: UIImage?, name: String, description: String, rank: String) {
@@ -531,15 +570,10 @@ final class RankCollectionViewCell: UICollectionViewCell {
         nameLabel.text = name
         descriptionLabel.text = description
         rankLabel.text = rank
+        
+        // 레이아웃 업데이트 및 cornerRadius 재설정
+        setNeedsLayout()
+        layoutIfNeeded()
+        updateCornerRadius()
     }
 }
-
-
-
-
-
-
-
-
-
-

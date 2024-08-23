@@ -267,7 +267,7 @@ final class AllPostTableViewCell: UITableViewCell {
             return
         }
         
-      //  let postID = "66c4b1b697d02bf91e204107"
+       // let postID = "66c8448e5056517017a3f3d2"
      
         print("📍\(postID)")
     
