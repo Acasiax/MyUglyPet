@@ -108,7 +108,7 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
+            make.top.equalTo(titleLabel.snp.bottom)
             make.left.equalTo(imageView.snp.right).offset(10)
             make.right.equalToSuperview().offset(-10)
             make.bottom.lessThanOrEqualToSuperview().offset(-10)

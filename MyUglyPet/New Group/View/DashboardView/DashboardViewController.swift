@@ -137,6 +137,10 @@ class DashboardViewController: UIViewController {
     
     var rankedGroups: [(key: PostGroup, value: [PostsModel])] = []
 
+    override func viewWillAppear(_ animated: Bool) {
+        fetchHashtagPosts(hashTag: "1등이닷")
+    }
+    
     
     
     override func viewDidLoad() {
@@ -152,7 +156,7 @@ class DashboardViewController: UIViewController {
         
         // 배너의 페이지 수에 맞춰 페이지 컨트롤 설정
         pageControl.numberOfPages = bannerData.count
-        fetchHashtagPosts(hashTag: "1등이닷")
+        
         setupSubviews()
         setupConstraints()
     }
@@ -305,7 +309,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                        }
                    }
                    
-                   cell.configure(with: UIImage(systemName: "star"), name: "\(rank)등: \(group.key.title)", description: "\(group.key.content1)")
+            cell.configure(with: UIImage(systemName: "star"), name: " \(group.key.title)", description: "\(group.key.content1)", rank: "\(rank)등")
                    
                    return cell
             
@@ -442,11 +446,23 @@ final class RankCollectionViewCell: UICollectionViewCell {
     
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: "figure.stand")
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 50
+        imageView.layer.cornerRadius = 75 // Half of the height/width for a circular view
         return imageView
+    }()
+    
+    let rankLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = UIColor.yellow
+        label.textColor = .black
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.layer.cornerRadius = 10
+        label.layer.masksToBounds = true
+        label.text = "1등"
+        return label
     }()
     
     let nameLabel: UILabel = {
@@ -476,38 +492,48 @@ final class RankCollectionViewCell: UICollectionViewCell {
     }
     
     func setupUI() {
-            contentView.addSubview(containerView)
-            containerView.addSubview(profileImageView)
-            containerView.addSubview(nameLabel)
-            containerView.addSubview(descriptionLabel)
-            
-            containerView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            
-            profileImageView.snp.makeConstraints { make in
-                make.top.equalToSuperview().offset(10)
-                make.centerX.equalToSuperview()
-                make.width.height.equalTo(80)
-            }
-            
-            nameLabel.snp.makeConstraints { make in
-                make.top.equalTo(profileImageView.snp.bottom).offset(10)
-                make.centerX.equalToSuperview()
-            }
-            
-            descriptionLabel.snp.makeConstraints { make in
-                make.top.equalTo(nameLabel.snp.bottom).offset(5)
-                make.centerX.equalToSuperview()
-            }
+        contentView.addSubview(containerView)
+        containerView.addSubview(profileImageView)
+        containerView.addSubview(rankLabel)
+        containerView.addSubview(nameLabel)
+        containerView.addSubview(descriptionLabel)
+        
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+        
+        profileImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(-20)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(120)
+        }
+        
+        rankLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(-10)
+            make.leading.equalToSuperview().offset(-10)
+            make.width.equalTo(40)
+            make.height.equalTo(40)
+        }
+        
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(10)
+            make.centerX.equalToSuperview()
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(5)
+            make.centerX.equalToSuperview()
+        }
+    }
     
-    func configure(with image: UIImage?, name: String, description: String) {
+    func configure(with image: UIImage?, name: String, description: String, rank: String) {
         profileImageView.image = image
         nameLabel.text = name
         descriptionLabel.text = description
+        rankLabel.text = rank
     }
 }
+
 
 
 

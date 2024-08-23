@@ -140,7 +140,7 @@ extension GameViewController {
             let fullImageURLString = APIKey.baseURL + "v1/" + imageUrlString
             return Pet(
                 name: post.title ?? "기본 이름",
-                userName: post.content ?? "기본 내용",
+                userName: post.content1 ?? "기본 내용",
                 imageURL: fullImageURLString
             )
         }
@@ -273,7 +273,7 @@ extension GameViewController {
 extension GameViewController {
     
     func removeBaseURL(from url: String) -> String {
-        let baseURL = "http://lslp.sesac.co.kr:31819/v1/"
+        let baseURL = APIKey.baseURL + "v1/"
         if url.hasPrefix(baseURL) {
             return String(url.dropFirst(baseURL.count))
         } else {
@@ -282,7 +282,7 @@ extension GameViewController {
     }
 
     
-    // MARK: - 우승자 이미지 및 게시글 업로드 함수
+    // MARK: - 우승자 이미지 게시글 업로드 함수
     func uploadWinnerImageAndPost() {
         guard let winnerPet = winnerPet else {
             print("우승자가 설정되지 않았습니다.")
