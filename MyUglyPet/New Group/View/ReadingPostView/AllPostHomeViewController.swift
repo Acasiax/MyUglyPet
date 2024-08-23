@@ -147,6 +147,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         
         let post = serverPosts[indexPath.row]
         cell.postID = post.postId
+        cell.userID = post.creator.userId
         cell.titleLabel.text = post.title // 포스트 제목 설정
         cell.contentLabel.text = post.content // 포스트 내용 설정
         cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달

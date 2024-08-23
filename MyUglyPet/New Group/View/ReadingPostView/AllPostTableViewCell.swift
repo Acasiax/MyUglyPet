@@ -13,8 +13,6 @@ final class AllPostTableViewCell: UITableViewCell {
 
     weak var delegate: AllPostTableViewCellDelegate?
 
-      
-    
     // containerView 생성
     let containerView: UIView = {
         let view = UIView()
@@ -66,9 +64,21 @@ final class AllPostTableViewCell: UITableViewCell {
         return label
     }()
 
-    lazy var followButton: UIButton = {
+    lazy var deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("삭제", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 15
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var followButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("팔로우", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
@@ -77,6 +87,8 @@ final class AllPostTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
         return button
     }()
+
+    
 
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -139,6 +151,7 @@ final class AllPostTableViewCell: UITableViewCell {
     
     // 각 셀의 포스트 ID를 저장하는 프로퍼티
         var postID: String?
+    var userID: String?
     
     var imageFiles: [String] = [] {
             didSet {
@@ -179,6 +192,7 @@ final class AllPostTableViewCell: UITableViewCell {
         containerView.addSubview(infoLabel)
         containerView.addSubview(locationTimeLabel)
         containerView.addSubview(timeLabel)
+        containerView.addSubview(deleteButton)
         containerView.addSubview(followButton)
         containerView.addSubview(collectionView)
         containerView.addSubview(contentLabel)
@@ -214,11 +228,18 @@ final class AllPostTableViewCell: UITableViewCell {
             make.left.equalTo(locationTimeLabel.snp.right).offset(8)
         }
 
-        followButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
-            make.right.equalToSuperview().inset(10)
-        }
+        
+        deleteButton.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(10)
+                make.right.equalToSuperview().inset(10)
+            }
 
+            followButton.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(10)
+                make.right.equalTo(deleteButton.snp.left).offset(-10) // 간격을 조정할 수 있습니다
+            }
+        
+    
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(locationTimeLabel.snp.bottom).offset(25)
             make.left.equalTo(userProfileImageView)
@@ -260,7 +281,7 @@ final class AllPostTableViewCell: UITableViewCell {
     }
 
     
-    @objc func followButtonTapped() {
+    @objc func deleteButtonTapped() {
         
         guard let postID = postID else {
             print("postID가 없습니다.")
@@ -272,23 +293,23 @@ final class AllPostTableViewCell: UITableViewCell {
         print("📍\(postID)")
     
         isFollowing.toggle()
-        AnimationZip.animateButtonPress(followButton)
+        AnimationZip.animateButtonPress(deleteButton)
     
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
             if self.isFollowing {
-                self.followButton.setTitle("삭제완료", for: .normal)
-                self.followButton.backgroundColor = .red
+                self.deleteButton.setTitle("삭제완료", for: .normal)
+                self.deleteButton.backgroundColor = .red
                 self.deletePost(postID: postID)
             } else {
-                self.followButton.setTitle("삭제", for: .normal)
-                self.followButton.backgroundColor = .systemBlue
+                self.deleteButton.setTitle("삭제", for: .normal)
+                self.deleteButton.backgroundColor = .systemBlue
             }
         }
     }
-
     
-
+    
+    
     func deletePost(postID: String) {
         PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
             switch result {
@@ -300,6 +321,55 @@ final class AllPostTableViewCell: UITableViewCell {
                 }
             case .failure(let error):
                 print("포스트 삭제 중 오류 발생: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    
+    @objc func followButtonTapped() {
+        guard let userID = userID else {
+            print("postID가 없습니다.")
+            return
+        }
+        
+        print("📍\(userID)")
+        
+        isFollowing.toggle()
+        AnimationZip.animateButtonPress(followButton) // followButton을 사용해야 합니다.
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self = self else { return }
+            
+            self.updateFollowButtonUI()
+
+            // 팔로우 또는 언팔로우 API 요청
+            self.followPost(postID: userID)
+        }
+    }
+
+    func updateFollowButtonUI() {
+        if isFollowing {
+            followButton.setTitle("언팔로우", for: .normal)
+            followButton.backgroundColor = .red
+        } else {
+            followButton.setTitle("팔로우", for: .normal)
+            followButton.backgroundColor = .systemBlue
+        }
+    }
+
+    func followPost(postID: String) {
+        FollowPostNetworkManager.shared.followUser(userID: postID) { [weak self] result in
+            switch result {
+            case .success(let followResponse):
+                print("팔로우 상태가 변경되었습니다: \(followResponse.following_status)")
+                // 필요하다면 여기서 추가 UI 업데이트 또는 동작 수행 가능
+            case .failure(let error):
+                print("팔로우 중 오류 발생: \(error.localizedDescription)")
+                // 오류 발생 시, UI를 원래대로 복구할 수 있습니다.
+                DispatchQueue.main.async {
+                    self?.isFollowing.toggle()
+                    self?.updateFollowButtonUI()
+                }
             }
         }
     }

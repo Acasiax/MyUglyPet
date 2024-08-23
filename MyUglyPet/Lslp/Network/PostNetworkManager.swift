@@ -5,6 +5,38 @@
 //  Created by 이윤지 on 8/19/24.
 //
 
+
+import UIKit
+import Alamofire
+
+
+// MARK: - 팔로우 기능
+class FollowPostNetworkManager {
+    
+    static let shared = FollowPostNetworkManager()
+    
+    private init() {}
+    
+    func followUser(userID: String, completion: @escaping (Result<FollowResponse, Error>) -> Void) {
+        let router = Router.follow(userID: userID)
+        
+        AF.request(router.asURLRequest)
+            .validate()
+            .responseDecodable(of: FollowResponse.self) { response in
+                switch response.result {
+                case .success(let followResponse):
+                    completion(.success(followResponse))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+}
+
+
+
+
+
 import UIKit
 import Alamofire
 
@@ -290,3 +322,5 @@ class WinnerPostNetworkManager {
             }
     }
 }
+
+

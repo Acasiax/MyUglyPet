@@ -467,7 +467,8 @@ final class RankCollectionViewCell: UICollectionViewCell {
     
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = CustomColors.softPurple
+        imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: "figure.stand")
         imageView.clipsToBounds = true
         return imageView
