@@ -9,7 +9,6 @@
 import UIKit
 import Alamofire
 
-
 // MARK: - 팔로우 기능
 class FollowPostNetworkManager {
     
@@ -26,6 +25,22 @@ class FollowPostNetworkManager {
                 switch response.result {
                 case .success(let followResponse):
                     completion(.success(followResponse))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    // MARK: - 언팔로우 기능 추가
+    func unfollowUser(userID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let router = Router.unfollow(userID: userID)
+        
+        AF.request(router.asURLRequest)
+            .validate()
+            .response { response in
+                switch response.result {
+                case .success:
+                    completion(.success(())) // 성공 시 Void 반환
                 case .failure(let error):
                     completion(.failure(error))
                 }

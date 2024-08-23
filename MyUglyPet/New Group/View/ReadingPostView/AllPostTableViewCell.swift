@@ -328,7 +328,7 @@ final class AllPostTableViewCell: UITableViewCell {
     
     @objc func followButtonTapped() {
         guard let userID = userID else {
-            print("postID가 없습니다.")
+            print("userID가 없습니다.")
             return
         }
         
@@ -343,7 +343,7 @@ final class AllPostTableViewCell: UITableViewCell {
             self.updateFollowButtonUI()
 
             // 팔로우 또는 언팔로우 API 요청
-            self.followPost(postID: userID)
+            self.toggleFollowStatus(userID: userID)
         }
     }
 
@@ -357,22 +357,40 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
 
-    func followPost(postID: String) {
-        FollowPostNetworkManager.shared.followUser(userID: postID) { [weak self] result in
-            switch result {
-            case .success(let followResponse):
-                print("팔로우 상태가 변경되었습니다: \(followResponse.following_status)")
-                // 필요하다면 여기서 추가 UI 업데이트 또는 동작 수행 가능
-            case .failure(let error):
-                print("팔로우 중 오류 발생: \(error.localizedDescription)")
-                // 오류 발생 시, UI를 원래대로 복구할 수 있습니다.
-                DispatchQueue.main.async {
-                    self?.isFollowing.toggle()
-                    self?.updateFollowButtonUI()
+    func toggleFollowStatus(userID: String) {
+        if isFollowing {
+            FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
+                switch result {
+                case .success(let followResponse):
+                    print("팔로우 상태가 변경되었습니다: \(followResponse.following_status)")
+                    // 필요하다면 추가 UI 업데이트 또는 동작 수행 가능
+                case .failure(let error):
+                    print("팔로우 중 오류 발생: \(error.localizedDescription)")
+                    // 오류 발생 시, UI를 원래대로 복구할 수 있습니다.
+                    DispatchQueue.main.async {
+                        self?.isFollowing.toggle()
+                        self?.updateFollowButtonUI()
+                    }
+                }
+            }
+        } else {
+            FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
+                switch result {
+                case .success:
+                    print("언팔로우 상태가 변경되었습니다.")
+                    // 필요하다면 추가 UI 업데이트 또는 동작 수행 가능
+                case .failure(let error):
+                    print("언팔로우 중 오류 발생: \(error.localizedDescription)")
+                    // 오류 발생 시, UI를 원래대로 복구할 수 있습니다.
+                    DispatchQueue.main.async {
+                        self?.isFollowing.toggle()
+                        self?.updateFollowButtonUI()
+                    }
                 }
             }
         }
     }
+
 
 
     
