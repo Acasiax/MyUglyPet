@@ -124,6 +124,7 @@ final class AllPostHomeViewController: UIViewController {
             switch result {
             case .success(let posts):
                 self?.serverPosts = posts
+                print("🦾\(String(describing: self?.serverPosts))")
                 self?.tableView.reloadData() // 데이터 로드 후 테이블뷰 리로드
                 print("포스팅을 가져오는데 성공했어요🥰")
             case .failure(let error):
@@ -196,15 +197,27 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let detailViewController = DetailViewController()
-            let selectedPost = serverPosts[indexPath.row]
-        detailViewController.comments = selectedPost.comments ?? []
-            detailViewController.title = selectedPost.title // 제목 설정
-            detailViewController.post = selectedPost
-            detailViewController.imageFiles = selectedPost.files ?? [] // 이미지 URL 배열 전달
-
-            navigationController?.pushViewController(detailViewController, animated: true)
+        let detailViewController = DetailViewController()
+        let selectedPost = serverPosts[indexPath.row]
+        
+        // Post와 관련된 데이터를 전달
+        detailViewController.post = selectedPost
+        detailViewController.comments = selectedPost.comments
+        detailViewController.imageFiles = selectedPost.files ?? []
+        
+        // 추가적으로 Post ID와 선택된 첫 번째 댓글의 Comment ID를 전달
+        detailViewController.postId = selectedPost.postId
+        
+        // 댓글이 있는 경우 첫 번째 댓글의 ID를 전달, 없다면 nil 전달
+        if let firstComment = selectedPost.comments.first {
+            detailViewController.commentId = firstComment.commentId
+        } else {
+            detailViewController.commentId = nil
         }
+
+        navigationController?.pushViewController(detailViewController, animated: true)
+    }
+
 }
 
 

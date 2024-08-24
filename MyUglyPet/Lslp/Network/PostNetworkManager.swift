@@ -109,20 +109,18 @@ class PostNetworkManager {
             let router = try Router.deleteComment(postID: postID, commentID: commentID).asURLRequest()
             
             AF.request(router)
-                .validate(statusCode: 200..<300)
-                .responseData { response in
-                    switch response.result {
-                    case .success(let data):
-                        if data.isEmpty {
-                            print("서버 응답이 비어 있습니다.")
-                            completion(true, nil)  // 응답이 비어 있어도 성공으로 간주
-                        } else {
-                            print("서버 응답 데이터: \(data)")
-                            completion(true, nil)
-                        }
-                    case .failure(let error):
+                .response { response in  // responseData 대신 response로 변경하여 비어있는 응답도 처리 가능하게 함
+                    if let error = response.error {
                         print("서버 요청 실패: \(error.localizedDescription)")
                         completion(false, error)
+                    } else {
+                        if let data = response.data, data.isEmpty {
+                            print("서버 응답이 비어 있습니다. 하지만 성공으로 간주합니다.")
+                            completion(true, nil)  // 비어있는 응답도 성공으로 간주
+                        } else {
+                            print("서버 응답 데이터: \(response.data ?? Data())")
+                            completion(true, nil)
+                        }
                     }
                 }
         } catch {

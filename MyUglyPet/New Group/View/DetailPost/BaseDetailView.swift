@@ -10,11 +10,7 @@ import SnapKit
 
 class BaseDetailView: UIViewController {
     
-    var imageFiles: [String] = [] // 이미지 URL 배열을 저장할 프로퍼티
-    var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티
-    
-    var comments: [Comment] = []  // 댓글을 저장하는 배열  
-    
+   
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 20
@@ -64,7 +60,7 @@ class BaseDetailView: UIViewController {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
+        
         return button
     }()
 
@@ -176,7 +172,7 @@ class BaseDetailView: UIViewController {
         let sendImage = UIImage(systemName: "paperplane.fill")
         button.setImage(sendImage, for: .normal)
         button.tintColor = .systemBlue
-        button.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        
         return button
     }()
     
@@ -324,53 +320,6 @@ class BaseDetailView: UIViewController {
     }
     
     
-    @objc func sendButtonTapped() {
-        guard let text = commentTextField.text, !text.isEmpty else { return }
 
-        guard let postID = post?.postId else {
-            print("Post ID를 찾을 수 없습니다.")
-            return
-        }
-        print("사용할 Post ID: \(postID)")
-
-        PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
-            switch result {
-            case .success:
-                print("댓글 작성 성공!")
-
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let currentDate = dateFormatter.string(from: Date())
-
-                // UserComment 생성
-                let newUserComment = UserComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
-                
-                // UserComment를 Comment로 변환
-                let newComment = Comment(from: newUserComment)
-                self?.comments.append(newComment)
-
-                self?.commentTextField.text = ""
-                self?.noCommentsLabel.isHidden = true
-                self?.tableView.reloadData()
-
-            case .failure(let error):
-                print("댓글 작성 실패: \(error.localizedDescription)")
-            }
-        }
-    }
-
-
-    @objc func followButtonTapped() {
-        print("팔로우 버튼 탭")
-        
-      
-        AnimationZip.animateButtonPress(followButton)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.followButton.setTitle("팔로잉", for: .normal)
-            self.followButton.backgroundColor = .orange
-        }
-    }
-    
     
 }

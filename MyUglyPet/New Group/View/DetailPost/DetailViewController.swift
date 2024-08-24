@@ -25,21 +25,19 @@ struct UserComment {
 
 
 final class DetailViewController: BaseDetailView {
-
     
-    var photos: [UIImage] = [
-        UIImage(named: "기본냥멍1")!,
-        UIImage(named: "기본냥멍2")!,
-        UIImage(named: "기본냥멍3")!,
-        UIImage(named: "기본냥멍4")!,
-        UIImage(named: "기본냥멍5")!,
-        UIImage(named: "기본냥멍6")!
-    ]
-
+    var imageFiles: [String] = [] // 이미지 URL 배열을 저장할 프로퍼티
+    var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티 //🔥
+    
+    var comments: [Comment] = []  // 댓글을 저장하는 배열
+    var postId: String?
+    var commentId: String?
+    
     private var serverPosts: [PostsModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = CustomColors.lightBeige
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -47,34 +45,90 @@ final class DetailViewController: BaseDetailView {
         tableView.dataSource = self
         configureHierarchy()
         configureConstraints()
-        
+        followButton.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         // 전달받은 포스트 데이터를 UI에 반영
-               if let post = post {
-                   contentLabel.text = post.content
-                   // 추가적으로 titleLabel, userNameLabel 등에도 포스트 데이터를 반영할 수 있음
-               }
-
-               collectionView.reloadData() // 컬렉션뷰 리로드
-    }
-    
-    // 게시글 모든피드 포스팅 가져오기
-    private func fetchAllFeedPosts() {
-        print(#function)
-      
-        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed") //🌟
-
-        // 네트워크 요청 예시 (PostNetworkManager 사용)
-        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
-            switch result {
-            case .success(let posts):
-                self?.serverPosts = posts
-               // self?.CommentTablev.reloadData() // 데이터 로드 후 테이블뷰 리로드
-                print("allFeed 포스팅을 가져오는데 성공했어요🥰")
-            case .failure(let error):
-                print("allFeed 포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+        if let post = post {
+            contentLabel.text = post.content
+            collectionView.reloadData()
+            tableView.reloadData()
+            // 추가적으로 titleLabel, userNameLabel 등에도 포스트 데이터를 반영할 수 있음
+        }
+        
+        collectionView.reloadData() // 컬렉션뷰 리로드
+        
+        
+        // 전달받은 postId와 commentId를 출력하거나 사용
+//        if let postId = postId {
+//            print("Post ID: \(postId)")
+//        }
+//        
+//        if let commentId = commentId {
+//            print("Comment ID: \(commentId)")
+//        }
+//        
+        // post 객체에서 postId와 comments를 통해 Comment ID를 출력
+        if let post = post {
+            print("Post ID (post 객체): \(post.postId)")
+            
+            // 첫 번째 댓글의 Comment ID 출력
+            if let firstComment = post.comments.first {
+                print("Comment ID (첫 번째 댓글): \(firstComment.commentId)")
             }
         }
     }
+    
+    
+    @objc func sendButtonTapped() {
+        guard let text = commentTextField.text, !text.isEmpty else { return }
+
+        guard let postID = post?.postId else {
+           // guard let postID = post?.comments.commentId else {
+            print("Post ID를 찾을 수 없습니다.")
+            return
+        }
+        print("사용할 Post ID: \(postID)")
+
+        PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
+            switch result {
+            case .success:
+                print("댓글 작성 성공!")
+
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let currentDate = dateFormatter.string(from: Date())
+
+                // UserComment 생성
+                let newUserComment = UserComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
+                
+                // UserComment를 Comment로 변환
+                let newComment = Comment(from: newUserComment)
+                self?.comments.append(newComment)
+
+                self?.commentTextField.text = ""
+                self?.noCommentsLabel.isHidden = true
+                self?.tableView.reloadData()
+
+            case .failure(let error):
+                print("댓글 작성 실패: \(error.localizedDescription)")
+            }
+        }
+    }
+
+
+    @objc func followButtonTapped() {
+        print("팔로우 버튼 탭")
+        
+      
+        AnimationZip.animateButtonPress(followButton)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.followButton.setTitle("팔로잉", for: .normal)
+            self.followButton.backgroundColor = .orange
+        }
+    }
+    
+ 
     
 }
 
@@ -177,6 +231,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         cell.delegate = self
         let comment = comments[indexPath.row]
+        
         // 각 속성을 한국어로 출력
                
         cell.configure(with: comment.creator.profileImage, username: comment.creator.nick, date: comment.createdAt, comment: comment.content)
@@ -186,17 +241,88 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+//extension DetailViewController: CommentTableViewCellDelegate {
+//    func didTapDeleteButton(in cell: CommentTableViewCell) {
+//        // 여기에서 삭제 버튼이 눌렸을 때의 동작을 정의합니다.
+//        print("삭제 버튼이 DetailViewController에서 눌렸습니다.")
+//        
+//        // 예를 들어, 해당 셀의 인덱스를 가져와 해당 댓글을 삭제할 수 있습니다.
+//        if let indexPath = tableView.indexPath(for: cell) {
+//            // comments 배열에서 해당 댓글을 삭제
+//            comments.remove(at: indexPath.row)
+//            // 테이블뷰에서 해당 셀 삭제
+//            tableView.deleteRows(at: [indexPath], with: .automatic)
+//        }
+//    }
+//}
+
+
+
 extension DetailViewController: CommentTableViewCellDelegate {
     func didTapDeleteButton(in cell: CommentTableViewCell) {
-        // 여기에서 삭제 버튼이 눌렸을 때의 동작을 정의합니다.
         print("삭제 버튼이 DetailViewController에서 눌렸습니다.")
         
-        // 예를 들어, 해당 셀의 인덱스를 가져와 해당 댓글을 삭제할 수 있습니다.
+        // 해당 셀의 인덱스를 가져옴
         if let indexPath = tableView.indexPath(for: cell) {
-            // comments 배열에서 해당 댓글을 삭제
-            comments.remove(at: indexPath.row)
-            // 테이블뷰에서 해당 셀 삭제
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            guard let postId = post?.postId else {
+                print("오류: postId가 nil입니다. 댓글 삭제 요청을 중단합니다.")
+                return
+            }
+            
+            let commentId = post?.comments[indexPath.row].commentId
+            
+            guard let commentId = commentId else {
+                print("오류: commentId가 nil입니다. 댓글 삭제 요청을 중단합니다.")
+                return
+            }
+            
+            print("삭제할 댓글 정보:")
+            print(" - postId: \(postId)")
+            print(" - commentId: \(commentId)")
+            print(" - 해당 셀의 인덱스: \(indexPath.row)")
+            
+            // 네트워크를 통해 댓글 삭제 요청
+            PostNetworkManager.shared.deleteComment(postID: postId, commentID: commentId) { [weak self] success, error in
+                guard let self = self else {
+                    print("오류: DetailViewController 인스턴스가 nil입니다. 클로저 실행 중단.")
+                    return
+                }
+                
+                if success {
+                    print("서버로부터 댓글 삭제 성공 응답을 받았습니다.")
+                    
+                    // 테이블뷰 업데이트 전에 comments 배열에서 해당 댓글 삭제
+                    self.post?.comments.remove(at: indexPath.row)
+                    
+                    // 테이블뷰에서 해당 셀 삭제
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    
+                    print("댓글이 성공적으로 삭제되었습니다.")
+                    
+                } else {
+                    if let error = error {
+                        print("댓글 삭제 실패: \(error.localizedDescription)")
+                    } else {
+                        print("댓글 삭제 실패: 알 수 없는 오류 발생")
+                    }
+                    
+                    // 오류 메시지를 사용자에게 표시
+                    self.showErrorAlert(message: "댓글을 삭제하는 데 실패했습니다. 나중에 다시 시도해주세요.")
+                }
+            }
+        } else {
+            print("오류: 셀의 인덱스를 가져오지 못했습니다. 댓글 삭제 요청을 중단합니다.")
         }
     }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
+
+
+
+
