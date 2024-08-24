@@ -83,7 +83,6 @@ final class DetailViewController: BaseDetailView {
         guard let text = commentTextField.text, !text.isEmpty else { return }
 
         guard let postID = post?.postId else {
-           // guard let postID = post?.comments.commentId else {
             print("Post ID를 찾을 수 없습니다.")
             return
         }
@@ -224,22 +223,24 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
 //댓글 창 테이블뷰
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return comments.count
+        // post가 nil이 아니고, 댓글이 있으면 그 수를 반환, 그렇지 않으면 0을 반환
+        return post?.comments.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         cell.delegate = self
-        let comment = comments[indexPath.row]
         
-        // 각 속성을 한국어로 출력
-               
-        cell.configure(with: comment.creator.profileImage, username: comment.creator.nick, date: comment.createdAt, comment: comment.content)
-        
+        // post의 comments 배열에서 해당 댓글을 가져옴
+        if let comment = post?.comments[indexPath.row] {
+            // 각 속성을 설정하여 셀을 구성
+            cell.configure(with: comment.creator.profileImage, username: comment.creator.nick, date: comment.createdAt, comment: comment.content)
+        }
         
         return cell
     }
 }
+
 
 //extension DetailViewController: CommentTableViewCellDelegate {
 //    func didTapDeleteButton(in cell: CommentTableViewCell) {
