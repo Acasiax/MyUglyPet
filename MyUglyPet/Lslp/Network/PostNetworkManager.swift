@@ -12,9 +12,32 @@ import Alamofire
 // MARK: - 팔로우 기능
 class FollowPostNetworkManager {
     
+    
+    
+    
     static let shared = FollowPostNetworkManager()
     
     private init() {}
+    
+    // 내 프로필 조회
+       func fetchMyProfile(completion: @escaping (Result<MyProfileResponse, Error>) -> Void) {
+           let router = Router.fetchMyProfile
+
+           do {
+               let request = try router.asURLRequest()
+               
+               AF.request(request).responseDecodable(of: MyProfileResponse.self) { response in
+                   switch response.result {
+                   case .success(let profileResponse):
+                       completion(.success(profileResponse))
+                   case .failure(let error):
+                       completion(.failure(error))
+                   }
+               }
+           } catch {
+               completion(.failure(error))
+           }
+       }
     
     func followUser(userID: String, completion: @escaping (Result<FollowResponse, Error>) -> Void) {
         let router = Router.follow(userID: userID)

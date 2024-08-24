@@ -58,12 +58,17 @@ class BannerCollectionViewCell: UICollectionViewCell {
 
 class HobbyCardCollectionViewCell: UICollectionViewCell {
 
-    
+    var postID: String?
+    var userID: String?
+    var imageFiles: [String] = [] // 이미지 파일 URL 배열
+    weak var delegate: AnyObject? // 델리게이트
+
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
+        imageView.image = UIImage(named: "기본냥멍3")
         return imageView
     }()
     
@@ -81,6 +86,16 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    let followButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("팔로우", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .orange
+        button.layer.cornerRadius = 5
+        button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -90,10 +105,11 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
+    private func setupUI() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(followButton)
         
         imageView.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(10)
@@ -104,14 +120,42 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.left.equalTo(imageView.snp.right).offset(10)
-            make.right.equalToSuperview().offset(-10)
+            make.right.equalTo(followButton.snp.left).offset(-10)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom)
             make.left.equalTo(imageView.snp.right).offset(10)
-            make.right.equalToSuperview().offset(-10)
+            make.right.equalTo(followButton.snp.left).offset(-10)
             make.bottom.lessThanOrEqualToSuperview().offset(-10)
+        }
+        
+        followButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-10)
+            make.width.equalTo(80)
+            make.height.equalTo(30)
+        }
+    }
+    
+    // 팔로우 상태를 설정하는 메서드 추가
+    func configureFollowButton(isFollowing: Bool) {
+        if isFollowing {
+            followButton.setTitle("언팔로우", for: .normal)
+            followButton.backgroundColor = .green
+        } else {
+            followButton.setTitle("팔로우", for: .normal)
+            followButton.backgroundColor = .orange
+        }
+    }
+    
+    @objc private func followButtonTapped() {
+        if followButton.backgroundColor == .orange {
+            followButton.setTitle("언팔로우", for: .normal)
+            followButton.backgroundColor = .green
+        } else {
+            followButton.setTitle("팔로우", for: .normal)
+            followButton.backgroundColor = .orange
         }
     }
     

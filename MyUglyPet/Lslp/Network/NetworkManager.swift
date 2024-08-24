@@ -13,6 +13,8 @@ import Alamofire
  */
 struct NetworkManager {
     
+   // static let shared = NetworkManager()
+    
     private init() { }
     
     static func createLogin(email: String, password: String) {
@@ -50,7 +52,7 @@ struct NetworkManager {
 // 4. asURLRequest가 하고 있는건 뭐야?
  //*/
     static func fetchProfile() {
-
+        print("==========🔥🔥🔥🔥🔥🔥🔥🔥")
         do {
             let request = try Router.fetchProfile.asURLRequest()
             

@@ -44,7 +44,9 @@ class DashboardViewController: UIViewController {
     let scrollView = UIScrollView()
     let contentStackView = UIStackView()
     
-
+    private var serverPosts: [PostsModel] = []
+    private var myProfile: MyProfileResponse?
+    
     let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "냥멍난이"
@@ -116,7 +118,7 @@ class DashboardViewController: UIViewController {
     // 취미 카드 섹션 헤더
     let hobbyCardHeaderLabel: UILabel = {
         let label = UILabel()
-        label.text = "취미 카드"
+        label.text = "내 친구들"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -139,6 +141,8 @@ class DashboardViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         fetchHashtagPosts(hashTag: "1등이닷")
+        fetchAllFeedPosts()
+        fetchMyProfile()
     }
     
     
@@ -244,7 +248,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             
             
         case hobbyCardCollectionView:
-            return 10
+            return serverPosts.count
             
         default:
             return 0
@@ -326,9 +330,25 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                return cell
             
         case hobbyCardCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HobbyCardCollectionViewCell.identifier, for: indexPath) as! HobbyCardCollectionViewCell
-            cell.configure(with: UIImage(named: "기본냥멍1")!, title: "유저 \(indexPath.row + 1)", description: "이것은 취미 카드 설명입니다.")
-            return cell
+                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HobbyCardCollectionViewCell.identifier, for: indexPath) as! HobbyCardCollectionViewCell
+                  
+                  let post = serverPosts[indexPath.row]
+                  cell.postID = post.postId
+                  cell.userID = post.creator.userId
+                  cell.descriptionLabel.text = post.title // 포스트 제목 설정
+                  cell.titleLabel.text = post.creator.nick // 사용자 닉네임
+                  cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
+                  cell.delegate = self  // 델리게이트 설정
+                  
+                  // 팔로우 상태를 확인하고 버튼을 설정
+                  if let myProfile = myProfile {
+                      let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
+                      cell.configureFollowButton(isFollowing: isFollowing)
+                  }
+            
+            cell.backgroundColor = CustomColors.softBlue
+                  
+                  return cell
             
         default:
             return UICollectionViewCell()
@@ -345,7 +365,44 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
 
 
 extension DashboardViewController {
+    //내 프로필 가져오기
+    func fetchMyProfile() {
+            // FollowPostNetworkManager 싱글턴 인스턴스를 사용하여 프로필 요청
+            FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+                switch result {
+                case .success(let profile):
+                    self?.myProfile = profile
+                    print("내 프로필 가져오는데 성공했어요🥰", profile)
+                   
+                    
+                case .failure(let error):
+                    // 프로필 데이터를 가져오지 못했을 때
+                    print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+                }
+            }
+        }
+    
+    
+    // 게시글 모든피드 포스팅 가져오기
+    private func fetchAllFeedPosts() {
+        print(#function)
+      
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed") //🌟
 
+        // 네트워크 요청 예시 (PostNetworkManager 사용)
+        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.serverPosts = posts
+                self?.hobbyCardCollectionView.reloadData() // 데이터 로드 후 테이블뷰 리로드
+                print("allFeed 포스팅을 가져오는데 성공했어요🥰")
+            case .failure(let error):
+                print("allFeed 포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    
     // 해시태그를 사용하여 포스팅 가져오기
     private func fetchHashtagPosts(hashTag: String) {
         print(#function)
@@ -354,8 +411,9 @@ extension DashboardViewController {
         PostNetworkManager.shared.fetchHashtagPosts(query: query) { [weak self] result in
             switch result {
             case .success(let posts):
+                
                 // 모든 포스트 출력
-                self?.printAllPosts(posts)
+             //   self?.printAllPosts(posts)
                 // 포스트를 처리하여 랭킹 계산
                 self?.processFetchedPosts(posts)
             case .failure(let error):
@@ -420,10 +478,10 @@ extension DashboardViewController {
         }
         
         for (index, group) in rankedGroups.enumerated() {
-            print("\(index + 1)등 그룹의 타이틀: \(group.key.title)")
-            print("\(index + 1)등 그룹의 내용: \(group.key.content)")
-            print("\(index + 1)등 그룹의 내용1: \(group.key.content1)")
-            print("\(index + 1)등 그룹의 중복된 포스트 개수: \(group.value.count)개") // 해당 그룹에 몇 개의 포스트가 있는지 출력
+//            print("\(index + 1)등 그룹의 타이틀: \(group.key.title)")
+//            print("\(index + 1)등 그룹의 내용: \(group.key.content)")
+//            print("\(index + 1)등 그룹의 내용1: \(group.key.content1)")
+//            print("\(index + 1)등 그룹의 중복된 포스트 개수: \(group.value.count)개")
 
             // 그룹에 포함된 포스트들을 모두 출력
             for (postIndex, post) in group.value.enumerated() {
@@ -434,7 +492,7 @@ extension DashboardViewController {
         }
         
         self.rankedGroups = rankedGroups
-        print("그룹이 잘 들어갔나?: \(rankedGroups)")
+      //  print("그룹이 잘 들어갔나?: \(rankedGroups)")
         rankCollectionView.reloadData()
         
         
