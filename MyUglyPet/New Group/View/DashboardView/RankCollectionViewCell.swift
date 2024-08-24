@@ -63,6 +63,8 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
     var imageFiles: [String] = [] // 이미지 파일 URL 배열
     weak var delegate: AnyObject? // 델리게이트
 
+    private var isFollowing: Bool = false // 팔로우 상태를 추적하는 변수
+
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -140,6 +142,11 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
     
     // 팔로우 상태를 설정하는 메서드 추가
     func configureFollowButton(isFollowing: Bool) {
+        self.isFollowing = isFollowing
+        updateFollowButtonUI()
+    }
+
+    private func updateFollowButtonUI() {
         if isFollowing {
             followButton.setTitle("언팔로우", for: .normal)
             followButton.backgroundColor = .green
@@ -148,14 +155,44 @@ class HobbyCardCollectionViewCell: UICollectionViewCell {
             followButton.backgroundColor = .orange
         }
     }
-    
+
     @objc private func followButtonTapped() {
-        if followButton.backgroundColor == .orange {
-            followButton.setTitle("언팔로우", for: .normal)
-            followButton.backgroundColor = .green
+        guard let userID = userID else {
+            print("userID가 없습니다.")
+            return
+        }
+
+        isFollowing.toggle()
+        updateFollowButtonUI()
+
+        if isFollowing {
+            FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
+                switch result {
+                case .success:
+                    print("팔로우 성공")
+                case .failure(let error):
+                    print("팔로우 실패: \(error.localizedDescription)")
+                    // 팔로우 실패 시 UI를 원래대로 복구
+                    DispatchQueue.main.async {
+                        self?.isFollowing.toggle()
+                        self?.updateFollowButtonUI()
+                    }
+                }
+            }
         } else {
-            followButton.setTitle("팔로우", for: .normal)
-            followButton.backgroundColor = .orange
+            FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
+                switch result {
+                case .success:
+                    print("언팔로우 성공")
+                case .failure(let error):
+                    print("언팔로우 실패: \(error.localizedDescription)")
+                    // 언팔로우 실패 시 UI를 원래대로 복구
+                    DispatchQueue.main.async {
+                        self?.isFollowing.toggle()
+                        self?.updateFollowButtonUI()
+                    }
+                }
+            }
         }
     }
     

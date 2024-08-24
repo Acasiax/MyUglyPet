@@ -50,6 +50,14 @@ final class AllPostHomeViewController: UIViewController {
     }()
     
     private let panGestureRecognizer = UIPanGestureRecognizer()
+    private var myProfile: MyProfileResponse?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // 데이터 로드
+        fetchPosts()
+        fetchMyProfile()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,8 +68,7 @@ final class AllPostHomeViewController: UIViewController {
         tableView.dataSource = self
         configureConstraints()
         
-        // 데이터 로드
-               fetchPosts()
+       
         
         // Pan Gesture Recognizer를 tableView에 추가
         panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
@@ -88,7 +95,25 @@ final class AllPostHomeViewController: UIViewController {
     }
 
     
+    //내 프로필 가져오기
+    func fetchMyProfile() {
+            // FollowPostNetworkManager 싱글턴 인스턴스를 사용하여 프로필 요청
+            FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+                switch result {
+                case .success(let profile):
+                    self?.myProfile = profile
+                    print("내 프로필 가져오는데 성공했어요🥰", profile)
+                   
+                    
+                case .failure(let error):
+                    // 프로필 데이터를 가져오지 못했을 때
+                    print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+                }
+            }
+        }
     
+    
+    //게시글 모든 피드 가져오기
     private func fetchPosts() {
         // 쿼리 파라미터 생성
 
@@ -153,8 +178,17 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
         cell.delegate = self  // 델리게이트 설정
         
+        // 팔로우 상태를 확인하고 버튼을 설정
+        if let myProfile = myProfile {
+            let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
+            cell.configureFollowButton(isFollowing: isFollowing)
+        }
+  
+        
         let colorIndex = indexPath.row % colors.count
         cell.containerView.backgroundColor = colors[colorIndex]
+        
+        
         
         return cell
     }

@@ -13,7 +13,7 @@ final class AllPostTableViewCell: UITableViewCell {
     
     weak var delegate: AllPostTableViewCellDelegate?
     
-    // containerView 생성
+    // UI 요소들
     let containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
@@ -22,7 +22,6 @@ final class AllPostTableViewCell: UITableViewCell {
         return view
     }()
     
-    // 기존 UI 요소들
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 20
@@ -87,8 +86,6 @@ final class AllPostTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
         return button
     }()
-    
-    
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -157,7 +154,6 @@ final class AllPostTableViewCell: UITableViewCell {
             checkAndHideButtons()
         }
     }
-
     
     var imageFiles: [String] = [] {
         didSet {
@@ -171,19 +167,15 @@ final class AllPostTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        // contentView에 containerView 추가
+        // contentView에 containerView 추가 및 UI 구성
         contentView.addSubview(containerView)
-        
-        // containerView에 제약 조건 설정
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(10) // contentView와의 간격 설정
+            make.edges.equalToSuperview().inset(10)
         }
         
-        // containerView에 나머지 UI 요소들 추가
         configureHierarchy()
         configureConstraints()
         
-        // 컬렉션 뷰 데이터 소스 및 델리게이트 설정
         collectionView.dataSource = self
         collectionView.delegate = self
     }
@@ -234,7 +226,6 @@ final class AllPostTableViewCell: UITableViewCell {
             make.left.equalTo(locationTimeLabel.snp.right).offset(8)
         }
         
-        
         deleteButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(10)
             make.right.equalToSuperview().inset(10)
@@ -242,9 +233,8 @@ final class AllPostTableViewCell: UITableViewCell {
         
         followButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(10)
-            make.right.equalTo(deleteButton.snp.left).offset(-10) // 간격을 조정할 수 있습니다
+            make.right.equalTo(deleteButton.snp.left).offset(-10)
         }
-        
         
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(locationTimeLabel.snp.bottom).offset(25)
@@ -256,8 +246,6 @@ final class AllPostTableViewCell: UITableViewCell {
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(200)
         }
-        
-        
         
         likeButton.snp.makeConstraints { make in
             make.top.equalTo(collectionView.snp.bottom).offset(10)
@@ -281,9 +269,7 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    
     // followButton을 숨길지 여부를 확인하는 메서드
-    // followButton과 deleteButton을 숨길지 여부를 확인하는 메서드
     private func checkAndHideButtons() {
         let currentUserID = UserDefaultsManager.shared.id
         if let userID = userID {
@@ -294,23 +280,76 @@ final class AllPostTableViewCell: UITableViewCell {
             deleteButton.isHidden = true
         }
     }
+    
+    @objc func followButtonTapped() {
+        guard let userID = userID else {
+            print("userID가 없습니다.")
+            return
+        }
+        
+        // 팔로우 상태 토글
+        isFollowing.toggle()
+        updateFollowButtonUI()
+        
+        // 팔로우 또는 언팔로우 API 호출
+        if isFollowing {
+            FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
+                switch result {
+                case .success:
+                    print("팔로우 성공")
+                case .failure(let error):
+                    print("팔로우 실패: \(error.localizedDescription)")
+                    // 실패 시 상태를 복구
+                    DispatchQueue.main.async {
+                        self?.isFollowing.toggle()
+                        self?.updateFollowButtonUI()
+                    }
+                }
+            }
+        } else {
+            FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
+                switch result {
+                case .success:
+                    print("언팔로우 성공")
+                case .failure(let error):
+                    print("언팔로우 실패: \(error.localizedDescription)")
+                    // 실패 시 상태를 복구
+                    DispatchQueue.main.async {
+                        self?.isFollowing.toggle()
+                        self?.updateFollowButtonUI()
+                    }
+                }
+            }
+        }
+    }
+    
+    // 팔로우 상태를 설정하는 메서드 추가
+    func configureFollowButton(isFollowing: Bool) {
+        self.isFollowing = isFollowing
+        updateFollowButtonUI()
+    }
+    
+    // 팔로우 버튼의 UI 업데이트
+    private func updateFollowButtonUI() {
+        if isFollowing {
+            followButton.setTitle("언팔로우", for: .normal)
+            followButton.backgroundColor = .red
+        } else {
+            followButton.setTitle("팔로우", for: .normal)
+            followButton.backgroundColor = .systemBlue
+        }
+    }
+    
     @objc private func handleCommentButtonTapped() {
         print("댓글 버튼 탭")
         delegate?.didTapCommentButton(in: self)
     }
     
-    
-
     @objc func deleteButtonTapped() {
-        
         guard let postID = postID else {
             print("postID가 없습니다.")
             return
         }
-        
-        // let postID = "66c8448e5056517017a3f3d2"
-        
-        print("📍\(postID)")
         
         isFollowing.toggle()
         AnimationZip.animateButtonPress(deleteButton)
@@ -328,14 +367,11 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    
-    
     func deletePost(postID: String) {
         PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
             switch result {
             case .success:
                 print("포스트가 성공적으로 삭제되었습니다.")
-                // 해당 셀을 삭제하도록 delegate 호출
                 if let delegate = self?.delegate {
                     delegate.didTapDeleteButton(in: self!)
                 }
@@ -344,77 +380,6 @@ final class AllPostTableViewCell: UITableViewCell {
             }
         }
     }
-    
-    
-    @objc func followButtonTapped() {
-        guard let userID = userID else {
-            print("userID가 없습니다.")
-            return
-        }
-        
-        print("📍\(userID)")
-        
-        isFollowing.toggle()
-        AnimationZip.animateButtonPress(followButton) // followButton을 사용해야 합니다.
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            guard let self = self else { return }
-            
-            self.updateFollowButtonUI()
-            
-            // 팔로우 또는 언팔로우 API 요청
-            self.toggleFollowStatus(userID: userID)
-        }
-    }
-    
-    func updateFollowButtonUI() {
-        if isFollowing {
-            followButton.setTitle("언팔로우", for: .normal)
-            followButton.backgroundColor = .red
-        } else {
-            followButton.setTitle("팔로우", for: .normal)
-            followButton.backgroundColor = .systemBlue
-        }
-    }
-    
-    func toggleFollowStatus(userID: String) {
-        if isFollowing {
-            FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
-                switch result {
-                case .success(let followResponse):
-                    print("팔로우 상태가 변경되었습니다: \(followResponse.following_status)")
-                    // 필요하다면 추가 UI 업데이트 또는 동작 수행 가능
-                case .failure(let error):
-                    print("팔로우 중 오류 발생: \(error.localizedDescription)")
-                    // 오류 발생 시, UI를 원래대로 복구할 수 있습니다.
-                    DispatchQueue.main.async {
-                        self?.isFollowing.toggle()
-                        self?.updateFollowButtonUI()
-                    }
-                }
-            }
-        } else {
-            FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
-                switch result {
-                case .success:
-                    print("언팔로우 상태가 변경되었습니다.")
-                    // 필요하다면 추가 UI 업데이트 또는 동작 수행 가능
-                case .failure(let error):
-                    print("언팔로우 중 오류 발생: \(error.localizedDescription)")
-                    // 오류 발생 시, UI를 원래대로 복구할 수 있습니다.
-                    DispatchQueue.main.async {
-                        self?.isFollowing.toggle()
-                        self?.updateFollowButtonUI()
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    
-    
-    
 }
 
 
