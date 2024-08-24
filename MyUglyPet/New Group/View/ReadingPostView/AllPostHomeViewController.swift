@@ -102,7 +102,7 @@ final class AllPostHomeViewController: UIViewController {
                 switch result {
                 case .success(let profile):
                     self?.myProfile = profile
-                    print("내 프로필 가져오는데 성공했어요🥰", profile)
+                   // print("내 프로필 가져오는데 성공했어요🥰", profile)
                    
                     
                 case .failure(let error):
@@ -198,7 +198,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let detailViewController = DetailViewController()
             let selectedPost = serverPosts[indexPath.row]
-            
+        detailViewController.comments = selectedPost.comments ?? []
             detailViewController.title = selectedPost.title // 제목 설정
             detailViewController.post = selectedPost
             detailViewController.imageFiles = selectedPost.files ?? [] // 이미지 URL 배열 전달

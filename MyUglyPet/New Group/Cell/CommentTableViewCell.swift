@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class CommentTableViewCell: UITableViewCell {
     
@@ -100,10 +101,15 @@ final class CommentTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with profileImage: UIImage?, username: String, date: String, comment: String) {
-        profileImageView.image = profileImage
-        usernameLabel.text = username
-        dateLabel.text = date
-        commentLabel.text = comment
-    }
+    func configure(with profileImageURL: String?, username: String, date: String, comment: String) {
+            if let profileImageURL = profileImageURL, let url = URL(string: profileImageURL) {
+                profileImageView.kf.setImage(with: url)
+            } else {
+                profileImageView.image = UIImage(named: "기본냥멍1") // 기본 이미지 설정
+            }
+            
+            usernameLabel.text = username
+            dateLabel.text = date
+            commentLabel.text = comment
+        }
 }

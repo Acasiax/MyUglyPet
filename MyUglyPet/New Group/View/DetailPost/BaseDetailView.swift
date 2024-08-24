@@ -13,7 +13,7 @@ class BaseDetailView: UIViewController {
     var imageFiles: [String] = [] // 이미지 URL 배열을 저장할 프로퍼티
     var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티
     
-    var comments: [DummyComment] = []  // 댓글을 저장하는 배열
+    var comments: [Comment] = []  // 댓글을 저장하는 배열  
     
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -326,37 +326,39 @@ class BaseDetailView: UIViewController {
     
     @objc func sendButtonTapped() {
         guard let text = commentTextField.text, !text.isEmpty else { return }
-        
-        // 댓글 작성 메서드를 호출하기 위해 postID가 필요합니다.
+
         guard let postID = post?.postId else {
             print("Post ID를 찾을 수 없습니다.")
             return
         }
         print("사용할 Post ID: \(postID)")
 
-        // PostNetworkManager의 postComment 메서드를 호출하여 댓글을 서버에 전송
         PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
             switch result {
             case .success:
                 print("댓글 작성 성공!")
-                
-                // UI 업데이트: 작성된 댓글을 로컬에서도 추가
+
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 let currentDate = dateFormatter.string(from: Date())
+
+                // UserComment 생성
+                let newUserComment = UserComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
                 
-                let newComment = DummyComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
+                // UserComment를 Comment로 변환
+                let newComment = Comment(from: newUserComment)
                 self?.comments.append(newComment)
-                
+
                 self?.commentTextField.text = ""
                 self?.noCommentsLabel.isHidden = true
                 self?.tableView.reloadData()
-                
+
             case .failure(let error):
-                print("댓 ㅍ!: \(error.localizedDescription)")
+                print("댓글 작성 실패: \(error.localizedDescription)")
             }
         }
     }
+
 
     @objc func followButtonTapped() {
         print("팔로우 버튼 탭")

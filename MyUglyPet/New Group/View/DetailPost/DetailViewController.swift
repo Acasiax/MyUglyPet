@@ -16,6 +16,14 @@ struct DummyComment {
     let text: String
 }
 
+struct UserComment {
+    let profileImage: UIImage?
+    let username: String
+    let date: String
+    let text: String
+}
+
+
 final class DetailViewController: BaseDetailView {
 
     
@@ -28,6 +36,8 @@ final class DetailViewController: BaseDetailView {
         UIImage(named: "기본냥멍6")!
     ]
 
+    private var serverPosts: [PostsModel] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.lightBeige
@@ -46,6 +56,26 @@ final class DetailViewController: BaseDetailView {
 
                collectionView.reloadData() // 컬렉션뷰 리로드
     }
+    
+    // 게시글 모든피드 포스팅 가져오기
+    private func fetchAllFeedPosts() {
+        print(#function)
+      
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed") //🌟
+
+        // 네트워크 요청 예시 (PostNetworkManager 사용)
+        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.serverPosts = posts
+               // self?.CommentTablev.reloadData() // 데이터 로드 후 테이블뷰 리로드
+                print("allFeed 포스팅을 가져오는데 성공했어요🥰")
+            case .failure(let error):
+                print("allFeed 포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
+    }
+    
 }
 
 
@@ -158,7 +188,9 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         
         let comment = comments[indexPath.row]
-        cell.configure(with: comment.profileImage, username: comment.username, date: comment.date, comment: comment.text)
+        // 각 속성을 한국어로 출력
+               
+        cell.configure(with: comment.creator.profileImage, username: comment.creator.nick, date: comment.createdAt, comment: comment.content)
         
         return cell
     }

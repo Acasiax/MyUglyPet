@@ -135,8 +135,22 @@ struct Creator: Codable {
     }
 }
 
+//struct Comment: Codable {
+//    let commentId: String          // 댓글 ID        // 댓글 ID
+//    let content: String            // 댓글 내용
+//    let createdAt: String          // 댓글 작성 날짜
+//    let creator: Creator           // 댓글 작성자 정보
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case commentId = "comment_id"
+//        case content
+//        case createdAt
+//        case creator
+//    }
+//}
+
 struct Comment: Codable {
-    let commentId: String          // 댓글 ID        // 댓글 ID
+    let commentId: String          // 댓글 ID
     let content: String            // 댓글 내용
     let createdAt: String          // 댓글 작성 날짜
     let creator: Creator           // 댓글 작성자 정보
@@ -147,8 +161,15 @@ struct Comment: Codable {
         case createdAt
         case creator
     }
-}
 
+    // UserComment로부터 Comment를 생성하는 이니셜라이저
+    init(from userComment: UserComment) {
+        self.commentId = UUID().uuidString // 새 댓글 ID 생성
+        self.content = userComment.text
+        self.createdAt = userComment.date
+        self.creator = Creator(userId: UUID().uuidString, nick: userComment.username, profileImage: nil)
+    }
+}
 
 
 //MARK: - 댓글

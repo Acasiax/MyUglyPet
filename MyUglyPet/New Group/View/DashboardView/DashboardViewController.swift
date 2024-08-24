@@ -379,7 +379,7 @@ extension DashboardViewController {
                 switch result {
                 case .success(let profile):
                     self?.myProfile = profile
-                    print("내 프로필 가져오는데 성공했어요🥰", profile)
+                   // print("내 프로필 가져오는데 성공했어요🥰", profile)
                    
                     
                 case .failure(let error):
@@ -492,7 +492,7 @@ extension DashboardViewController {
 
             // 그룹에 포함된 포스트들을 모두 출력
             for (postIndex, post) in group.value.enumerated() {
-                print("    포함된 포스트 \(postIndex + 1): 타이틀: \(post.title ?? "제목 없음"), 파일 URL: \(post.files ?? [])")
+               // print("    포함된 포스트 \(postIndex + 1): 타이틀: \(post.title ?? "제목 없음"), 파일 URL: \(post.files ?? [])")
             }
             
             print("========================\n")
