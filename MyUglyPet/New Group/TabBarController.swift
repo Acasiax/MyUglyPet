@@ -45,7 +45,7 @@ enum MainTab: CaseIterable {
         case .movies: viewController = AllPostHomeViewController()
         case .podcast: viewController = MainHomeViewController()
         case .books: viewController = NameInputViewController()
-        case .search: viewController = UglyCandidateViewController()
+        case .search: viewController = EditProfileViewController()
         }
         
         let navController = UINavigationController(rootViewController: viewController)
