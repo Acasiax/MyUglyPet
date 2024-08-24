@@ -103,6 +103,35 @@ class PostNetworkManager {
        }
 
     
+    //MARK: - 댓글 삭제
+    func deleteComment(postID: String, commentID: String, completion: @escaping (Bool, Error?) -> Void) {
+        do {
+            let router = try Router.deleteComment(postID: postID, commentID: commentID).asURLRequest()
+            
+            AF.request(router)
+                .validate(statusCode: 200..<300)
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        if data.isEmpty {
+                            print("서버 응답이 비어 있습니다.")
+                            completion(true, nil)  // 응답이 비어 있어도 성공으로 간주
+                        } else {
+                            print("서버 응답 데이터: \(data)")
+                            completion(true, nil)
+                        }
+                    case .failure(let error):
+                        print("서버 요청 실패: \(error.localizedDescription)")
+                        completion(false, error)
+                    }
+                }
+        } catch {
+            completion(false, error)
+        }
+    }
+
+    
+    
     
     //MARK: - 댓글 작성/등록
     func postComment(toPostWithID postID: String, content: String, completion: @escaping (Result<Void, Error>) -> Void) {

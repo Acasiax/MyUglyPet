@@ -101,7 +101,7 @@ struct PostsModel: Codable {
     let likes: [String]?          // 좋아요 목록 (선택적)
     let likes2: [String]?         // 추가 좋아요 목록 (선택적)
     let hashTags: [String]?       // 해시태그 목록 (선택적)
-    let comments: [Comment]?      // 댓글 목록 (선택적)
+    var comments: [Comment]?      // 댓글 목록 (선택적)
     
     enum CodingKeys: String, CodingKey {
         case postId = "post_id"

@@ -172,12 +172,6 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
 }
 
 
-
-
-
-
-
-
 //댓글 창 테이블뷰
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

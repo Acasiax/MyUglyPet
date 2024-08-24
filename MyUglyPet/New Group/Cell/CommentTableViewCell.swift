@@ -1,3 +1,6 @@
+
+
+
 //
 //  CommentTableViewCell.swift
 //  MyUglyPet
@@ -9,9 +12,17 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class CommentTableViewCell: UITableViewCell {
-    
+// Delegate 프로토콜 정의
+protocol CommentTableViewCellDelegate: AnyObject {
+    func didTapDeleteButton(in cell: CommentTableViewCell)
+}
 
+final class CommentTableViewCell: UITableViewCell {
+
+    // Delegate 변수 선언
+    weak var delegate: CommentTableViewCellDelegate?
+    var postId: String?
+    
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -20,7 +31,6 @@ final class CommentTableViewCell: UITableViewCell {
         return imageView
     }()
     
-
     let usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 14)
@@ -28,7 +38,6 @@ final class CommentTableViewCell: UITableViewCell {
         return label
     }()
     
-
     let dateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
@@ -36,7 +45,6 @@ final class CommentTableViewCell: UITableViewCell {
         return label
     }()
     
-
     let commentLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
@@ -45,7 +53,6 @@ final class CommentTableViewCell: UITableViewCell {
         return label
     }()
     
-  
     let replyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("댓글수정", for: .normal)
@@ -54,10 +61,19 @@ final class CommentTableViewCell: UITableViewCell {
         return button
     }()
     
+    let deleteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("삭제", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        button.setTitleColor(.red, for: .normal)
+        return button
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
         configureConstraints()
+      
     }
     
     required init?(coder: NSCoder) {
@@ -70,6 +86,7 @@ final class CommentTableViewCell: UITableViewCell {
         contentView.addSubview(dateLabel)
         contentView.addSubview(commentLabel)
         contentView.addSubview(replyButton)
+        contentView.addSubview(deleteButton)
     }
     
     private func configureConstraints() {
@@ -99,7 +116,13 @@ final class CommentTableViewCell: UITableViewCell {
             make.left.equalTo(commentLabel)
             make.bottom.equalToSuperview().inset(10)
         }
+        
+        deleteButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(10)
+            make.right.equalToSuperview().inset(10)
+        }
     }
+    
     
     func configure(with profileImageURL: String?, username: String, date: String, comment: String) {
             if let profileImageURL = profileImageURL, let url = URL(string: profileImageURL) {
@@ -113,3 +136,4 @@ final class CommentTableViewCell: UITableViewCell {
             commentLabel.text = comment
         }
 }
+
