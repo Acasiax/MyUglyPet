@@ -346,6 +346,13 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                       cell.configureFollowButton(isFollowing: isFollowing)
                   }
             
+            // '나자신' 타이틀 설정을 위한 비교
+               if let userID = cell.userID, userID == UserDefaultsManager.shared.id {
+                   cell.followButton.setTitle("나자신", for: .normal)
+                   cell.followButton.isEnabled = false // 자신의 계정을 팔로우하지 않도록 버튼 비활성화
+                   cell.followButton.backgroundColor = .gray
+               }
+            
             cell.backgroundColor = CustomColors.softBlue
                   
                   return cell
