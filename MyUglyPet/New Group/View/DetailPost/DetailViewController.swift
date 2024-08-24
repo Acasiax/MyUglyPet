@@ -86,34 +86,57 @@ final class DetailViewController: BaseDetailView {
             print("Post ID를 찾을 수 없습니다.")
             return
         }
+        
+        guard let userID = post?.creator.userId else {
+               print("User ID를 찾을 수 없습니다.")
+               return
+           }
+        
         print("사용할 Post ID: \(postID)")
 
+        // 댓글 작성 요청을 보냅니다.
         PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
             switch result {
             case .success:
                 print("댓글 작성 성공!")
 
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let currentDate = dateFormatter.string(from: Date())
+                // 댓글 작성 후, 최신 포스트 데이터를 다시 불러옵니다.👍
+                self?.fetchLatestPostData(userID: userID)
 
-                // UserComment 생성
-                let newUserComment = UserComment(profileImage: UIImage(systemName: "person.circle"), username: "User", date: currentDate, text: text)
-                
-                // UserComment를 Comment로 변환
-                let newComment = Comment(from: newUserComment)
-                self?.comments.append(newComment)
-
+                // 텍스트 필드를 초기화합니다.
                 self?.commentTextField.text = ""
-                self?.noCommentsLabel.isHidden = true
-                self?.tableView.reloadData()
 
             case .failure(let error):
                 print("댓글 작성 실패: \(error.localizedDescription)")
+                self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요.")
             }
         }
     }
 
+    private func fetchLatestPostData(userID: String) {
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
+        
+        PostNetworkManager.shared.fetchUserPosts(userID: userID, query: query) { [weak self] result in
+            switch result {
+            case .success(let updatedPosts):
+                print("🙌 특정유저별에서 가져온 값: \(updatedPosts)")
+                // 최신 포스트 데이터를 가져오면, 이를 UI에 반영합니다.
+                // 새로 받아온 첫 번째 포스트를 기존 post 객체에 업데이트
+                self?.post = updatedPosts.first // 필요한 경우 로직을 조정하세요
+                self?.tableView.reloadData() // 테이블뷰를 리로드하여 최신 포스트가 반영되도록 합니다.
+
+            case .failure(let error):
+                print("포스트 데이터를 불러오는 데 실패했습니다: \(error.localizedDescription)")
+                self?.showErrorAlert(message: "포스트 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.")
+            }
+        }
+    }
+
+
+
+
+
+ 
 
     @objc func followButtonTapped() {
         print("팔로우 버튼 탭")

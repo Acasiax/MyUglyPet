@@ -84,6 +84,29 @@ class PostNetworkManager {
     
     private init() {}
 
+    
+    
+    //MARK: - 특정 유저별 포스터 조회
+        func fetchUserPosts(userID: String, query: FetchReadingPostQuery, completion: @escaping (Result<[PostsModel], Error>) -> Void) {
+            let request = Router.fetchUserPosts(userID: userID, query: query).asURLRequest
+            
+            AF.request(request)
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let result = try JSONDecoder().decode(PostsResponse.self, from: data)
+                            completion(.success(result.data))
+                        } catch {
+                            completion(.failure(error))
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+        }
+    
+
     //MARK: - 포스트 삭제
        func deletePost(postID: String, completion: @escaping (Result<Void, Error>) -> Void) {
            let request = Router.deletePost(postID: postID).asURLRequest

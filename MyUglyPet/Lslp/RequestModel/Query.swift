@@ -162,13 +162,7 @@ struct Comment: Codable {
         case creator
     }
 
-    // UserComment로부터 Comment를 생성하는 이니셜라이저
-    init(from userComment: UserComment) {
-        self.commentId = UUID().uuidString // 새 댓글 ID 생성
-        self.content = userComment.text
-        self.createdAt = userComment.date
-        self.creator = Creator(userId: UUID().uuidString, nick: userComment.username, profileImage: nil)
-    }
+
 }
 
 
