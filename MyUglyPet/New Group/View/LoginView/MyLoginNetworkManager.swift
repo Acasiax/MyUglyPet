@@ -29,6 +29,7 @@ class MyLoginNetworkManager {
                     print("로그인 성공:", success)
                     UserDefaultsManager.shared.token = success.access
                     UserDefaultsManager.shared.refreshToken = success.refresh
+                    UserDefaultsManager.shared.id = success.id
                     completion(true) // 로그인 성공
                     
                 case .failure(let failure):

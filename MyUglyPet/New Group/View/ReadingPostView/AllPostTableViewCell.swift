@@ -10,9 +10,9 @@ import SnapKit
 import Kingfisher
 
 final class AllPostTableViewCell: UITableViewCell {
-
+    
     weak var delegate: AllPostTableViewCellDelegate?
-
+    
     // containerView 생성
     let containerView: UIView = {
         let view = UIView()
@@ -21,7 +21,7 @@ final class AllPostTableViewCell: UITableViewCell {
         view.backgroundColor = .white // 컨테이너의 배경색 설정
         return view
     }()
-
+    
     // 기존 UI 요소들
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -31,7 +31,7 @@ final class AllPostTableViewCell: UITableViewCell {
         imageView.image = UIImage(named: "기본냥멍1")
         return imageView
     }()
-
+    
     lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.text = "못난이"
@@ -39,7 +39,7 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .black
         return label
     }()
-
+    
     lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.text = "2세 남아, 푸들"
@@ -47,7 +47,7 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .darkGray
         return label
     }()
-
+    
     lazy var locationTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "서울시 문래동"
@@ -55,7 +55,7 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .lightGray
         return label
     }()
-
+    
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "1시간 전"
@@ -63,7 +63,7 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .lightGray
         return label
     }()
-
+    
     lazy var deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("삭제", for: .normal)
@@ -87,9 +87,9 @@ final class AllPostTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
         return button
     }()
-
     
-
+    
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -100,13 +100,13 @@ final class AllPostTableViewCell: UITableViewCell {
         collectionView.clipsToBounds = true
         return collectionView
     }()
-
+    
     let titleLabel: UILabel = {
-          let label = UILabel()
-          label.font = UIFont.boldSystemFont(ofSize: 16)
-          label.textColor = .black
-          return label
-      }()
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = .black
+        return label
+    }()
     
     lazy var contentLabel: UILabel = {
         let label = UILabel()
@@ -115,7 +115,7 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .black
         return label
     }()
-
+    
     lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         let heartImage = UIImage(systemName: "heart")
@@ -123,7 +123,7 @@ final class AllPostTableViewCell: UITableViewCell {
         button.tintColor = .black
         return button
     }()
-
+    
     lazy var likeLabel: UILabel = {
         let label = UILabel()
         label.text = "1"
@@ -131,7 +131,7 @@ final class AllPostTableViewCell: UITableViewCell {
         label.textColor = .black
         return label
     }()
-
+    
     lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         let commentImage = UIImage(systemName: "bubble.right")
@@ -140,7 +140,7 @@ final class AllPostTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(handleCommentButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     lazy var commentLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
@@ -150,42 +150,48 @@ final class AllPostTableViewCell: UITableViewCell {
     }()
     
     // 각 셀의 포스트 ID를 저장하는 프로퍼티
-        var postID: String?
-    var userID: String?
+    var postID: String?
+    var userID: String? {
+        didSet {
+            // userID가 설정될 때마다 followButton을 숨길지 여부를 확인
+            checkAndHideButtons()
+        }
+    }
+
     
     var imageFiles: [String] = [] {
-            didSet {
-                collectionView.reloadData()
-            }
+        didSet {
+            collectionView.reloadData()
         }
+    }
     
     // 팔로우 상태를 추적하는 변수
     private var isFollowing = false
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
         // contentView에 containerView 추가
         contentView.addSubview(containerView)
-
+        
         // containerView에 제약 조건 설정
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(10) // contentView와의 간격 설정
         }
-
+        
         // containerView에 나머지 UI 요소들 추가
         configureHierarchy()
         configureConstraints()
         
         // 컬렉션 뷰 데이터 소스 및 델리게이트 설정
-                collectionView.dataSource = self
-                collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func configureHierarchy() {
         containerView.addSubview(userProfileImageView)
         containerView.addSubview(userNameLabel)
@@ -201,45 +207,45 @@ final class AllPostTableViewCell: UITableViewCell {
         containerView.addSubview(commentButton)
         containerView.addSubview(commentLabel)
     }
-
+    
     private func configureConstraints() {
         userProfileImageView.snp.makeConstraints { make in
             make.top.left.equalToSuperview().inset(10)
             make.width.height.equalTo(40)
         }
-
+        
         userNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(10)
             make.left.equalTo(userProfileImageView.snp.right).offset(10)
         }
-
+        
         infoLabel.snp.makeConstraints { make in
             make.top.equalTo(userNameLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
         }
-
+        
         locationTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(infoLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
         }
-
+        
         timeLabel.snp.makeConstraints { make in
             make.top.equalTo(infoLabel.snp.bottom).offset(4)
             make.left.equalTo(locationTimeLabel.snp.right).offset(8)
         }
-
+        
         
         deleteButton.snp.makeConstraints { make in
-                make.top.equalToSuperview().inset(10)
-                make.right.equalToSuperview().inset(10)
-            }
-
-            followButton.snp.makeConstraints { make in
-                make.top.equalToSuperview().inset(10)
-                make.right.equalTo(deleteButton.snp.left).offset(-10) // 간격을 조정할 수 있습니다
-            }
+            make.top.equalToSuperview().inset(10)
+            make.right.equalToSuperview().inset(10)
+        }
         
-    
+        followButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(10)
+            make.right.equalTo(deleteButton.snp.left).offset(-10) // 간격을 조정할 수 있습니다
+        }
+        
+        
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(locationTimeLabel.snp.bottom).offset(25)
             make.left.equalTo(userProfileImageView)
@@ -250,37 +256,51 @@ final class AllPostTableViewCell: UITableViewCell {
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(200)
         }
-
-       
-
+        
+        
+        
         likeButton.snp.makeConstraints { make in
             make.top.equalTo(collectionView.snp.bottom).offset(10)
             make.left.equalTo(collectionView)
             make.bottom.equalToSuperview().inset(10)
         }
-
+        
         likeLabel.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton)
             make.left.equalTo(likeButton.snp.right).offset(5)
         }
-
+        
         commentButton.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton)
             make.left.equalTo(likeLabel.snp.right).offset(20)
         }
-
+        
         commentLabel.snp.makeConstraints { make in
             make.centerY.equalTo(commentButton)
             make.left.equalTo(commentButton.snp.right).offset(5)
         }
     }
-
+    
+    
+    // followButton을 숨길지 여부를 확인하는 메서드
+    // followButton과 deleteButton을 숨길지 여부를 확인하는 메서드
+    private func checkAndHideButtons() {
+        let currentUserID = UserDefaultsManager.shared.id
+        if let userID = userID {
+            followButton.isHidden = (userID == currentUserID)
+            deleteButton.isHidden = (userID != currentUserID)
+        } else {
+            followButton.isHidden = false
+            deleteButton.isHidden = true
+        }
+    }
     @objc private func handleCommentButtonTapped() {
         print("댓글 버튼 탭")
         delegate?.didTapCommentButton(in: self)
     }
-
     
+    
+
     @objc func deleteButtonTapped() {
         
         guard let postID = postID else {
@@ -288,13 +308,13 @@ final class AllPostTableViewCell: UITableViewCell {
             return
         }
         
-       // let postID = "66c8448e5056517017a3f3d2"
-     
+        // let postID = "66c8448e5056517017a3f3d2"
+        
         print("📍\(postID)")
-    
+        
         isFollowing.toggle()
         AnimationZip.animateButtonPress(deleteButton)
-    
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
             if self.isFollowing {
@@ -336,17 +356,17 @@ final class AllPostTableViewCell: UITableViewCell {
         
         isFollowing.toggle()
         AnimationZip.animateButtonPress(followButton) // followButton을 사용해야 합니다.
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
             
             self.updateFollowButtonUI()
-
+            
             // 팔로우 또는 언팔로우 API 요청
             self.toggleFollowStatus(userID: userID)
         }
     }
-
+    
     func updateFollowButtonUI() {
         if isFollowing {
             followButton.setTitle("언팔로우", for: .normal)
@@ -356,7 +376,7 @@ final class AllPostTableViewCell: UITableViewCell {
             followButton.backgroundColor = .systemBlue
         }
     }
-
+    
     func toggleFollowStatus(userID: String) {
         if isFollowing {
             FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
@@ -390,9 +410,9 @@ final class AllPostTableViewCell: UITableViewCell {
             }
         }
     }
-
-
-
+    
+    
+    
     
     
 }
@@ -402,8 +422,8 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageFiles.count
     }
-
-
+    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
         
@@ -437,9 +457,9 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
         
         return cell
     }
-
-
-        
+    
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
