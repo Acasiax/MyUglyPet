@@ -73,7 +73,7 @@ final class CommentTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
         configureConstraints()
-      
+        configureActions()
     }
     
     required init?(coder: NSCoder) {
@@ -123,17 +123,24 @@ final class CommentTableViewCell: UITableViewCell {
         }
     }
     
+    private func configureActions() {
+        deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
+    }
+    
+    @objc private func didTapDeleteButton() {
+        print("삭제 버튼이 눌렸습니다.")
+        delegate?.didTapDeleteButton(in: self)
+    }
     
     func configure(with profileImageURL: String?, username: String, date: String, comment: String) {
-            if let profileImageURL = profileImageURL, let url = URL(string: profileImageURL) {
-                profileImageView.kf.setImage(with: url)
-            } else {
-                profileImageView.image = UIImage(named: "기본냥멍1") // 기본 이미지 설정
-            }
-            
-            usernameLabel.text = username
-            dateLabel.text = date
-            commentLabel.text = comment
+        if let profileImageURL = profileImageURL, let url = URL(string: profileImageURL) {
+            profileImageView.kf.setImage(with: url)
+        } else {
+            profileImageView.image = UIImage(named: "기본냥멍1") // 기본 이미지 설정
         }
+        
+        usernameLabel.text = username
+        dateLabel.text = date
+        commentLabel.text = comment
+    }
 }
-

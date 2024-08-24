@@ -141,12 +141,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         deepPhotoVC.photos = imageFiles.map { file in
             return APIKey.baseURL + "v1/" + file
         }
-        
-        
-      
-             
-        
-        
+   
         // 선택한 인덱스를 deepPhotoVC에 전달
         deepPhotoVC.selectedIndex = indexPath.item
         
@@ -180,12 +175,28 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
-        
+        cell.delegate = self
         let comment = comments[indexPath.row]
         // 각 속성을 한국어로 출력
                
         cell.configure(with: comment.creator.profileImage, username: comment.creator.nick, date: comment.createdAt, comment: comment.content)
         
+        
         return cell
+    }
+}
+
+extension DetailViewController: CommentTableViewCellDelegate {
+    func didTapDeleteButton(in cell: CommentTableViewCell) {
+        // 여기에서 삭제 버튼이 눌렸을 때의 동작을 정의합니다.
+        print("삭제 버튼이 DetailViewController에서 눌렸습니다.")
+        
+        // 예를 들어, 해당 셀의 인덱스를 가져와 해당 댓글을 삭제할 수 있습니다.
+        if let indexPath = tableView.indexPath(for: cell) {
+            // comments 배열에서 해당 댓글을 삭제
+            comments.remove(at: indexPath.row)
+            // 테이블뷰에서 해당 셀 삭제
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 }
