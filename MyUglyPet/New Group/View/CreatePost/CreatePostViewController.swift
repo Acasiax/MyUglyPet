@@ -14,27 +14,27 @@ import PhotosUI
 
 final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
-    private let disposeBag = DisposeBag()  // DisposeBag 초기화
-    
+    private let disposeBag = DisposeBag()
+    private let viewModel = CreatePostViewModel()
+
     // UI 요소들을 구조체를 통해 초기화
-     let submitButton = NewPostUI.submitButtonUI()
-     let characterCountLabel = NewPostUI.characterCountLabelUI()
-     let minimumTextLabel = NewPostUI.minimumTextLabelUI()
-     let scrollView = NewPostUI.scrollViewUI()
-     let imageContainerStackView = NewPostUI.imageContainerStackViewUI()
-     let photoAttachmentButton = NewPostUI.photoAttachmentButtonUI()
-     let cameraIcon = NewPostUI.cameraIconUI()
-     let photoCountLabel = NewPostUI.photoCountLabelUI()
-     let rewardLabel = NewPostUI.rewardLabelUI()
-     let guidelineLabel = NewPostUI.guidelineLabelUI()
-     let titleTextField = NewPostUI.titleTextFieldUI()
-     let reviewTextView = NewPostUI.reviewTextViewUI()
-     let activityIndicator = NewPostUI.activityIndicatorUI()
+    let submitButton = NewPostUI.submitButtonUI()
+    let characterCountLabel = NewPostUI.characterCountLabelUI()
+    let minimumTextLabel = NewPostUI.minimumTextLabelUI()
+    let scrollView = NewPostUI.scrollViewUI()
+    let imageContainerStackView = NewPostUI.imageContainerStackViewUI()
+    let photoAttachmentButton = NewPostUI.photoAttachmentButtonUI()
+    let cameraIcon = NewPostUI.cameraIconUI()
+    let photoCountLabel = NewPostUI.photoCountLabelUI()
+    let rewardLabel = NewPostUI.rewardLabelUI()
+    let guidelineLabel = NewPostUI.guidelineLabelUI()
+    let titleTextField = NewPostUI.titleTextFieldUI()
+    let reviewTextView = NewPostUI.reviewTextViewUI()
+    let activityIndicator = NewPostUI.activityIndicatorUI()
 
-     var selectedImageData: Data?
-     var selectedImages: [UIView] = []
+    var selectedImageData: Data?
+    var selectedImages: [UIView] = []
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.lightBeige
@@ -47,28 +47,30 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
     }
     
     private func setupBindings() {
-        // 텍스트 뷰의 입력을 관찰하고 캐릭터 수 업데이트
-        reviewTextView.rx.text.orEmpty
-            .map { "\($0.count)" }
-            .bind(to: characterCountLabel.rx.text)
+        let input = CreatePostViewModel.Input(
+            reviewText: reviewTextView.rx.text.orEmpty.asObservable()
+        )
+
+        let output = viewModel.transform(input: input)
+
+        output.characterCount
+            .drive(characterCountLabel.rx.text)
             .disposed(by: disposeBag)
-        
-        // 텍스트 뷰의 입력을 관찰하여 버튼 활성화 상태 업데이트
-        reviewTextView.rx.text.orEmpty
-            .map { $0.count >= 5 }
-            .bind(with: self) { owner, isEnabled in
-                owner.submitButton.isEnabled = isEnabled
-                owner.submitButton.backgroundColor = isEnabled ? .orange : .lightGray
-            }
+
+        output.isSubmitButtonEnabled
+            .drive(onNext: { [weak self] isEnabled in
+                self?.submitButton.isEnabled = isEnabled
+                self?.submitButton.backgroundColor = isEnabled ? .orange : .lightGray
+            })
             .disposed(by: disposeBag)
-        
+
         // 사진 첨부 버튼 클릭 이벤트 처리
         photoAttachmentButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.photoAttachmentButtonTapped()
             }
             .disposed(by: disposeBag)
-        
+
         // 작성 완료 버튼 클릭 이벤트 처리
         submitButton.rx.tap
             .bind(with: self) { owner,_  in
@@ -77,8 +79,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             .disposed(by: disposeBag)
     }
 
-    
-     func photoAttachmentButtonTapped() {
+    func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
         AnimationZip.animateButtonPress(photoAttachmentButton)
 
@@ -91,7 +92,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         present(picker, animated: true, completion: nil)
     }
     
-     func submitButtonTapped() {
+    func submitButtonTapped() {
         print(selectedImages.count)
         print(selectedImages.debugDescription)
         guard let text = reviewTextView.text, !text.isEmpty else {
@@ -107,8 +108,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             uploadImagesAndPost()
         }
     }
-    
-    
+
     func textViewDidChange(_ textView: UITextView) {
         if let text = textView.text {
             characterCountLabel.text = "\(text.count)"
@@ -122,7 +122,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
-    
+
     func addSelectedImage(_ image: UIImage) {
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
@@ -168,13 +168,11 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             .disposed(by: disposeBag)
     }
 
-    
     func updatePhotoCountLabel() {
         let count = selectedImages.count
         photoCountLabel.text = "\(count)/5"
     }
 }
-
 
 // MARK: - 이미지, 게시글 업로드 함수
 extension CreatePostViewController {
@@ -219,8 +217,8 @@ extension CreatePostViewController {
             if uploadedImageUrls.isEmpty {
                 print("모든 이미지 업로드 실패")
                 let alert = UIAlertController(title: "오류", message: "모든 이미지 업로드에 실패했습니다.", preferredStyle: .alert)
-                   alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                   self.present(alert, animated: true, completion: nil)
+                alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             } else {
                 print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
                 self.uploadPost(withImageURLs: uploadedImageUrls)
@@ -232,12 +230,11 @@ extension CreatePostViewController {
         activityIndicator.startAnimating()
         
         guard let title = titleTextField.text, !title.isEmpty else {
-                print("게시글 제목: \(title)")
-                return
-            }
+            print("게시글 제목이 비어있습니다.")
+            return
+        }
         let content = reviewTextView.text ?? ""
-       // let productId: String? = nil
-        let productId: String? = "allFeed" //🌟
+        let productId: String? = "allFeed"
 
         print("업로드할 이미지 URL: \(imageUrls)")
 
@@ -291,4 +288,3 @@ extension CreatePostViewController: PHPickerViewControllerDelegate {
         }
     }
 }
-
