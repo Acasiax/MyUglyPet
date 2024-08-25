@@ -247,6 +247,8 @@ extension GameViewController {
             title: title,
             content: "#1등이닷", // 해쉬태그
             content1: content1,
+            content3: "",
+            content4: "",
             productId: "각유저가고른1등우승자",
             fileURLs: imageUrls
         ) { result in

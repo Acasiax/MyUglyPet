@@ -35,6 +35,14 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
     var selectedImageData: Data?
     var selectedImages: [UIView] = []
 
+    // 위도와 경도를 저장할 변수
+       var latitude: String? //위도
+       var longitude: String? //경도
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchCurrentLocation()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

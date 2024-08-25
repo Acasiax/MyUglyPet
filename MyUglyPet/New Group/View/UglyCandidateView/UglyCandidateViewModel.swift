@@ -126,6 +126,8 @@ class UglyCandidateViewModel {
                 title: title,
                 content: "",
                 content1: userName,
+                content3: "", //위도 안씀
+                content4: "", // 경도 안씀
                 productId: productId,
                 fileURLs: imageUrls
             ) { result in

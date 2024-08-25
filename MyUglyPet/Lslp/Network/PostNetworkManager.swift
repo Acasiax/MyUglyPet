@@ -11,10 +11,7 @@ import Alamofire
 
 // MARK: - 팔로우 기능
 class FollowPostNetworkManager {
-    
-    
-    
-    
+
     static let shared = FollowPostNetworkManager()
     
     private init() {}
@@ -283,6 +280,8 @@ class PostNetworkManager {
         title: String?,
         content: String?,
         content1: String?,
+        content3: String?, //위도
+        content4: String?, //경도
         productId: String?,
         fileURLs: [String],
         completion: @escaping (Result<Void, Error>) -> Void
@@ -291,6 +290,8 @@ class PostNetworkManager {
             "title": title ?? "",
             "content": content ?? "",
             "content1": content1 ?? "",
+            "content3": content3 ?? "위도값없음",
+            "content4": content4 ?? "경도값없음",
             "product_id": productId ?? "",
             "files": fileURLs
         ]

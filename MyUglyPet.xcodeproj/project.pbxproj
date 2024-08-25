@@ -29,6 +29,7 @@
 		AA6474472C7B672A0079ECE0 /* EditProfileViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */; };
 		AA6474492C7B69BE0079ECE0 /* EditProfileUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */; };
 		AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */; };
+		AA64744E2C7BA0B80079ECE0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -115,6 +116,7 @@
 		AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewLayout.swift; sourceTree = "<group>"; };
 		AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileUI.swift; sourceTree = "<group>"; };
 		AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMapViewController.swift; sourceTree = "<group>"; };
+		AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */,
+				AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */,
 			);
 			path = MyMapView;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				AA64742D2C7B23C50079ECE0 /* MainHomeViewLayout.swift in Sources */,
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
 				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,
+				AA64744E2C7BA0B80079ECE0 /* LocationManager.swift in Sources */,
 				AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */,
 				AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */,
 				AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */,

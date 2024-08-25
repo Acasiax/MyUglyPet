@@ -61,6 +61,11 @@ extension CreatePostViewController {
     }
 
     func uploadPost(withImageURLs imageUrls: [String]) {
+        
+        let latitude = latitude
+        let longitude = longitude
+        print("📍 위도: \(String(describing: latitude)), 📍경도: \(longitude)")
+        
         activityIndicator.startAnimating()
         
         guard let title = titleTextField.text, !title.isEmpty else {
@@ -76,6 +81,8 @@ extension CreatePostViewController {
             title: title,
             content: content,
             content1: "",
+            content3: latitude,
+            content4: longitude,
             productId: productId,
             fileURLs: imageUrls
         ) { result in
@@ -103,3 +110,30 @@ extension CreatePostViewController {
         submitButton.backgroundColor = isTextValid ? .orange : .lightGray
     }
 }
+
+
+extension CreatePostViewController {
+    
+    func fetchCurrentLocation() {
+        print("🙆‍♀️ 위치 가져오기 시작 🙆‍♀️")
+        
+        // 위치 업데이트 콜백 등록
+        LocationManager.shared.locationUpdateCallback = { [weak self] coordinate in
+            // 위도와 경도 값을 String으로 변환하여 변수에 저장
+            let latitudeString = String(format: "%.6f", coordinate.latitude)
+            let longitudeString = String(format: "%.6f", coordinate.longitude)
+            
+            // self에 저장된 클래스 변수로 접근하여 저장
+            self?.latitude = latitudeString
+            self?.longitude = longitudeString
+            
+            // 디버깅을 위한 출력
+            print("현재 위치 - 위도: \(latitudeString), 경도: \(longitudeString)")
+        }
+        
+        // 현재 위치를 가져오기
+        LocationManager.shared.requestLocationPermission()
+        LocationManager.shared.fetchCurrentLocation()
+    }
+}
+

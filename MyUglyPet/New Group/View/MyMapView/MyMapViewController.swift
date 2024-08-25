@@ -7,34 +7,36 @@
 
 import UIKit
 import MapKit
+import Kingfisher
 
 class MyMapViewController: UIViewController, MKMapViewDelegate {
     
+    var serverPosts: [PostsModel] = [] // 서버에서 가져온 게시글 데이터를 저장할 변수
     let mapView = MKMapView()
-    let sesacCoordinate = CLLocationCoordinate2D(latitude: 37.51818789942772, longitude: 126.88541765534976) // 새싹 영등포 캠퍼스 위치
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 서버에서 게시글 가져오기 및 지도에 핀셋 추가
+        fetchPosts()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.showsUserLocation = true
+        
         // 지도 설정
+        mapView.showsUserLocation = true
         mapView.frame = view.bounds
         mapView.delegate = self
         view.addSubview(mapView)
         
         // 위치 권한 요청 및 위치 업데이트 시작
         LocationManager.shared.requestLocationPermission()
-        LocationManager.shared.startUpdatingLocation()
+        LocationManager.shared.fetchCurrentLocation()
         
         // 위치 업데이트 콜백 등록
         LocationManager.shared.locationUpdateCallback = { [weak self] coordinate in
             self?.updateMapLocation(coordinate)
         }
-        
-        // 특정 위치에 핀 추가
-        addCustomPin()
-        
-        // 초기 지도 설정: 만약 사용자가 위치를 허용하지 않았을 경우, 새싹 캠퍼스로 기본 위치 설정
-        mapView.setRegion(MKCoordinateRegion(center: sesacCoordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
         
         // 확대/축소 버튼 추가
         addZoomButtons()
@@ -43,21 +45,12 @@ class MyMapViewController: UIViewController, MKMapViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // 위치 업데이트 중지
-        LocationManager.shared.stopUpdatingLocation()
+        // LocationManager.shared.stopUpdatingLocation()
     }
 
     // 사용자의 현재 위치로 지도 이동
     private func updateMapLocation(_ coordinate: CLLocationCoordinate2D) {
         mapView.setRegion(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-    }
-    
-    // 특정 위치에 커스텀 핀 추가
-    private func addCustomPin() {
-        let pin = MKPointAnnotation()
-        pin.coordinate = sesacCoordinate
-        pin.title = "새싹 영등포캠퍼스"
-        pin.subtitle = "전체 3층짜리 건물"
-        mapView.addAnnotation(pin)
     }
     
     // 확대/축소 버튼 추가 함수
@@ -98,58 +91,99 @@ class MyMapViewController: UIViewController, MKMapViewDelegate {
     }
 }
 
-
-import UIKit
-import CoreLocation
-
-class LocationManager: NSObject, CLLocationManagerDelegate {
+extension MyMapViewController {
     
-    static let shared = LocationManager()
-    
-    private let locationManager = CLLocationManager()
-    
-    var currentLocation: CLLocationCoordinate2D?
-    var locationUpdateCallback: ((CLLocationCoordinate2D) -> Void)?
-    
-    private override init() {
-        super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    }
-    
-    func requestLocationPermission() {
-        locationManager.requestWhenInUseAuthorization()
-    }
-    
-    func startUpdatingLocation() {
-        if CLLocationManager.locationServicesEnabled() {
-            switch locationManager.authorizationStatus {
-            case .authorizedWhenInUse, .authorizedAlways:
-                locationManager.startUpdatingLocation()
-            case .denied, .restricted, .notDetermined:
-                requestLocationPermission()
-            @unknown default:
-                fatalError("Unhandled case in location authorization status")
+    // 게시글 모든 피드 가져오기
+    private func fetchPosts() {
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
+        
+        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.serverPosts = posts
+                
+                // 서버에서 가져온 게시글을 기반으로 지도에 핀셋 표시
+                self?.addPinsToMap()
+                
+            case .failure(let error):
+                print("포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    // 게시글의 위치 정보를 사용해 지도에 핀셋 추가
+    private func addPinsToMap() {
+        for post in serverPosts {
+            // content3과 content4를 Double로 변환
+            print("서버에서 받은 이미지 \(post.files ?? [])")
+            print("서버에서 받은 위도 \(post.content3 ?? "없음")")
+            print("서버에서 받은 경도 \(post.content4 ?? "없음")")
+            if let latitudeString = post.content3, let longitudeString = post.content4,
+               let latitude = Double(latitudeString), let longitude = Double(longitudeString) {
+                
+                // CLLocationCoordinate2D 생성
+                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                
+                // 이미지 URL 생성
+                if let imageUrlString = post.files?.first {
+                    let fullImageURLString = APIKey.baseURL + "v1/" + imageUrlString
+                    print("전체 이미지 URL: \(fullImageURLString)")
+                    // 지도에 핀셋 추가
+                    addPinToMap(at: coordinate, title: post.title, imageURL: fullImageURLString)
+                    print("🧝🏻‍♂️: \(coordinate)")
+                } else {
+                    // 이미지가 없는 경우
+                    addPinToMap(at: coordinate, title: post.title, imageURL: nil)
+                }
+            }
+        }
+        
+        // 모든 핀셋이 보이도록 지도 범위를 설정
+        setMapRegionToFitAllPins()
+    }
+    
+    // 특정 좌표에 핀셋을 추가하는 메서드
+    private func addPinToMap(at coordinate: CLLocationCoordinate2D, title: String?, imageURL: String?) {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = title
+        print("핀셋 추가: \(annotation.coordinate), 타이틀: \(annotation.title ?? "없음")")
+        mapView.addAnnotation(annotation)
+    }
+    
+    // 모든 핀셋을 포함하는 지도로 조정
+    private func setMapRegionToFitAllPins() {
+        var zoomRect = MKMapRect.null
+        
+        for annotation in mapView.annotations {
+            let annotationPoint = MKMapPoint(annotation.coordinate)
+            let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
+            zoomRect = zoomRect.union(pointRect)
+        }
+        
+        mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50), animated: true)
+    }
+    
+    // MKMapViewDelegate 메서드: 핀셋의 뷰를 커스텀
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let identifier = "CustomPin"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
         } else {
-            print("Location services are not enabled")
+            annotationView?.annotation = annotation
         }
-    }
-    
-    func stopUpdatingLocation() {
-        locationManager.stopUpdatingLocation()
-    }
-    
-    // CLLocationManagerDelegate methods
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            currentLocation = location.coordinate
-            locationUpdateCallback?(location.coordinate)
+        
+        // 이미지 뷰 추가 (선택 사항)
+        if let imageURLString = (annotation as? MKPointAnnotation)?.title, let imageURL = URL(string: imageURLString) {
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+            imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder"))
+            annotationView?.leftCalloutAccessoryView = imageView
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to get user location: \(error.localizedDescription)")
+        
+        return annotationView
     }
 }
 
