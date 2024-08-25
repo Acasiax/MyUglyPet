@@ -33,7 +33,6 @@ class UglyCandidateViewController: UIViewController {
     }
 
 
-
     // MARK: - rx로 바인딩한거
     func bindViewModel() {
         let input = UglyCandidateViewModel.Input(

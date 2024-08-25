@@ -18,6 +18,9 @@
 		AA64742D2C7B23C50079ECE0 /* MainHomeViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */; };
 		AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64742E2C7B26FC0079ECE0 /* UglyCandidateUI.swift */; };
 		AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */; };
+		AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */; };
+		AA6474362C7B29FB0079ECE0 /* GameViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */; };
+		AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -95,6 +98,9 @@
 		AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeViewLayout.swift; sourceTree = "<group>"; };
 		AA64742E2C7B26FC0079ECE0 /* UglyCandidateUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateUI.swift; sourceTree = "<group>"; };
 		AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateLayout.swift; sourceTree = "<group>"; };
+		AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewAnimation.swift; sourceTree = "<group>"; };
+		AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewServerLogic.swift; sourceTree = "<group>"; };
+		AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewLayout.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -303,6 +309,9 @@
 			children = (
 				AA7272EB2C6DECD6007551C4 /* GameViewController.swift */,
 				AA7272ED2C6E637A007551C4 /* BaseGameView.swift */,
+				AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */,
+				AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */,
+				AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */,
 			);
 			path = Gameview;
 			sourceTree = "<group>";
@@ -321,10 +330,10 @@
 			isa = PBXGroup;
 			children = (
 				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
-				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
 				AA6474262C7B092D0079ECE0 /* MainHomeViewModel.swift */,
-				AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */,
+				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
 				AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */,
+				AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -564,6 +573,7 @@
 				AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */,
 				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,
 				AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */,
+				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
 				AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */,
 				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
@@ -578,6 +588,7 @@
 				AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA7273582C71D032007551C4 /* UserDefaultsManager.swift in Sources */,
+				AA6474362C7B29FB0079ECE0 /* GameViewServerLogic.swift in Sources */,
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,
 				AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */,
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
@@ -585,6 +596,7 @@
 				AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */,
 				AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */,
 				AA72735A2C71DA95007551C4 /* BaseCreatePost.swift in Sources */,
+				AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */,
 				AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
 				AA6474292C7B11A90079ECE0 /* UglyCandidateViewModel.swift in Sources */,
