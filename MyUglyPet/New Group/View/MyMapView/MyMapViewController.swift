@@ -144,11 +144,42 @@ extension MyMapViewController {
     
     // 특정 좌표에 핀셋을 추가하는 메서드
     private func addPinToMap(at coordinate: CLLocationCoordinate2D, title: String?, imageURL: String?) {
-        let annotation = MKPointAnnotation()
+        let annotation = CustomPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title = title
-        print("핀셋 추가: \(annotation.coordinate), 타이틀: \(annotation.title ?? "없음")")
+        annotation.imageURL = imageURL // CustomPointAnnotation에 imageURL을 저장
+        print("핀셋 추가: \(annotation.coordinate), 타이틀: \(annotation.title ?? "없음"), 이미지 URL: \(annotation.imageURL ?? "없음")")
         mapView.addAnnotation(annotation)
+    }
+    
+    // MARK: - 이미지 로드 함수
+    func loadImage(imageView: UIImageView, imageURL: String?) {
+        guard let imageURL = imageURL, let url = URL(string: imageURL) else {
+            print("잘못된 URL 문자열: \(imageURL ?? "없음")")
+            imageView.image = UIImage(named: "placeholder")
+            return
+        }
+
+        let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "10", product_id: "")).headersForImageRequest
+
+        let modifier = AnyModifier { request in
+            var r = request
+            r.allHTTPHeaderFields = headers
+            return r
+        }
+        
+        imageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholder"),
+            options: [.requestModifier(modifier)]
+        ) { result in
+            switch result {
+            case .success(let value):
+                print("이미지 로드 성공📩: \(value.source.url?.absoluteString ?? "")")
+            case .failure(let error):
+                print("이미지 로드 실패📩: \(error.localizedDescription)")
+            }
+        }
     }
     
     // 모든 핀셋을 포함하는 지도로 조정
@@ -177,14 +208,18 @@ extension MyMapViewController {
         }
         
         // 이미지 뷰 추가 (선택 사항)
-        if let imageURLString = (annotation as? MKPointAnnotation)?.title, let imageURL = URL(string: imageURLString) {
+        if let customAnnotation = annotation as? CustomPointAnnotation, let imageURL = customAnnotation.imageURL {
             let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-            imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder"))
+            loadImage(imageView: imageView, imageURL: imageURL)
             annotationView?.leftCalloutAccessoryView = imageView
+            print("이미지 URL 로드: \(imageURL)")
         }
         
         return annotationView
     }
 }
 
-
+// CustomPointAnnotation 클래스 정의
+class CustomPointAnnotation: MKPointAnnotation {
+    var imageURL: String?
+}
