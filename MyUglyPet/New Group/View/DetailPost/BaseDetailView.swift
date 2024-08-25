@@ -54,7 +54,7 @@ class BaseDetailView: UIViewController {
 
     lazy var followButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("팔로우", for: .normal)
+        button.setTitle("수정", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue

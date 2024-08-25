@@ -32,6 +32,7 @@ final class DetailViewController: BaseDetailView {
     var comments: [Comment] = []  // 댓글을 저장하는 배열
     var postId: String?
     var commentId: String?
+    var isFollowing: Bool = false
     
     private var serverPosts: [PostsModel] = []
     
@@ -135,22 +136,24 @@ final class DetailViewController: BaseDetailView {
 
 
 
-
- 
-
     @objc func followButtonTapped() {
         print("팔로우 버튼 탭")
         
-      
+        // 현재 상태에 따라 버튼 제목과 배경색을 토글
+        isFollowing.toggle()
+        
+        let newTitle = isFollowing ? "수정중" : "수정"
+        let newColor = isFollowing ? UIColor.orange : UIColor.systemBlue
+        
+        // 애니메이션 적용
         AnimationZip.animateButtonPress(followButton)
         
+        // 버튼의 제목과 배경색을 변경
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.followButton.setTitle("팔로잉", for: .normal)
-            self.followButton.backgroundColor = .orange
+            self.followButton.setTitle(newTitle, for: .normal)
+            self.followButton.backgroundColor = newColor
         }
     }
-    
- 
     
 }
 
