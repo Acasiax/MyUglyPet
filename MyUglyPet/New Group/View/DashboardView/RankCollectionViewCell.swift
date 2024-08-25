@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-
 final class RankCollectionViewCell: UICollectionViewCell {
     
     let containerView: UIView = {

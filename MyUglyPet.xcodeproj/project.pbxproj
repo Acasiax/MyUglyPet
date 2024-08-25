@@ -21,6 +21,7 @@
 		AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */; };
 		AA6474362C7B29FB0079ECE0 /* GameViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */; };
 		AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */; };
+		AA64743A2C7B2FC20079ECE0 /* AllPostTableCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -53,8 +54,6 @@
 		AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */; };
 		AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273022C70287B007551C4 /* AnimationZip.swift */; };
 		AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273042C70403D007551C4 /* IndexMenuCollectionCell.swift */; };
-		AA72730F2C705EFC007551C4 /* BaseAllPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72730E2C705EFC007551C4 /* BaseAllPostView.swift */; };
-		AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273102C7065C3007551C4 /* ScrollViewController.swift */; };
 		AA72731B2C7078D9007551C4 /* arrowup.json in Resources */ = {isa = PBXBuildFile; fileRef = AA72731A2C7078D8007551C4 /* arrowup.json */; };
 		AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */; };
 		AA7273202C70E03A007551C4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */; };
@@ -101,6 +100,7 @@
 		AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewAnimation.swift; sourceTree = "<group>"; };
 		AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewServerLogic.swift; sourceTree = "<group>"; };
 		AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewLayout.swift; sourceTree = "<group>"; };
+		AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableCellLayout.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,8 +129,6 @@
 		AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepPhotoViewController.swift; sourceTree = "<group>"; };
 		AA7273022C70287B007551C4 /* AnimationZip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationZip.swift; sourceTree = "<group>"; };
 		AA7273042C70403D007551C4 /* IndexMenuCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexMenuCollectionCell.swift; sourceTree = "<group>"; };
-		AA72730E2C705EFC007551C4 /* BaseAllPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAllPostView.swift; sourceTree = "<group>"; };
-		AA7273102C7065C3007551C4 /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		AA72731A2C7078D8007551C4 /* arrowup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = arrowup.json; sourceTree = "<group>"; };
 		AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableViewCell.swift; sourceTree = "<group>"; };
 		AA7273222C70F8AC007551C4 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +194,15 @@
 				AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */,
 			);
 			path = UglyCandidateView;
+			sourceTree = "<group>";
+		};
+		AA64743B2C7B31120079ECE0 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */,
+				AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		AA7272A82C6C967C007551C4 = {
@@ -269,7 +276,6 @@
 				AA72730D2C705ED9007551C4 /* DetailPost */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
 				AA7273062C704075007551C4 /* CreatePost */,
-				AA7273102C7065C3007551C4 /* ScrollViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -320,8 +326,7 @@
 			isa = PBXGroup;
 			children = (
 				AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */,
-				AA72730E2C705EFC007551C4 /* BaseAllPostView.swift */,
-				AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */,
+				AA64743B2C7B31120079ECE0 /* Cell */,
 			);
 			path = ReadingPostView;
 			sourceTree = "<group>";
@@ -570,12 +575,12 @@
 				AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
-				AA7273112C7065C4007551C4 /* ScrollViewController.swift in Sources */,
 				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,
 				AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */,
 				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
 				AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */,
+				AA64743A2C7B2FC20079ECE0 /* AllPostTableCellLayout.swift in Sources */,
 				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
 				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,
@@ -584,7 +589,6 @@
 				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
 				AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
-				AA72730F2C705EFC007551C4 /* BaseAllPostView.swift in Sources */,
 				AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA7273582C71D032007551C4 /* UserDefaultsManager.swift in Sources */,
