@@ -81,11 +81,13 @@ class EditProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchMyProfile()
+       
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+       
     }
     
     private var myProfile: MyProfileResponse?
@@ -110,7 +112,7 @@ class EditProfileViewController: UIViewController {
     
     private func setupStatsArea() {
         followersLabel = labelUI(number: "0", title: "팔로워")
-        postsLabel = labelUI(number: "0", title: "게시물수")
+        postsLabel = labelUI(number: "0", title: "전체 게시물수")
         followingLabel = labelUI(number: "0", title: "팔로잉")
         
         statsStackView.addArrangedSubview(followersLabel!)
@@ -250,6 +252,32 @@ class EditProfileViewController: UIViewController {
 }
 
 extension EditProfileViewController {
+    
+    func deletePostID() {
+            guard let profile = myProfile else {
+                print("프로필 정보가 없습니다.")
+                return
+            }
+            
+            let postIDs = profile.posts
+            guard !postIDs.isEmpty else {
+                print("삭제할 포스트가 없습니다.")
+                return
+            }
+            
+            for postID in postIDs {
+                PostNetworkManager.shared.deletePost(postID: postID) { result in
+                    switch result {
+                    case .success:
+                        print("포스트 \(postID)가 성공적으로 삭제되었습니다.")
+                    case .failure(let error):
+                        print("포스트 \(postID) 삭제 중 오류 발생: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+    
+    
     
     // 내 프로필 가져오기
     func fetchMyProfile() {
