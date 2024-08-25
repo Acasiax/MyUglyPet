@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */; };
 		AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */; };
-		AA0C87DD2C74EC1600C8A950 /* GameSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */; };
 		AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */; };
 		AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */; };
 		AA6474252C7A35810079ECE0 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */; };
@@ -81,7 +80,6 @@
 /* Begin PBXFileReference section */
 		AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateViewController.swift; sourceTree = "<group>"; };
-		AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingViewController.swift; sourceTree = "<group>"; };
 		AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingCalculatorViewController.swift; sourceTree = "<group>"; };
 		AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroUglyCandidateViewController.swift; sourceTree = "<group>"; };
 		AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 			children = (
 				AA7272EB2C6DECD6007551C4 /* GameViewController.swift */,
 				AA7272ED2C6E637A007551C4 /* BaseGameView.swift */,
-				AA0C87DC2C74EC1600C8A950 /* GameSettingViewController.swift */,
 			);
 			path = Gameview;
 			sourceTree = "<group>";
@@ -522,7 +519,6 @@
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
 				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,
-				AA0C87DD2C74EC1600C8A950 /* GameSettingViewController.swift in Sources */,
 				AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */,
 				AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */,
 				AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */,

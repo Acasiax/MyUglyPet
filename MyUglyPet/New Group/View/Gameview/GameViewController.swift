@@ -10,6 +10,9 @@ import UIKit
 import SnapKit
 import Kingfisher
 import Alamofire
+import RxSwift
+import RxCocoa
+
 
 struct Pet {
     let name: String
@@ -20,7 +23,6 @@ struct Pet {
 
 final class GameViewController: BaseGameView {
 
-
     var pets: [Pet] = []
     var currentPetIndex: Int = 0
     var lastPetIndex: Int?
@@ -28,6 +30,8 @@ final class GameViewController: BaseGameView {
     var winnerPet: Pet?  // 우승자 정보를 저장하는 변수
     let rounds: [String] = ["망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
 
+    // DisposeBag 생성
+    private let disposeBag = DisposeBag()
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -40,25 +44,40 @@ final class GameViewController: BaseGameView {
         view.backgroundColor = CustomColors.lightBeige
         addsub()
         setupUI()
-        tapGest()
+        bindUI()
         fetchPosts()
         basiclottieAnimationView.play()
     }
 
-
-    func tapGest() {
-        let firstTapGesture = UITapGestureRecognizer(target: self, action: #selector(firstContainerTapped))
+    private func bindUI() {
+        // 첫 번째 컨테이너 탭 제스처
+        let firstTapGesture = UITapGestureRecognizer()
         firstContainerView.addGestureRecognizer(firstTapGesture)
+        firstTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                owner.firstContainerTapped()
+            }
+            .disposed(by: disposeBag)
         
-        let secondTapGesture = UITapGestureRecognizer(target: self, action: #selector(secondContainerTapped))
+        // 두 번째 컨테이너 탭 제스처
+        let secondTapGesture = UITapGestureRecognizer()
         secondContainerView.addGestureRecognizer(secondTapGesture)
+        secondTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                owner.secondContainerTapped()
+            }
+            .disposed(by: disposeBag)
         
-        submitWinnerButton.addTarget(self, action: #selector(submitWinnerButtonTapped), for: .touchUpInside)
+        // 우승자 제출 버튼
+        submitWinnerButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.submitWinnerButtonTapped()
+            }
+            .disposed(by: disposeBag)
     }
 
-
-    // MARK: - 사용자가 선택했을 떄
-    @objc func firstContainerTapped() {
+    // MARK: - 사용자가 선택했을 때
+    func firstContainerTapped() {
         print("첫번째 컨테이너가 선택되었습니다.")
         
         let selectedPet = pets[currentPetIndex]
@@ -76,7 +95,7 @@ final class GameViewController: BaseGameView {
         }
     }
     
-    @objc func secondContainerTapped() {
+    func secondContainerTapped() {
         print("두번째 컨테이너가 선택되었습니다.")
         let selectedPet = pets[lastPetIndex!]
         checkForFinalWinner(selectedPet: selectedPet)
@@ -93,9 +112,8 @@ final class GameViewController: BaseGameView {
         }
     }
 
-    
-    //여기 파일은 잘 로드됨🌟🔥
-    @objc func submitWinnerButtonTapped() {
+    // 여기 파일은 잘 로드됨🌟🔥
+    func submitWinnerButtonTapped() {
         if let winner = winnerPet {
             print("🔥우승자 이름: \(winner.name), 인사말: \(winner.userName), 이미지 URL: \(winner.imageURL)")
             // 우승자 정보를 서버에 업로드
@@ -103,12 +121,10 @@ final class GameViewController: BaseGameView {
         } else {
             print("우승자가 설정되지 않았습니다.")
         }
-        
     }
-
 }
 
-// MARK: - 서버 데이터 가져 올때 메서드
+// MARK: - 서버 데이터 가져올 때 메서드
 extension GameViewController {
     private func fetchPosts() {
         let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "못난이후보등록")
@@ -177,10 +193,7 @@ extension GameViewController {
             }
         }
     }
-    
 }
-
-
 
 // MARK: - 게임 로직 함수
 extension GameViewController {
@@ -260,14 +273,8 @@ extension GameViewController {
         winnerPet = pet
 
         animateWinnerContainerView()
-        
-        // 우승자 정보를 서버에 업로드
-      //  uploadWinnerImageAndPost() // 변경된 부분
     }
 }
-
-
-
 
 // MARK: - 1등한 우승자를 서버에 포스팅하기
 extension GameViewController {
@@ -281,7 +288,6 @@ extension GameViewController {
         }
     }
 
-    
     // MARK: - 우승자 이미지 게시글 업로드 함수
     func uploadWinnerImageAndPost() {
         guard let winnerPet = winnerPet else {
@@ -340,17 +346,16 @@ extension GameViewController {
         }
     }
 
-
     // 우승자 게시글 업로드 함수
     private func uploadWinnerPost(withImageURLs imageUrls: [String], pet: Pet) {
         let title = pet.name
         let content1 = pet.userName
-//근데 여기 파일은 로드가 안됨. 주소가 submitWinnerButtonTapped()하고 다름 미세하게
+        // 근데 여기 파일은 로드가 안됨. 주소가 submitWinnerButtonTapped()하고 다름 미세하게
         print("우승자 업로드 정보: 제목 - \(title), 내용 - \(content1), 이미지 URL - \(imageUrls)")
 
         PostNetworkManager.shared.createPost(
             title: title,
-            content: "#1등이닷", //해쉬태그
+            content: "#1등이닷", // 해쉬태그
             content1: content1,
             productId: "각유저가고른1등우승자",
             fileURLs: imageUrls
@@ -364,7 +369,6 @@ extension GameViewController {
         }
     }
 }
-
 
 // MARK: - 애니메이션
 extension GameViewController {
@@ -390,3 +394,4 @@ extension GameViewController {
         }
     }
 }
+

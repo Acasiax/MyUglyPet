@@ -8,6 +8,9 @@
 import UIKit
 import SnapKit
 import Alamofire
+import RxSwift
+import RxCocoa
+
 
 class IntroUglyCandidateViewController: UIViewController {
 
@@ -51,6 +54,9 @@ class IntroUglyCandidateViewController: UIViewController {
     
     // 서버에서 받아온 포스팅을 저장할 배열
     var serverPosts: [PostsModel] = []
+    
+    // DisposeBag 생성
+    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +64,7 @@ class IntroUglyCandidateViewController: UIViewController {
         
         addSubviews()
         setupLayout()
-        setupActions()
+        bindUI()
         fetchPosts()
     }
     
@@ -93,11 +99,15 @@ class IntroUglyCandidateViewController: UIViewController {
         }
     }
     
-    private func setupActions() {
-        letgoRegisterCandidateButton.addTarget(self, action: #selector(didTapLetgoRegisterCandidateButton), for: .touchUpInside)
+    private func bindUI() {
+        letgoRegisterCandidateButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.didTapLetgoRegisterCandidateButton()
+            }
+            .disposed(by: disposeBag)
     }
     
-    @objc private func didTapLetgoRegisterCandidateButton() {
+    private func didTapLetgoRegisterCandidateButton() {
         print("게임 시작 버튼이 눌렸습니다")
     }
     
@@ -107,12 +117,13 @@ class IntroUglyCandidateViewController: UIViewController {
 
         // 네트워크 요청 예시 (PostNetworkManager 사용)
         PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let posts):
-                self?.serverPosts = posts
+                self.serverPosts = posts
                 
                 // 포스팅 개수를 레이블에 표시하고 버튼 상태 업데이트
-                self?.updatePostCountLabel(postCount: posts.count)
+                self.updatePostCountLabel(postCount: posts.count)
                 
                 print("포스팅을 가져오는데 성공했어요🥰")
             case .failure(let error):
