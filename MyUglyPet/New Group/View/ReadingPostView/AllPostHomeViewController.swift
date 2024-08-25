@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 
 // 델리게이트 프로토콜 정의
@@ -15,19 +17,20 @@ protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapDeleteButton(in cell: AllPostTableViewCell)
 }
 
+
 final class AllPostHomeViewController: UIViewController {
     
     private var serverPosts: [PostsModel] = []
+    private let disposeBag = DisposeBag()
     
     let colors: [UIColor] = [
-           CustomColors.deepPurple,
-           UIColor(red: 1.00, green: 0.78, blue: 0.87, alpha: 1.00),
-           UIColor(red: 0.73, green: 0.96, blue: 0.48, alpha: 1.00),
-           CustomColors.softPink,
-           CustomColors.softBlue,
-           CustomColors.softPurple
-           
-       ]
+        CustomColors.deepPurple,
+        UIColor(red: 1.00, green: 0.78, blue: 0.87, alpha: 1.00),
+        UIColor(red: 0.73, green: 0.96, blue: 0.48, alpha: 1.00),
+        CustomColors.softPink,
+        CustomColors.softBlue,
+        CustomColors.softPurple
+    ]
     
     let plusButton: UIButton = {
         let button = UIButton(type: .system)
@@ -37,7 +40,6 @@ final class AllPostHomeViewController: UIViewController {
         button.backgroundColor = .orange
         button.layer.cornerRadius = 30
         button.clipsToBounds = true
-        button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -58,7 +60,6 @@ final class AllPostHomeViewController: UIViewController {
         fetchMyProfile()
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.83, green: 0.84, blue: 0.00, alpha: 1.00)
@@ -68,24 +69,26 @@ final class AllPostHomeViewController: UIViewController {
         tableView.dataSource = self
         configureConstraints()
         
-       
+        // Rx 방식으로 버튼 이벤트 처리
+        plusButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.handlePlusButtonTap()
+            }
+            .disposed(by: disposeBag)
         
         // Pan Gesture Recognizer를 tableView에 추가
         panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
         panGestureRecognizer.delegate = self // 델리게이트 설정
         tableView.addGestureRecognizer(panGestureRecognizer)
-        
-        
     }
-
+    
     deinit {
-           print("AllPostHomeView 디이닛")
-       }
+        print("AllPostHomeView 디이닛")
+    }
     
     private func configureConstraints() {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-           // make.top.equalToSuperview().offset(20)
         }
         
         plusButton.snp.makeConstraints { make in
@@ -93,48 +96,8 @@ final class AllPostHomeViewController: UIViewController {
             make.bottom.right.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
-
     
-    //내 프로필 가져오기
-    func fetchMyProfile() {
-            // FollowPostNetworkManager 싱글턴 인스턴스를 사용하여 프로필 요청
-            FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-                switch result {
-                case .success(let profile):
-                    self?.myProfile = profile
-                   // print("내 프로필 가져오는데 성공했어요🥰", profile)
-                   
-                    
-                case .failure(let error):
-                    // 프로필 데이터를 가져오지 못했을 때
-                    print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-                }
-            }
-        }
-    
-    
-    //게시글 모든 피드 가져오기
-    private func fetchPosts() {
-        // 쿼리 파라미터 생성
-
-        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed") //🌟
-
-        // 네트워크 요청 예시 (PostNetworkManager 사용)
-        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
-            switch result {
-            case .success(let posts):
-                self?.serverPosts = posts
-                print("🦾\(String(describing: self?.serverPosts))")
-                self?.tableView.reloadData() // 데이터 로드 후 테이블뷰 리로드
-                print("포스팅을 가져오는데 성공했어요🥰")
-            case .failure(let error):
-                print("포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    
-    @objc private func plusButtonTapped() {
+    private func handlePlusButtonTap() {
         print("게시글추가 +버튼 탭")
         AnimationZip.animateButtonPress(plusButton)
         
@@ -144,15 +107,36 @@ final class AllPostHomeViewController: UIViewController {
         }
     }
     
-
-    // Pan Gesture 처리
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-//기능 지웠음
+    // 내 프로필 가져오기
+    func fetchMyProfile() {
+        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.myProfile = profile
+            case .failure(let error):
+                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
     }
-
     
+    // 게시글 모든 피드 가져오기
+    private func fetchPosts() {
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
+        
+        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.serverPosts = posts
+                self?.tableView.reloadData()
+            case .failure(let error):
+                print("포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
+    }
     
-    
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        // 기능 지웠음
+    }
 }
 
 extension AllPostHomeViewController: UIGestureRecognizerDelegate {
@@ -161,11 +145,9 @@ extension AllPostHomeViewController: UIGestureRecognizerDelegate {
     }
 }
 
-
 extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       // print("헬로우 포스트 갯수: \(posts.count)")
-        return serverPosts.count // 포스트 개수만큼 반환
+        return serverPosts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -174,54 +156,41 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         let post = serverPosts[indexPath.row]
         cell.postID = post.postId
         cell.userID = post.creator.userId
-        cell.titleLabel.text = post.title // 포스트 제목 설정
-        cell.contentLabel.text = post.content // 포스트 내용 설정
-        cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
-        cell.delegate = self  // 델리게이트 설정
+        cell.titleLabel.text = post.title
+        cell.contentLabel.text = post.content
+        cell.imageFiles = post.files ?? []
+        cell.delegate = self
         
-        // 팔로우 상태를 확인하고 버튼을 설정
         if let myProfile = myProfile {
             let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
             cell.configureFollowButton(isFollowing: isFollowing)
         }
-  
         
         let colorIndex = indexPath.row % colors.count
         cell.containerView.backgroundColor = colors[colorIndex]
         
-        
-        
         return cell
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailViewController = DetailViewController()
         let selectedPost = serverPosts[indexPath.row]
         
-        // Post와 관련된 데이터를 전달
         detailViewController.post = selectedPost
         detailViewController.comments = selectedPost.comments
         detailViewController.imageFiles = selectedPost.files ?? []
-        
-        // 추가적으로 Post ID와 선택된 첫 번째 댓글의 Comment ID를 전달
         detailViewController.postId = selectedPost.postId
         
-        // 댓글이 있는 경우 첫 번째 댓글의 ID를 전달, 없다면 nil 전달
         if let firstComment = selectedPost.comments.first {
             detailViewController.commentId = firstComment.commentId
         } else {
             detailViewController.commentId = nil
         }
-
+        
         navigationController?.pushViewController(detailViewController, animated: true)
     }
-
 }
 
-
-// 델리게이트 메서드 구현
 extension AllPostHomeViewController: AllPostTableViewCellDelegate {
     func didTapCommentButton(in cell: AllPostTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
@@ -232,15 +201,10 @@ extension AllPostHomeViewController: AllPostTableViewCellDelegate {
     
     func didTapDeleteButton(in cell: AllPostTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        
-        // 서버에서 해당 포스트를 삭제한 후, 로컬 데이터에서도 삭제
         serverPosts.remove(at: indexPath.row)
-        
-        // 테이블뷰에서 셀 삭제
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
 }
-
 
 
 
