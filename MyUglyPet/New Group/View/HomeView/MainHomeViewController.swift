@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 import Lottie
 
 struct Mission {
@@ -22,12 +24,10 @@ struct MissionData {
     ]
 }
 
-
 final class MainHomeViewController: UIViewController {
     
+    private let disposeBag = DisposeBag()
     private let allPostHomeVC = AllPostHomeViewController()
-
-    
     private let missions: [Mission] = MissionData.missions
     
     let arrowupLottieAnimationView: LottieAnimationView = {
@@ -47,7 +47,6 @@ final class MainHomeViewController: UIViewController {
         button.layer.cornerRadius = 75
         button.layer.borderColor = UIColor.orange.cgColor
         button.layer.borderWidth = 2
-        button.addTarget(self, action: #selector(petButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -58,7 +57,6 @@ final class MainHomeViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -79,9 +77,7 @@ final class MainHomeViewController: UIViewController {
     
     private lazy var feedLabel: UILabel = {
         let label = UILabel()
-        
         let fullString = NSMutableAttributedString(string: "\n친구들 게시글 보러가기")
-        
         label.attributedText = fullString
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -97,8 +93,8 @@ final class MainHomeViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = CustomColors.softBlue
-        
         setupLayout()
+        bindUI()
         
         // Pan Gesture Recognizer 설정
         panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
@@ -106,8 +102,8 @@ final class MainHomeViewController: UIViewController {
     }
     
     deinit {
-           print("MainHomeViewController 디이닛")
-       }
+        print("MainHomeViewController 디이닛")
+    }
     
     private func setupLayout() {
         view.addSubview(petButton)
@@ -139,7 +135,6 @@ final class MainHomeViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        
         arrowupLottieAnimationView.snp.makeConstraints { make in
             make.centerX.equalTo(feedLabel)
             make.bottom.equalTo(feedLabel.snp.top).offset(10)
@@ -147,34 +142,36 @@ final class MainHomeViewController: UIViewController {
             make.height.equalTo(arrowupLottieAnimationView.snp.width).multipliedBy(1.0)  // 비율 유지
         }
 
-        
         feedLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
+    }
+    
+    private func bindUI() {
+        // Pet Button Rx 이벤트 처리
+        petButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("반려동물 이미지 탭")
+                AnimationZip.animateButtonPress(owner.petButton)
+            }
+            .disposed(by: disposeBag)
         
-      
+        // Upload Button Rx 이벤트 처리
+        uploadButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("울 애기 사진 업로드하기 버튼 탭")
+                AnimationZip.animateButtonPress(owner.uploadButton)
+                let uglyCandidateVC = UglyCandidateViewController()
+                owner.navigationController?.pushViewController(uglyCandidateVC, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         arrowupLottieAnimationView.isHidden = false
         arrowupLottieAnimationView.play()
-    }
-    
-    
-    @objc private func petButtonTapped() {
-        print("반려동물 이미지 탭")
-        AnimationZip.animateButtonPress(petButton)
-    }
-    
-    @objc private func uploadButtonTapped() {
-        print("울 애기 사진 업로드하기 버튼 탭")
-        AnimationZip.animateButtonPress(uploadButton)
-        let uglyCandidateVC = UglyCandidateViewController()
-        self.navigationController?.pushViewController(uglyCandidateVC, animated: true)
-        
-        
     }
     
     // Pan Gesture 처리
@@ -206,13 +203,7 @@ final class MainHomeViewController: UIViewController {
             }
         }
     }
-
-    
 }
-
-
-
-
 
 extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
@@ -224,43 +215,30 @@ extension MainHomeViewController: UICollectionViewDataSource, UICollectionViewDe
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IndexMenuCollectionCell.identifier, for: indexPath) as! IndexMenuCollectionCell
         let mission = missions[indexPath.item]
         cell.configure(iconName: mission.iconName, title: mission.title, carrotCount: mission.carrotCount)
-        cell.actionButton.addTarget(self, action: #selector(missionButtonTapped), for: .touchUpInside)
+        
+        // 셀의 버튼 이벤트를 Rx 방식으로 처리
+        cell.actionButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("하러가기 버튼 탭, 인덱스: \(indexPath.item)")
+                
+                // 버튼 애니메이션 실행
+                AnimationZip.animateButtonPress(cell.actionButton)
+                
+                // 화면 전환
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    if indexPath.item == 0 {
+                        let gameViewController = GameViewController()
+                        owner.navigationController?.pushViewController(gameViewController, animated: true)
+                    } else if indexPath.item == 1 {
+                        let introUglyCandidateVC = IntroUglyCandidateViewController()
+                        owner.navigationController?.pushViewController(introUglyCandidateVC, animated: true)
+                    }
+                }
+            }
+            .disposed(by: cell.disposeBag)
+        
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("인덱스 \(indexPath.item) 눌렀지요")
-        // guard let cell = sender.superview?.superview as? MissionCell else { return }
-       
-    }
-    
-    @objc private func missionButtonTapped(_ sender: UIButton) {
-        // 어떤 셀의 버튼이 눌렸는지 확인하기 위해 sender를 이용
-        guard let cell = sender.superview?.superview as? IndexMenuCollectionCell else { return }
-        
-        // 해당 셀의 인덱스를 찾기 위해 collectionView에서 인덱스 가져오기
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
-
-        print("하러가기 버튼 탭, 인덱스: \(indexPath.item)")
-
-        // 버튼 애니메이션 실행
-        AnimationZip.animateButtonPress(sender)
-        
-        // 애니메이션이 끝난 후에 화면 전환을 하기 위해 비동기 작업 추가
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // 0.3초 후에 실행
-            // 인덱스가 0일 경우 GameViewController로 이동
-            if indexPath.item == 0 {
-                let gameViewController = GameViewController()
-                self.navigationController?.pushViewController(gameViewController, animated: true)
-            } else if indexPath.item == 1 {
-                // 인덱스가 1일 경우 IntroUglyCandidateViewController로 이동
-                let introUglyCandidateVC = IntroUglyCandidateViewController()
-                self.navigationController?.pushViewController(introUglyCandidateVC, animated: true)
-            }
-        }
-    }
-
-    
 }
 
 

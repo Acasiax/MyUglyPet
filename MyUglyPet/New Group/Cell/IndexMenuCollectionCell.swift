@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 class IndexMenuCollectionCell: UICollectionViewCell {
     
@@ -14,6 +15,8 @@ class IndexMenuCollectionCell: UICollectionViewCell {
     private let titleLabel = UILabel()
     private let carrotLabel = UILabel()
     let actionButton = UIButton()
+    
+    var disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,8 +28,14 @@ class IndexMenuCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // 셀이 재사용될 때마다 새로운 DisposeBag을 생성하여 이전의 바인딩을 해제합니다.
+        disposeBag = DisposeBag()
+    }
+    
     func configure(iconName: String, title: String, carrotCount: Int) {
-        iconImageView.image = UIImage(named: "기본냥멍1")
+        iconImageView.image = UIImage(named: "기본냥멍1")
         iconImageView.backgroundColor = .yellow
         titleLabel.text = title
         carrotLabel.text = "🥕 당근 \(carrotCount)개"
