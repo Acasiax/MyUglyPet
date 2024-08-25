@@ -30,13 +30,6 @@ struct FetchReadingPostQuery: Encodable {
 
 
 //MARK: -  포스트 조회
-//struct Post: Codable {
-//    let postId: String
-//    let title: String
-//    let content: String
-//    // 필요한 다른 필드들 추가
-//}
-
 struct PostsResponse: Codable {
     let data: [PostsModel]
     let nextCursor: String?
@@ -62,29 +55,6 @@ struct PostQuery: Encodable {
     let files: [String]
 }
 
-//struct PostsModel: Codable {
-//    let title: String?        // 게시글 제목 (선택적)
-//    let content: String?      // 게시글 본문 (선택적)
-//    let content1: String?     // 추가 콘텐츠 필드 (선택적)
-//    let content2: String?     // 추가 콘텐츠 필드 (선택적)
-//    let content3: String?     // 추가 콘텐츠 필드 (선택적)
-//    let content4: String?     // 추가 콘텐츠 필드 (선택적)
-//    let content5: String?     // 추가 콘텐츠 필드 (선택적)
-//    let productId: String?    // 제품 ID (선택적)
-//    let files: [String]?      // 이미지 파일 경로 목록 (선택적)
-//
-//    enum CodingKeys: String, CodingKey {
-//        case title
-//        case content
-//        case content1
-//        case content2
-//        case content3
-//        case content4
-//        case content5
-//        case productId = "product_id"
-//        case files
-//    }
-//}
 struct PostsModel: Codable {
     let postId: String            // 게시글 ID
     let productId: String?        // 제품 ID (선택적)
@@ -135,20 +105,6 @@ struct Creator: Codable {
     }
 }
 
-//struct Comment: Codable {
-//    let commentId: String          // 댓글 ID        // 댓글 ID
-//    let content: String            // 댓글 내용
-//    let createdAt: String          // 댓글 작성 날짜
-//    let creator: Creator           // 댓글 작성자 정보
-//    
-//    enum CodingKeys: String, CodingKey {
-//        case commentId = "comment_id"
-//        case content
-//        case createdAt
-//        case creator
-//    }
-//}
-
 struct Comment: Codable {
     let commentId: String          // 댓글 ID
     let content: String            // 댓글 내용
@@ -194,3 +150,21 @@ struct CommentCreator: Codable {
 
 
 
+struct Mission {
+    let iconName: String
+    let title: String
+    let carrotCount: Int
+}
+
+struct MissionData {
+    static let missions: [Mission] = [
+        Mission(iconName: "icon1", title: "망한 사진 월드컵 대회참여하기", carrotCount: 2),
+        Mission(iconName: "icon2", title: "후보 구경하기", carrotCount: 3)
+    ]
+}
+
+struct Pet {
+    let name: String
+    let userName: String
+    let imageURL: String
+}

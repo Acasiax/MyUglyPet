@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 import PhotosUI
 import RxSwift
 import RxCocoa
@@ -17,58 +16,12 @@ class UglyCandidateViewController: UIViewController {
     let disposeBag = DisposeBag()
     let viewModel = UglyCandidateViewModel()
 
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "후보를 등록해주세요"
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        return label
-    }()
-    
-    let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = CustomColors.softPurple
-        view.layer.cornerRadius = 20
-        return view
-    }()
-    
-    let imageButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "기본냥멍3"), for: .normal)
-        button.imageView?.contentMode = .scaleAspectFill
-        button.layer.cornerRadius = 75
-        button.clipsToBounds = true
-        return button
-    }()
-    
-    let helloNameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "사진제목"
-        textField.font = UIFont.systemFont(ofSize: 22, weight: .bold)
-        textField.textAlignment = .center
-        textField.borderStyle = .roundedRect
-        return textField
-    }()
-    
-    let subtitleTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "사용자이름"
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.textAlignment = .center
-        textField.borderStyle = .roundedRect
-        textField.textColor = .gray
-        return textField
-    }()
-    
-    let submitButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("후보에 등록할게요", for: .normal)
-        button.backgroundColor = CustomColors.softPink
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        return button
-    }()
+    let titleLabel = UglyCandidateUI.titleLabel
+    let containerView = UglyCandidateUI.containerView
+    let imageButton = UglyCandidateUI.imageButton
+    let helloNameTextField = UglyCandidateUI.helloNameTextField
+    let subtitleTextField = UglyCandidateUI.subtitleTextField
+    let submitButton = UglyCandidateUI.submitButton
     
     var selectedImage = BehaviorSubject<UIImage?>(value: nil)
 
@@ -79,54 +32,9 @@ class UglyCandidateViewController: UIViewController {
         bindViewModel()
     }
 
-    func setupViews() {
-        view.backgroundColor = CustomColors.lightBeige
-        view.addSubview(titleLabel)
-        view.addSubview(containerView)
-       
-        containerView.addSubview(imageButton)
-        containerView.addSubview(helloNameTextField)
-        containerView.addSubview(subtitleTextField)
-        view.addSubview(submitButton)
-    }
 
-    func setupConstraints() {
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
-            make.left.right.equalTo(view).inset(20)
-        }
 
-        containerView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(250)
-            make.height.equalTo(300)
-            make.centerY.equalToSuperview().offset(-20)
-        }
-        
-        imageButton.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(150)
-        }
-
-        helloNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(imageButton.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(200)
-        }
-
-        subtitleTextField.snp.makeConstraints { make in
-            make.top.equalTo(helloNameTextField.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(200)
-        }
-
-        submitButton.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.bottom).offset(40)
-            make.centerX.equalToSuperview()
-        }
-    }
-
+    // MARK: - rx로 바인딩한거
     func bindViewModel() {
         let input = UglyCandidateViewModel.Input(
             imageButtonTap: imageButton.rx.tap.asObservable(),
@@ -163,6 +71,7 @@ class UglyCandidateViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
+    // MARK: - 이미지 선택 후 초기화 등등
     func presentImagePicker() {
         var configuration = PHPickerConfiguration()
         configuration.selectionLimit = 1
@@ -206,3 +115,5 @@ extension UglyCandidateViewController: PHPickerViewControllerDelegate {
         }
     }
 }
+
+

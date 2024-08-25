@@ -6,19 +6,13 @@
 //
 //firstContainerView와 secondContainerView를 선택할 때
 
+
 import UIKit
 import SnapKit
 import Kingfisher
 import Alamofire
 import RxSwift
 import RxCocoa
-
-
-struct Pet {
-    let name: String
-    let userName: String
-    let imageURL: String
-}
 
 
 final class GameViewController: BaseGameView {

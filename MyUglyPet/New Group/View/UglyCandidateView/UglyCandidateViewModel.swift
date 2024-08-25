@@ -5,14 +5,14 @@
 //  Created by 이윤지 on 8/25/24.
 //
 
-import Foundation
+import UIKit
 import RxSwift
 import RxCocoa
 import Alamofire
 
 class UglyCandidateViewModel {
-
-    // Input
+    private let disposeBag = DisposeBag()
+    
     struct Input {
         let imageButtonTap: Observable<Void>
         let submitButtonTap: Observable<Void>
@@ -21,13 +21,14 @@ class UglyCandidateViewModel {
         let userName: Observable<String?>
     }
 
-    // Output
     struct Output {
         let presentImagePicker: Observable<Void>
         let uploadResult: Observable<Result<Void, Error>>
         let validationError: Observable<String>
     }
 
+    
+    
     func transform(input: Input) -> Output {
         let presentImagePicker = input.imageButtonTap
             .do(onNext: { print("이미지 버튼 탭 이벤트") })
@@ -74,7 +75,7 @@ class UglyCandidateViewModel {
         )
     }
 
-    private let disposeBag = DisposeBag()
+    
 
     // 이미지 및 게시글 업로드 함수
     private func uploadImagesAndPost(title: String, userName: String, image: UIImage) -> Observable<Result<Void, Error>> {
