@@ -78,7 +78,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
     }
 
     
-    @objc func photoAttachmentButtonTapped() {
+     func photoAttachmentButtonTapped() {
         print("카메라 버튼 탭")
         AnimationZip.animateButtonPress(photoAttachmentButton)
 
@@ -91,7 +91,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         present(picker, animated: true, completion: nil)
     }
     
-    @objc func submitButtonTapped() {
+     func submitButtonTapped() {
         print(selectedImages.count)
         print(selectedImages.debugDescription)
         guard let text = reviewTextView.text, !text.isEmpty else {
