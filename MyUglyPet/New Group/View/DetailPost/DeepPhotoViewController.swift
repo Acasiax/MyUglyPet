@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 import Kingfisher
 
 class CustomPageControl: UIView {
@@ -77,7 +79,6 @@ class CustomPageControl: UIView {
 
 
 
-
 class DeepPhotoViewController: UIViewController {
     
     var photos: [String] = []
@@ -90,7 +91,6 @@ class DeepPhotoViewController: UIViewController {
         layout.itemSize = UIScreen.main.bounds.size
         layout.sectionInset = .zero
 
-        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
@@ -100,9 +100,8 @@ class DeepPhotoViewController: UIViewController {
     
     private let customPageControl: CustomPageControl = {
         let pageControl = CustomPageControl()
-        pageControl.currentPageImage = UIImage(systemName: "pawprint.circle.fill") // 현재 페이지 이미지
-    
-        pageControl.pageImage = UIImage(systemName: "pawprint.circle") // 기본 페이지 이미지
+        pageControl.currentPageImage = UIImage(systemName: "pawprint.circle.fill")
+        pageControl.pageImage = UIImage(systemName: "pawprint.circle")
         return pageControl
     }()
     
@@ -110,10 +109,11 @@ class DeepPhotoViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("X", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
     
+    private let disposeBag = DisposeBag()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.softPurple
@@ -130,11 +130,17 @@ class DeepPhotoViewController: UIViewController {
         
         setupConstraints()
         
+        // Rx 방식으로 버튼 이벤트 처리
+        closeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
         
-               // 처음 선택된 이미지로 스크롤
-               if selectedIndex < photos.count {
-                   collectionView.scrollToItem(at: IndexPath(item: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
-               }
+        // 처음 선택된 이미지로 스크롤
+        if selectedIndex < photos.count {
+            collectionView.scrollToItem(at: IndexPath(item: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
+        }
     }
     
     private func setupConstraints() {
@@ -153,10 +159,6 @@ class DeepPhotoViewController: UIViewController {
             make.width.height.equalTo(44)
         }
     }
-    
-    @objc private func closeButtonTapped() {
-        navigationController?.popViewController(animated: true)
-    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -170,11 +172,9 @@ extension DeepPhotoViewController: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
         
-        // 이미지 URL을 가져옴
         let imageURLString = photos[indexPath.item]
         
         if let imageURL = URL(string: imageURLString) {
-            // Kingfisher를 사용하여 이미지를 비동기로 로드
             cell.imageView.kf.setImage(
                 with: imageURL,
                 placeholder: UIImage(named: "placeholder"),
@@ -198,7 +198,6 @@ extension DeepPhotoViewController: UICollectionViewDataSource, UICollectionViewD
         
         return cell
     }
-
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)

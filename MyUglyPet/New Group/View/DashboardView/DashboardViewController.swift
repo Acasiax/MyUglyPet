@@ -17,8 +17,6 @@ struct PostGroup: Hashable {
     let title: String
     let content: String
     let content1: String
-   // let files: String
-    // files는 비교에서 제외됩니다.
 }
 
 
@@ -29,7 +27,6 @@ struct finalPostGroup: Hashable {
     let content1: String
     let files: [String] // 파일 URL 배열을 저장
 }
-
 
 
 // 더미 데이터 배열
@@ -90,7 +87,6 @@ class DashboardViewController: UIViewController {
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = .black
-        pageControl.addTarget(self, action: #selector(pageControlValueChanged(_:)), for: .valueChanged)
         return pageControl
     }()
     
@@ -136,7 +132,6 @@ class DashboardViewController: UIViewController {
         return collectionView
     }()
     
-    
     let disposeBag = DisposeBag()
     
     var rankedGroups: [(key: PostGroup, value: [PostsModel])] = []
@@ -146,8 +141,6 @@ class DashboardViewController: UIViewController {
         fetchAllFeedPosts()
         fetchMyProfile()
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,12 +159,19 @@ class DashboardViewController: UIViewController {
         setupSubviews()
         setupConstraints()
         
+        // Rx 방식으로 pageControl의 값 변경 이벤트 처리
+        pageControl.rx.controlEvent(.valueChanged)
+            .withUnretained(self)  // [weak self] 대신 bind(with: self)를 사용하여 owner에 self 바인딩
+            .bind { owner, _ in
+                let indexPath = IndexPath(item: owner.pageControl.currentPage, section: 0)
+                owner.bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     func setupSubviews() {
         view.backgroundColor = CustomColors.lightBeige
         
-
         view.addSubview(scrollView)
         scrollView.addSubview(contentStackView)
         
@@ -224,13 +224,12 @@ class DashboardViewController: UIViewController {
         }
     }
     
-    // 페이지 컨트롤 값 변경 시 호출되는 메서드
-    @objc func pageControlValueChanged(_ sender: UIPageControl) {
-        let indexPath = IndexPath(item: sender.currentPage, section: 0)
-        bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    }
+    // 페이지 컨트롤 값 변경 시 호출되는 메서드 (더 이상 사용되지 않음)
+    // @objc func pageControlValueChanged(_ sender: UIPageControl) {
+    //     let indexPath = IndexPath(item: sender.currentPage, section: 0)
+    //     bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    // }
 }
-
 
 
 

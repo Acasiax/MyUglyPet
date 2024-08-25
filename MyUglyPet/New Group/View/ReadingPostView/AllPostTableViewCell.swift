@@ -8,17 +8,20 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 final class AllPostTableViewCell: UITableViewCell {
     
     weak var delegate: AllPostTableViewCellDelegate?
+    private let disposeBag = DisposeBag()  // DisposeBag 수동 관리
     
     // UI 요소들
     let containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
         view.clipsToBounds = true
-        view.backgroundColor = .white // 컨테이너의 배경색 설정
+        view.backgroundColor = .white
         return view
     }()
     
@@ -71,7 +74,6 @@ final class AllPostTableViewCell: UITableViewCell {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -83,7 +85,6 @@ final class AllPostTableViewCell: UITableViewCell {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        button.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -134,7 +135,6 @@ final class AllPostTableViewCell: UITableViewCell {
         let commentImage = UIImage(systemName: "bubble.right")
         button.setImage(commentImage, for: .normal)
         button.tintColor = .black
-        button.addTarget(self, action: #selector(handleCommentButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -150,7 +150,6 @@ final class AllPostTableViewCell: UITableViewCell {
     var postID: String?
     var userID: String? {
         didSet {
-            // userID가 설정될 때마다 followButton을 숨길지 여부를 확인
             checkAndHideButtons()
         }
     }
@@ -161,13 +160,11 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    // 팔로우 상태를 추적하는 변수
     private var isFollowing = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        // contentView에 containerView 추가 및 UI 구성
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(10)
@@ -178,6 +175,8 @@ final class AllPostTableViewCell: UITableViewCell {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        bindUI()
     }
     
     required init?(coder: NSCoder) {
@@ -269,7 +268,26 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    // followButton을 숨길지 여부를 확인하는 메서드
+    private func bindUI() {
+        followButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.followButtonTapped()
+            }
+            .disposed(by: disposeBag)
+        
+        deleteButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.deleteButtonTapped()
+            }
+            .disposed(by: disposeBag)
+        
+        commentButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.handleCommentButtonTapped()
+            }
+            .disposed(by: disposeBag)
+    }
+    
     private func checkAndHideButtons() {
         let currentUserID = UserDefaultsManager.shared.id
         if let userID = userID {
@@ -281,17 +299,15 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    @objc func followButtonTapped() {
+    private func followButtonTapped() {
         guard let userID = userID else {
             print("userID가 없습니다.")
             return
         }
         
-        // 팔로우 상태 토글
         isFollowing.toggle()
         updateFollowButtonUI()
         
-        // 팔로우 또는 언팔로우 API 호출
         if isFollowing {
             FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
                 switch result {
@@ -299,7 +315,6 @@ final class AllPostTableViewCell: UITableViewCell {
                     print("팔로우 성공")
                 case .failure(let error):
                     print("팔로우 실패: \(error.localizedDescription)")
-                    // 실패 시 상태를 복구
                     DispatchQueue.main.async {
                         self?.isFollowing.toggle()
                         self?.updateFollowButtonUI()
@@ -313,7 +328,6 @@ final class AllPostTableViewCell: UITableViewCell {
                     print("언팔로우 성공")
                 case .failure(let error):
                     print("언팔로우 실패: \(error.localizedDescription)")
-                    // 실패 시 상태를 복구
                     DispatchQueue.main.async {
                         self?.isFollowing.toggle()
                         self?.updateFollowButtonUI()
@@ -323,13 +337,11 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    // 팔로우 상태를 설정하는 메서드 추가
     func configureFollowButton(isFollowing: Bool) {
         self.isFollowing = isFollowing
         updateFollowButtonUI()
     }
     
-    // 팔로우 버튼의 UI 업데이트
     private func updateFollowButtonUI() {
         if isFollowing {
             followButton.setTitle("언팔로우", for: .normal)
@@ -340,12 +352,12 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    @objc private func handleCommentButtonTapped() {
+    private func handleCommentButtonTapped() {
         print("댓글 버튼 탭")
         delegate?.didTapCommentButton(in: self)
     }
     
-    @objc func deleteButtonTapped() {
+    private func deleteButtonTapped() {
         guard let postID = postID else {
             print("postID가 없습니다.")
             return
@@ -367,7 +379,7 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    func deletePost(postID: String) {
+    private func deletePost(postID: String) {
         PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
             switch result {
             case .success:
@@ -382,18 +394,16 @@ final class AllPostTableViewCell: UITableViewCell {
     }
 }
 
-
 extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageFiles.count
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
         
         let imageURLString = imageFiles[indexPath.item]
-        let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString //🌟내가 게시한 사진은 baseURL이 없음!
+        let fullImageURLString = APIKey.baseURL + "v1/" + imageURLString
         
         if let imageURL = URL(string: fullImageURLString) {
             let headers = Router.fetchPosts(query: FetchReadingPostQuery(next: nil, limit: "10", product_id: "")).headersForImageRequest
@@ -422,9 +432,6 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
         
         return cell
     }
-    
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)

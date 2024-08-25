@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import SnapKit
 import Kingfisher
 
 struct DummyComment {
@@ -25,7 +28,7 @@ struct UserComment {
 
 
 final class DetailViewController: BaseDetailView {
-    
+    private let disposeBag = DisposeBag()
     var imageFiles: [String] = [] // 이미지 URL 배열을 저장할 프로퍼티
     var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티 //🔥
     
@@ -46,8 +49,8 @@ final class DetailViewController: BaseDetailView {
         tableView.dataSource = self
         configureHierarchy()
         configureConstraints()
-        followButton.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
-        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        setupRx()
+     
         // 전달받은 포스트 데이터를 UI에 반영
         if let post = post {
             contentLabel.text = post.content
@@ -80,39 +83,61 @@ final class DetailViewController: BaseDetailView {
     }
     
     
-    @objc func sendButtonTapped() {
-        guard let text = commentTextField.text, !text.isEmpty else { return }
+    private func setupRx() {
+           followButton.rx.tap
+               .bind(with: self) { owner, _ in
+                   owner.handleFollowButtonTap()
+               }
+               .disposed(by: disposeBag)
+           
+           sendButton.rx.tap
+               .bind(with: self) { owner, _ in
+                   owner.handleSendButtonTap()
+               }
+               .disposed(by: disposeBag)
+       }
 
-        guard let postID = post?.postId else {
-            print("Post ID를 찾을 수 없습니다.")
-            return
-        }
-        
-        guard let userID = post?.creator.userId else {
+    private func handleFollowButtonTap() {
+           print("팔로우 버튼 탭")
+           
+           isFollowing.toggle()
+           
+           let newTitle = isFollowing ? "수정중" : "수정"
+           let newColor = isFollowing ? UIColor.orange : UIColor.systemBlue
+           
+           AnimationZip.animateButtonPress(followButton)
+           
+           DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+               self?.followButton.setTitle(newTitle, for: .normal)
+               self?.followButton.backgroundColor = newColor
+           }
+       }
+       
+       private func handleSendButtonTap() {
+           guard let text = commentTextField.text, !text.isEmpty else { return }
+           guard let postID = post?.postId else {
+               print("Post ID를 찾을 수 없습니다.")
+               return
+           }
+           guard let userID = post?.creator.userId else {
                print("User ID를 찾을 수 없습니다.")
                return
            }
-        
-        print("사용할 Post ID: \(postID)")
+           
+           print("사용할 Post ID: \(postID)")
 
-        // 댓글 작성 요청을 보냅니다.
-        PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
-            switch result {
-            case .success:
-                print("댓글 작성 성공!")
-
-                // 댓글 작성 후, 최신 포스트 데이터를 다시 불러옵니다.👍
-                self?.fetchLatestPostData(userID: userID)
-
-                // 텍스트 필드를 초기화합니다.
-                self?.commentTextField.text = ""
-
-            case .failure(let error):
-                print("댓글 작성 실패: \(error.localizedDescription)")
-                self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요.")
-            }
-        }
-    }
+           PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
+               switch result {
+               case .success:
+                   print("댓글 작성 성공!")
+                   self?.fetchLatestPostData(userID: userID)
+                   self?.commentTextField.text = ""
+               case .failure(let error):
+                   print("댓글 작성 실패: \(error.localizedDescription)")
+                   self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요.")
+               }
+           }
+       }
 
     private func fetchLatestPostData(userID: String) {
         let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
@@ -136,24 +161,7 @@ final class DetailViewController: BaseDetailView {
 
 
 
-    @objc func followButtonTapped() {
-        print("팔로우 버튼 탭")
-        
-        // 현재 상태에 따라 버튼 제목과 배경색을 토글
-        isFollowing.toggle()
-        
-        let newTitle = isFollowing ? "수정중" : "수정"
-        let newColor = isFollowing ? UIColor.orange : UIColor.systemBlue
-        
-        // 애니메이션 적용
-        AnimationZip.animateButtonPress(followButton)
-        
-        // 버튼의 제목과 배경색을 변경
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.followButton.setTitle(newTitle, for: .normal)
-            self.followButton.backgroundColor = newColor
-        }
-    }
+
     
 }
 

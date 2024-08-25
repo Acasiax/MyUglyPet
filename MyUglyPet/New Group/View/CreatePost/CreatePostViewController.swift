@@ -14,7 +14,7 @@ import PhotosUI
 
 final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
-    let disposeBag = DisposeBag()  // DisposeBag 초기화
+    private let disposeBag = DisposeBag()  // DisposeBag 초기화
     
     let submitButton: UIButton = {
         let button = UIButton(type: .system)
@@ -148,23 +148,23 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         // 텍스트 뷰의 입력을 관찰하여 버튼 활성화 상태 업데이트
         reviewTextView.rx.text.orEmpty
             .map { $0.count >= 5 }
-            .subscribe(onNext: { [weak self] isEnabled in
-                self?.submitButton.isEnabled = isEnabled
-                self?.submitButton.backgroundColor = isEnabled ? .orange : .lightGray
-            })
+            .bind(with: self) { owner, isEnabled in
+                owner.submitButton.isEnabled = isEnabled
+                owner.submitButton.backgroundColor = isEnabled ? .orange : .lightGray
+            }
             .disposed(by: disposeBag)
         
         // 사진 첨부 버튼 클릭 이벤트 처리
         photoAttachmentButton.rx.tap
-            .bind { [weak self] in
-                self?.photoAttachmentButtonTapped()
+            .bind(with: self) { owner, _ in
+                owner.photoAttachmentButtonTapped()
             }
             .disposed(by: disposeBag)
         
         // 작성 완료 버튼 클릭 이벤트 처리
         submitButton.rx.tap
-            .bind { [weak self] in
-                self?.submitButtonTapped()
+            .bind(with: self) { owner,_  in
+                owner.submitButtonTapped()
             }
             .disposed(by: disposeBag)
     }
@@ -199,7 +199,74 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             uploadImagesAndPost()
         }
     }
+    
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if let text = textView.text {
+            characterCountLabel.text = "\(text.count)"
+            
+            if text.count >= 5 {
+                submitButton.isEnabled = true
+                submitButton.backgroundColor = .orange
+            } else {
+                submitButton.isEnabled = false
+                submitButton.backgroundColor = .lightGray
+            }
+        }
+    }
+    
+    func addSelectedImage(_ image: UIImage) {
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 10
+        
+        let container = UIView()
+        container.layer.cornerRadius = 10
+        container.layer.borderColor = UIColor.lightGray.cgColor
+        container.layer.borderWidth = 1
+        container.addSubview(imageView)
+        
+        imageView.snp.makeConstraints { make in
+            make.edges.equalTo(container)
+            make.width.height.equalTo(90)
+        }
+        
+        let deleteButton = UIButton()
+        deleteButton.setTitle("x", for: .normal)
+        deleteButton.setTitleColor(.white, for: .normal)
+        deleteButton.backgroundColor = .black.withAlphaComponent(0.7)
+        deleteButton.layer.cornerRadius = 10
+        container.addSubview(deleteButton)
+        
+        deleteButton.snp.makeConstraints { make in
+            make.top.right.equalTo(container).inset(5)
+            make.width.height.equalTo(20)
+        }
+        
+        imageContainerStackView.addArrangedSubview(container)
+        selectedImages.append(container)
+        updatePhotoCountLabel()
+        
+        // RxSwift를 사용하여 버튼 이벤트 처리
+        deleteButton.rx.tap
+            .bind(with: self) { owner, _ in
+                if let index = owner.selectedImages.firstIndex(of: container) {
+                    owner.selectedImages[index].removeFromSuperview()
+                    owner.selectedImages.remove(at: index)
+                    owner.updatePhotoCountLabel()
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+
+    
+    func updatePhotoCountLabel() {
+        let count = selectedImages.count
+        photoCountLabel.text = "\(count)/5"
+    }
 }
+
 
 // MARK: - 이미지, 게시글 업로드 함수
 extension CreatePostViewController {

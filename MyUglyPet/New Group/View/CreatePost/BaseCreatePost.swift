@@ -98,66 +98,6 @@ extension CreatePostViewController {
         }
     }
 
-    func textViewDidChange(_ textView: UITextView) {
-        if let text = textView.text {
-            characterCountLabel.text = "\(text.count)"
-            
-            if text.count >= 5 {
-                submitButton.isEnabled = true
-                submitButton.backgroundColor = .orange
-            } else {
-                submitButton.isEnabled = false
-                submitButton.backgroundColor = .lightGray
-            }
-        }
-    }
-    
-    func addSelectedImage(_ image: UIImage) {
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
-        
-        let container = UIView()
-        container.layer.cornerRadius = 10
-        container.layer.borderColor = UIColor.lightGray.cgColor
-        container.layer.borderWidth = 1
-        container.addSubview(imageView)
-        
-        imageView.snp.makeConstraints { make in
-            make.edges.equalTo(container)
-            make.width.height.equalTo(90)
-        }
-        
-        let deleteButton = UIButton()
-        deleteButton.setTitle("x", for: .normal)
-        deleteButton.setTitleColor(.white, for: .normal)
-        deleteButton.backgroundColor = .black.withAlphaComponent(0.7)
-        deleteButton.layer.cornerRadius = 10
-        deleteButton.addTarget(self, action: #selector(deleteImage(_:)), for: .touchUpInside)
-        container.addSubview(deleteButton)
-        
-        deleteButton.snp.makeConstraints { make in
-            make.top.right.equalTo(container).inset(5)
-            make.width.height.equalTo(20)
-        }
-        
-        imageContainerStackView.addArrangedSubview(container)
-        selectedImages.append(container)
-        updatePhotoCountLabel()
-    }
-    
-    @objc func deleteImage(_ sender: UIButton) {
-        if let container = sender.superview, let index = selectedImages.firstIndex(of: container) {
-            selectedImages[index].removeFromSuperview()
-            selectedImages.remove(at: index)
-            updatePhotoCountLabel()
-        }
-    }
-    
-    func updatePhotoCountLabel() {
-        let count = selectedImages.count
-        photoCountLabel.text = "\(count)/5"
-    }
+   
 }
 

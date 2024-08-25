@@ -11,6 +11,8 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 // Delegate 프로토콜 정의
 protocol CommentTableViewCellDelegate: AnyObject {
@@ -22,6 +24,7 @@ final class CommentTableViewCell: UITableViewCell {
     // Delegate 변수 선언
     weak var delegate: CommentTableViewCellDelegate?
     var postId: String?
+    private let disposeBag = DisposeBag()
     
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -73,7 +76,7 @@ final class CommentTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
         configureConstraints()
-        configureActions()
+        configureBindings()
     }
     
     required init?(coder: NSCoder) {
@@ -123,13 +126,14 @@ final class CommentTableViewCell: UITableViewCell {
         }
     }
     
-    private func configureActions() {
-        deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
-    }
-    
-    @objc private func didTapDeleteButton() {
-        print("삭제 버튼이 눌렸습니다.")
-        delegate?.didTapDeleteButton(in: self)
+    private func configureBindings() {
+        // deleteButton의 탭 이벤트를 Rx로 바인딩
+        deleteButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("삭제 버튼이 눌렸습니다.")
+                owner.delegate?.didTapDeleteButton(in: owner)
+            }
+            .disposed(by: disposeBag)
     }
     
     func configure(with profileImageURL: String?, username: String, date: String, comment: String) {
