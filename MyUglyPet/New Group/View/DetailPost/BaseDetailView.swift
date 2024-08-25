@@ -307,10 +307,16 @@ class BaseDetailView: UIViewController {
             make.width.height.equalTo(24)
         }
         
-        commentTextField.snp.makeConstraints { make in
-            make.left.equalTo(attachmentButton.snp.right).offset(10)
-            make.centerY.equalTo(commentInputView)
-        }
+//        commentTextField.snp.makeConstraints { make in
+//            make.left.equalTo(attachmentButton.snp.right).offset(10)
+//            make.centerY.equalTo(commentInputView)
+//        }
+         commentTextField.snp.makeConstraints { make in
+             make.top.bottom.equalTo(commentInputView)
+             make.left.equalTo(commentInputView.snp.left).offset(40)
+             make.right.equalTo(commentInputView.snp.right)
+         }
+
         
         sendButton.snp.makeConstraints { make in
             make.right.equalTo(commentInputView).inset(10)

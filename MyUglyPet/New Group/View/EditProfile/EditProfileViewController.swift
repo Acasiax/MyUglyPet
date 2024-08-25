@@ -73,11 +73,22 @@ class EditProfileViewController: UIViewController {
         return button
     }()
 
-    // MARK: - Lifecycle
+    // Labels to be updated
+    private var followersLabel: UILabel?
+    private var postsLabel: UILabel?
+    private var followingLabel: UILabel?
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchMyProfile()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
+    
+    private var myProfile: MyProfileResponse?
 
     // MARK: - UI Setup
     private func setupUI() {
@@ -87,28 +98,30 @@ class EditProfileViewController: UIViewController {
         setupStatsArea()
         setupButtonsArea()
         setupBottomArea()
-        
-        setupConstraints()
     }
     
     private func setupProfileArea() {
         view.addSubview(profileImageView)
         view.addSubview(nameLabel)
         view.addSubview(emailLabel)
+        
+        setupProfileAreaConstraints()
     }
     
     private func setupStatsArea() {
-        let followersLabel = labelUI(number: "3,680", title: "팔로우")
-        let postsLabel = labelUI(number: "57", title: "게시물수")
-        let followingLabel = labelUI(number: "782", title: "팔로잉")
+        followersLabel = labelUI(number: "0", title: "팔로워")
+        postsLabel = labelUI(number: "0", title: "게시물수")
+        followingLabel = labelUI(number: "0", title: "팔로잉")
         
-        statsStackView.addArrangedSubview(followersLabel)
-        statsStackView.addArrangedSubview(postsLabel)
-        statsStackView.addArrangedSubview(followingLabel)
+        statsStackView.addArrangedSubview(followersLabel!)
+        statsStackView.addArrangedSubview(postsLabel!)
+        statsStackView.addArrangedSubview(followingLabel!)
         
         view.addSubview(statsStackView)
+        
+        setupStatsAreaConstraints()
     }
-    
+
     private func setupButtonsArea() {
         let buttons = [
             buttonUI(title: "게시물 관리", iconName: "doc.text", action: #selector(handlePostManagement)),
@@ -120,16 +133,20 @@ class EditProfileViewController: UIViewController {
         
         buttons.forEach { buttonsStackView.addArrangedSubview($0) }
         view.addSubview(buttonsStackView)
+        
+        setupButtonsAreaConstraints()
     }
     
     private func setupBottomArea() {
         view.addSubview(alertLabel)
         view.addSubview(logoutButton)
         view.addSubview(settingsButton)
+        
+        setupBottomAreaConstraints()
     }
 
-    // MARK: - Constraints
-    private func setupConstraints() {
+    // MARK: - Constraints Setup
+    private func setupProfileAreaConstraints() {
         profileImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.centerX.equalToSuperview()
@@ -145,18 +162,24 @@ class EditProfileViewController: UIViewController {
             make.top.equalTo(nameLabel.snp.bottom).offset(5)
             make.centerX.equalToSuperview()
         }
-        
+    }
+    
+    private func setupStatsAreaConstraints() {
         statsStackView.snp.makeConstraints { make in
             make.top.equalTo(emailLabel.snp.bottom).offset(20)
             make.left.right.equalToSuperview().inset(20)
             make.height.equalTo(50)
         }
-        
+    }
+    
+    private func setupButtonsAreaConstraints() {
         buttonsStackView.snp.makeConstraints { make in
             make.top.equalTo(statsStackView.snp.bottom).offset(20)
             make.left.right.equalToSuperview().inset(20)
         }
-        
+    }
+    
+    private func setupBottomAreaConstraints() {
         alertLabel.snp.makeConstraints { make in
             make.top.equalTo(buttonsStackView.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
@@ -223,5 +246,32 @@ class EditProfileViewController: UIViewController {
     
     @objc private func handleSettings() {
         print("설정 버튼 눌림")
+    }
+}
+
+extension EditProfileViewController {
+    
+    // 내 프로필 가져오기
+    func fetchMyProfile() {
+        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.myProfile = profile
+                print("내 프로필 가져오는데 성공했어요🥰", profile)
+                self?.updateUIWithProfileData()
+            case .failure(let error):
+                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    // 프로필 데이터를 기반으로 UI 업데이트
+    private func updateUIWithProfileData() {
+        guard let profile = myProfile else { return }
+        
+        // 팔로워, 팔로잉, 게시물 수 업데이트
+        followersLabel?.text = "\(profile.followers.count)\n팔로워"
+        followingLabel?.text = "\(profile.following.count)\n팔로잉"
+        postsLabel?.text = "\(profile.posts.count)\n게시물수"
     }
 }

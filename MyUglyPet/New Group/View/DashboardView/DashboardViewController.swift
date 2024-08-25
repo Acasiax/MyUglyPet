@@ -130,7 +130,7 @@ class DashboardViewController: UIViewController {
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 100)
         layout.minimumLineSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(HobbyCardCollectionViewCell.self, forCellWithReuseIdentifier: HobbyCardCollectionViewCell.identifier)
+        collectionView.register(MyBuddyCardCollectionViewCell.self, forCellWithReuseIdentifier: MyBuddyCardCollectionViewCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = CustomColors.softPurple
         return collectionView
@@ -330,7 +330,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                return cell
             
         case hobbyCardCollectionView:
-                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HobbyCardCollectionViewCell.identifier, for: indexPath) as! HobbyCardCollectionViewCell
+                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
                   
                   let post = serverPosts[indexPath.row]
                   cell.postID = post.postId
@@ -495,7 +495,7 @@ extension DashboardViewController {
                // print("    포함된 포스트 \(postIndex + 1): 타이틀: \(post.title ?? "제목 없음"), 파일 URL: \(post.files ?? [])")
             }
             
-            print("========================\n")
+          //  print("========================\n")
         }
         
         self.rankedGroups = rankedGroups

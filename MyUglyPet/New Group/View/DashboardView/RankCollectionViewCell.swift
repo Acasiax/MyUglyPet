@@ -56,7 +56,7 @@ class BannerCollectionViewCell: UICollectionViewCell {
     }
 }
 
-class HobbyCardCollectionViewCell: UICollectionViewCell {
+class MyBuddyCardCollectionViewCell: UICollectionViewCell {
 
     var postID: String?
     var userID: String?

@@ -42,8 +42,8 @@ enum MainTab: CaseIterable {
         let viewController: UIViewController
         switch self {
         case .music: viewController = DashboardViewController()
-        case .movies: viewController = AllPostHomeViewController()
-        case .podcast: viewController = MainHomeViewController()
+        case .movies: viewController = MainHomeViewController()
+        case .podcast: viewController = AllPostHomeViewController()
         case .books: viewController = NameInputViewController()
         case .search: viewController = EditProfileViewController()
         }
