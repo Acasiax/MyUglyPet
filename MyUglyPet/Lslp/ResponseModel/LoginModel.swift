@@ -5,10 +5,6 @@
 //  Created by jack on 7/24/24.
 //
 
-
-
-
-
 import Foundation
 
 struct LoginModel: Decodable {

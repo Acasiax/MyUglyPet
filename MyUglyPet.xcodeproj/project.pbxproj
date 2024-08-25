@@ -22,6 +22,7 @@
 		AA6474362C7B29FB0079ECE0 /* GameViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */; };
 		AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */; };
 		AA64743A2C7B2FC20079ECE0 /* AllPostTableCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */; };
+		AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -101,6 +102,7 @@
 		AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewServerLogic.swift; sourceTree = "<group>"; };
 		AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewLayout.swift; sourceTree = "<group>"; };
 		AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableCellLayout.swift; sourceTree = "<group>"; };
+		AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostUI.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -273,8 +275,8 @@
 				AA6474232C7A35650079ECE0 /* EditProfile */,
 				AA72737E2C739784007551C4 /* DashboardView */,
 				AA7273212C70F891007551C4 /* LoginView */,
-				AA72730D2C705ED9007551C4 /* DetailPost */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
+				AA72730D2C705ED9007551C4 /* DetailPost */,
 				AA7273062C704075007551C4 /* CreatePost */,
 			);
 			path = View;
@@ -306,6 +308,7 @@
 			children = (
 				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
 				AA7273592C71DA95007551C4 /* BaseCreatePost.swift */,
+				AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */,
 			);
 			path = CreatePost;
 			sourceTree = "<group>";
@@ -585,6 +588,7 @@
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
 				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,
 				AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */,
+				AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */,
 				AA64742B2C7B23600079ECE0 /* MainHomeUI.swift in Sources */,
 				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
 				AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */,

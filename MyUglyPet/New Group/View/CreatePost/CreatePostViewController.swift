@@ -16,116 +16,24 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
 
     private let disposeBag = DisposeBag()  // DisposeBag 초기화
     
-    let submitButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("작성 완료", for: .normal)
-        button.backgroundColor = UIColor.lightGray
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 5
-        button.isEnabled = false
-        return button
-    }()
-    
-    let characterCountLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .lightGray
-        return label
-    }()
-    
-    let minimumTextLabel: UILabel = {
-        let label = UILabel()
-        label.text = "/ 최소5자"
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .lightGray
-        return label
-    }()
-    
-    let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.showsHorizontalScrollIndicator = false
-        return scrollView
-    }()
-    
-    let imageContainerStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.alignment = .center
-        return stackView
-    }()
-    
-    let photoAttachmentButton: UIButton = {
-        let button = UIButton()
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 1
-        button.layer.cornerRadius = 10
-        button.backgroundColor = CustomColors.softPink.withAlphaComponent(0.5)
-        return button
-    }()
-    
-    let cameraIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "camera"))
-        imageView.tintColor = .white
-        return imageView
-    }()
-    
-    let photoCountLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0/5"
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .lightGray
-        return label
-    }()
-    
-    let rewardLabel: UILabel = {
-        let label = UILabel()
-        label.text = "사진 첨부 시 150M → 500M 지급"
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .orange
-        return label
-    }()
-    
-    let guidelineLabel: UILabel = {
-        let label = UILabel()
-        label.text = "반려동물의 소개글을 5자 이상 남겨주시면 다른 냥멍집사에게도 도움이 됩니다."
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .gray
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    let titleTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "게시글 제목을 입력하세요(필수*)"
-        textField.borderStyle = .none
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.layer.borderWidth = 1
-        textField.layer.cornerRadius = 5
-        textField.backgroundColor = .white
-        return textField
-    }()
-    
-    let reviewTextView: UITextView = {
-        let textView = UITextView()
-        textView.layer.borderColor = UIColor.lightGray.cgColor
-        textView.layer.borderWidth = 1
-        textView.layer.cornerRadius = 5
-        textView.font = UIFont.systemFont(ofSize: 16)
-        return textView
-    }()
-    
-    let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.hidesWhenStopped = true
-        indicator.color = .gray
-        return indicator
-    }()
+    // UI 요소들을 구조체를 통해 초기화
+     let submitButton = NewPostUI.submitButtonUI()
+     let characterCountLabel = NewPostUI.characterCountLabelUI()
+     let minimumTextLabel = NewPostUI.minimumTextLabelUI()
+     let scrollView = NewPostUI.scrollViewUI()
+     let imageContainerStackView = NewPostUI.imageContainerStackViewUI()
+     let photoAttachmentButton = NewPostUI.photoAttachmentButtonUI()
+     let cameraIcon = NewPostUI.cameraIconUI()
+     let photoCountLabel = NewPostUI.photoCountLabelUI()
+     let rewardLabel = NewPostUI.rewardLabelUI()
+     let guidelineLabel = NewPostUI.guidelineLabelUI()
+     let titleTextField = NewPostUI.titleTextFieldUI()
+     let reviewTextView = NewPostUI.reviewTextViewUI()
+     let activityIndicator = NewPostUI.activityIndicatorUI()
 
-    var selectedImageData: Data?
-    var selectedImages: [UIView] = []
+     var selectedImageData: Data?
+     var selectedImages: [UIView] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -4,7 +4,7 @@
 //
 //  Created by 이윤지 on 8/18/24.
 //
-//TabBarControllerFactory.createMainTabBarController()
+
 import UIKit
 
 class SetupScene {
