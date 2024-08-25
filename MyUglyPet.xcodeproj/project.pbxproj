@@ -24,6 +24,7 @@
 		AA64743A2C7B2FC20079ECE0 /* AllPostTableCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */; };
 		AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */; };
 		AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */; };
+		AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -105,6 +106,7 @@
 		AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableCellLayout.swift; sourceTree = "<group>"; };
 		AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostUI.swift; sourceTree = "<group>"; };
 		AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
+		AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewServerLogic.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */,
 				AA7273592C71DA95007551C4 /* CreatePostViewLayout.swift */,
 				AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */,
+				AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */,
 			);
 			path = CreatePost;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
 				AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */,
 				AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */,
+				AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */,
 				AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */,
 				AA72735A2C71DA95007551C4 /* CreatePostViewLayout.swift in Sources */,
 				AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */,

@@ -17,7 +17,6 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
     private let disposeBag = DisposeBag()
     private let viewModel = CreatePostViewModel()
 
-    // UI 요소들을 구조체를 통해 초기화
     let submitButton = NewPostUI.submitButtonUI()
     let characterCountLabel = NewPostUI.characterCountLabelUI()
     let minimumTextLabel = NewPostUI.minimumTextLabelUI()
@@ -32,9 +31,11 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
     let reviewTextView = NewPostUI.reviewTextViewUI()
     let activityIndicator = NewPostUI.activityIndicatorUI()
 
+    // MARK: - 상태 관리 변수
     var selectedImageData: Data?
     var selectedImages: [UIView] = []
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.lightBeige
@@ -46,6 +47,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         setupBindings()
     }
     
+    // MARK: - 데이터 바인딩 설정
     private func setupBindings() {
         let input = CreatePostViewModel.Input(
             reviewText: reviewTextView.rx.text.orEmpty.asObservable()
@@ -79,19 +81,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             .disposed(by: disposeBag)
     }
 
-    func photoAttachmentButtonTapped() {
-        print("카메라 버튼 탭")
-        AnimationZip.animateButtonPress(photoAttachmentButton)
-
-        var config = PHPickerConfiguration()
-        config.filter = .images
-        config.selectionLimit = 1
-        
-        let picker = PHPickerViewController(configuration: config)
-        picker.delegate = self
-        present(picker, animated: true, completion: nil)
-    }
-    
+    // MARK: - 게시글 제출
     func submitButtonTapped() {
         print(selectedImages.count)
         print(selectedImages.debugDescription)
@@ -109,6 +99,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         }
     }
 
+    // MARK: - 텍스트뷰 변경 처리
     func textViewDidChange(_ textView: UITextView) {
         if let text = textView.text {
             characterCountLabel.text = "\(text.count)"
@@ -123,6 +114,47 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         }
     }
 
+    // MARK: - 사진 수 업데이트
+    func updatePhotoCountLabel() {
+        let count = selectedImages.count
+        photoCountLabel.text = "\(count)/5"
+    }
+}
+
+// MARK: - PHPicker 사진 선택
+extension CreatePostViewController: PHPickerViewControllerDelegate {
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        if let itemProvider = results.first?.itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard let self = self else { return }
+                
+                if let image = image as? UIImage {
+                    DispatchQueue.main.async {
+                        self.addSelectedImage(image)
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - 사진 첨부 버튼 클릭 처리
+    func photoAttachmentButtonTapped() {
+        print("카메라 버튼 탭")
+        AnimationZip.animateButtonPress(photoAttachmentButton)
+
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
+    }
+    
+    // MARK: - 선택한 사진 추가
     func addSelectedImage(_ image: UIImage) {
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
@@ -166,125 +198,5 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
                 }
             }
             .disposed(by: disposeBag)
-    }
-
-    func updatePhotoCountLabel() {
-        let count = selectedImages.count
-        photoCountLabel.text = "\(count)/5"
-    }
-}
-
-// MARK: - 이미지, 게시글 업로드 함수
-extension CreatePostViewController {
-    
-    func uploadImagesAndPost() {
-        var uploadedImageUrls: [String] = []
-        let dispatchGroup = DispatchGroup()
-
-        for (index, imageViewContainer) in selectedImages.enumerated() {
-            print("처리 중인 이미지 인덱스: \(index)")
-            
-            guard let imageView = imageViewContainer.subviews.first as? UIImageView,
-                  let image = imageView.image,
-                  let imageData = image.jpegData(compressionQuality: 0.8) else {
-                print("이미지 데이터 생성 실패")
-                continue
-            }
-            
-            print("이미지 데이터 크기: \(imageData.count) bytes")
-            
-            dispatchGroup.enter()
-            
-            let imageUploadQuery = ImageUploadQuery(files: imageData)
-            
-            PostNetworkManager.shared.uploadPostImage(query: imageUploadQuery) { result in
-                switch result {
-                case .success(let imageUrls):
-                    if imageUrls.isEmpty {
-                        print("서버에서 빈 이미지 URL 배열을 반환했습니다.")
-                    } else {
-                        print("이미지 업로드 성공!!: \(imageUrls)")
-                        uploadedImageUrls.append(contentsOf: imageUrls)
-                    }
-                case .failure(let error):
-                    print("이미지 업로드 실패: \(error.localizedDescription)")
-                }
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.notify(queue: .main) {
-            if uploadedImageUrls.isEmpty {
-                print("모든 이미지 업로드 실패")
-                let alert = UIAlertController(title: "오류", message: "모든 이미지 업로드에 실패했습니다.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
-                self.uploadPost(withImageURLs: uploadedImageUrls)
-            }
-        }
-    }
-
-    func uploadPost(withImageURLs imageUrls: [String]) {
-        activityIndicator.startAnimating()
-        
-        guard let title = titleTextField.text, !title.isEmpty else {
-            print("게시글 제목이 비어있습니다.")
-            return
-        }
-        let content = reviewTextView.text ?? ""
-        let productId: String? = "allFeed"
-
-        print("업로드할 이미지 URL: \(imageUrls)")
-
-        PostNetworkManager.shared.createPost(
-            title: title,
-            content: content,
-            content1: "",
-            productId: productId,
-            fileURLs: imageUrls
-        ) { result in
-            self.activityIndicator.stopAnimating()
-            
-            switch result {
-            case .success:
-                print("게시글 업로드 성공")
-                self.reviewTextView.text = ""
-                self.selectedImages.removeAll()
-                self.updatePhotoCountLabel()
-                self.updateSubmitButtonState()
-                
-                let readingAllPostHomeVC = AllPostHomeViewController()
-                self.navigationController?.pushViewController(readingAllPostHomeVC, animated: true)
-            case .failure(let error):
-                print("게시글 업로드 실패: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func updateSubmitButtonState() {
-        let isTextValid = reviewTextView.text.count >= 5
-        submitButton.isEnabled = isTextValid
-        submitButton.backgroundColor = isTextValid ? .orange : .lightGray
-    }
-}
-
-// MARK: - PHPicker 사진 선택
-extension CreatePostViewController: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true, completion: nil)
-        
-        if let itemProvider = results.first?.itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                guard let self = self else { return }
-                
-                if let image = image as? UIImage {
-                    DispatchQueue.main.async {
-                        self.addSelectedImage(image)
-                    }
-                }
-            }
-        }
     }
 }
