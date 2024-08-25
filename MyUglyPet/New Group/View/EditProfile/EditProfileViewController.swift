@@ -7,299 +7,223 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
-class EditProfileViewController: UIViewController {
-
-    // MARK: - UI Components
-    private lazy var profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = UIColor.systemGray2
-        return imageView
-    }()
+final class EditProfileViewController: UIViewController {
     
-    private lazy var nameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "홍길동"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
+    lazy var profileImageButton = EditProfileUI.profileImageButton()
+    lazy var userNameLabel = EditProfileUI.userNameLabel()
+    lazy var userEmailLabel = EditProfileUI.userEmailLabel()
+    lazy var profileStatsStackView = EditProfileUI.profileStatsStackView()
+    lazy var notificationLabel = EditProfileUI.notificationLabel()
+    lazy var logoutButton = EditProfileUI.logoutButton()
+    lazy var deleteAccountButton = EditProfileUI.deleteAccountButton()
+    lazy var managePostsButton = EditProfileUI.managePostsButton()
+    lazy var editProfileButton = EditProfileUI.editProfileButton()
+    lazy var viewFollowingButton = EditProfileUI.viewFollowingButton()
+    lazy var viewFollowersButton = EditProfileUI.viewFollowersButton()
+    lazy var buttonStackView = EditProfileUI.buttonStackView(withButtons: [
+        managePostsButton, editProfileButton, viewFollowingButton, viewFollowersButton
+    ])
     
-    private lazy var emailLabel: UILabel = {
-        let label = UILabel()
-        label.text = "hongildong@email.address"
-        label.textColor = UIColor.systemOrange
-        return label
-    }()
+    private let disposeBag = DisposeBag()
     
-    private lazy var statsStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        return stackView
-    }()
+    var followersCountLabel: UILabel?
+    var postsCountLabel: UILabel?
+    var followingCountLabel: UILabel?
     
-    private lazy var buttonsStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 15
-        return stackView
-    }()
+    var userProfile: MyProfileResponse?
     
-    private lazy var alertLabel: UILabel = {
-        let label = UILabel()
-        label.text = "2.0 베타 버전이 완료되었습니다. 확인 부탁드립니다."
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .systemGray
-        return label
-    }()
-    
-    private lazy var logoutButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("로그아웃", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var settingsButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("설정", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
-        return button
-    }()
-
-    // Labels to be updated
-    private var followersLabel: UILabel?
-    private var postsLabel: UILabel?
-    private var followingLabel: UILabel?
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchMyProfile()
-       
+        fetchUserProfile()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = CustomColors.softIvory
         setupUI()
-       
+        bindButtons()
     }
     
-    private var myProfile: MyProfileResponse?
-
-    // MARK: - UI Setup
+    // MARK: - UI 설정
+    
     private func setupUI() {
-        view.backgroundColor = UIColor.systemGray6
-        
-        setupProfileArea()
-        setupStatsArea()
-        setupButtonsArea()
-        setupBottomArea()
+        setupProfileSection()
+        setupStatsSection()
+        setupBottomSection()
     }
     
-    private func setupProfileArea() {
-        view.addSubview(profileImageView)
-        view.addSubview(nameLabel)
-        view.addSubview(emailLabel)
+    private func setupProfileSection() {
+        view.addSubview(profileImageButton)
+        view.addSubview(userNameLabel)
+        view.addSubview(userEmailLabel)
         
-        setupProfileAreaConstraints()
+        setupProfileSectionConstraints()
     }
     
-    private func setupStatsArea() {
-        followersLabel = labelUI(number: "0", title: "팔로워")
-        postsLabel = labelUI(number: "0", title: "전체 게시물수")
-        followingLabel = labelUI(number: "0", title: "팔로잉")
+    private func setupStatsSection() {
+        followersCountLabel = EditProfileUI.statLabel(number: "0", title: "팔로워")
+        postsCountLabel = EditProfileUI.statLabel(number: "0", title: "전체 게시물수")
+        followingCountLabel = EditProfileUI.statLabel(number: "0", title: "팔로잉")
         
-        statsStackView.addArrangedSubview(followersLabel!)
-        statsStackView.addArrangedSubview(postsLabel!)
-        statsStackView.addArrangedSubview(followingLabel!)
+        profileStatsStackView.addArrangedSubview(followersCountLabel!)
+        profileStatsStackView.addArrangedSubview(postsCountLabel!)
+        profileStatsStackView.addArrangedSubview(followingCountLabel!)
         
-        view.addSubview(statsStackView)
+        view.addSubview(profileStatsStackView)
         
-        setupStatsAreaConstraints()
-    }
-
-    private func setupButtonsArea() {
-        let buttons = [
-            buttonUI(title: "게시물 관리", iconName: "doc.text", action: #selector(handlePostManagement)),
-            buttonUI(title: "새 글 쓰기", iconName: "pencil", action: #selector(handleNewPost)),
-            buttonUI(title: "팔로잉 목록", iconName: "message", action: #selector(handleFollowing)),
-            buttonUI(title: "팔로워 목록", iconName: "chart.bar", action: #selector(handleFollowers)),
-            buttonUI(title: "프로필 관리", iconName: "person.circle", action: #selector(handleProfileManagement))
-        ]
-        
-        buttons.forEach { buttonsStackView.addArrangedSubview($0) }
-        view.addSubview(buttonsStackView)
-        
-        setupButtonsAreaConstraints()
+        setupStatsSectionConstraints()
     }
     
-    private func setupBottomArea() {
-        view.addSubview(alertLabel)
+    private func setupBottomSection() {
+        view.addSubview(buttonStackView)
+        view.addSubview(notificationLabel)
         view.addSubview(logoutButton)
-        view.addSubview(settingsButton)
+        view.addSubview(deleteAccountButton)
         
-        setupBottomAreaConstraints()
-    }
-
-    // MARK: - Constraints Setup
-    private func setupProfileAreaConstraints() {
-        profileImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(80)
-        }
-        
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
-            make.centerX.equalToSuperview()
-        }
-        
-        emailLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-        }
+        setupBottomSectionConstraints()
     }
     
-    private func setupStatsAreaConstraints() {
-        statsStackView.snp.makeConstraints { make in
-            make.top.equalTo(emailLabel.snp.bottom).offset(20)
-            make.left.right.equalToSuperview().inset(20)
-            make.height.equalTo(50)
-        }
-    }
-    
-    private func setupButtonsAreaConstraints() {
-        buttonsStackView.snp.makeConstraints { make in
-            make.top.equalTo(statsStackView.snp.bottom).offset(20)
-            make.left.right.equalToSuperview().inset(20)
-        }
-    }
-    
-    private func setupBottomAreaConstraints() {
-        alertLabel.snp.makeConstraints { make in
-            make.top.equalTo(buttonsStackView.snp.bottom).offset(20)
-            make.centerX.equalToSuperview()
-        }
-        
-        logoutButton.snp.makeConstraints { make in
-            make.top.equalTo(alertLabel.snp.bottom).offset(20)
-            make.left.equalToSuperview().inset(20)
-        }
-        
-        settingsButton.snp.makeConstraints { make in
-            make.top.equalTo(alertLabel.snp.bottom).offset(20)
-            make.right.equalToSuperview().inset(20)
-        }
-    }
-
-    // MARK: - Helper Methods
-    private func labelUI(number: String, title: String) -> UILabel {
-        let label = UILabel()
-        label.text = "\(number)\n\(title)"
-        label.numberOfLines = 2
-        label.textAlignment = .center
-        return label
-    }
-    
-    private func buttonUI(title: String, iconName: String, action: Selector) -> UIButton {
-        let button = UIButton()
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.setImage(UIImage(systemName: iconName), for: .normal)
-        button.tintColor = .systemBlue
-        button.imageView?.contentMode = .scaleAspectFit
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-        button.contentHorizontalAlignment = .left
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
     // MARK: - Action Methods
-    @objc private func handlePostManagement() {
-        print("게시물 관리 버튼 눌림")
-    }
     
-    @objc private func handleNewPost() {
-        print("새 글 쓰기 버튼 눌림")
-    }
-    
-    @objc private func handleFollowing() {
-        print("팔로잉 목록 버튼 눌림")
-    }
-    
-    @objc private func handleFollowers() {
-        print("팔로워 목록 버튼 눌림")
-    }
-    
-    @objc private func handleProfileManagement() {
-        print("프로필 관리 버튼 눌림")
-    }
-    
-    @objc private func handleLogout() {
-        print("로그아웃 버튼 눌림")
-    }
-    
-    @objc private func handleSettings() {
-        print("설정 버튼 눌림")
+    private func bindButtons() {
+        
+        profileImageButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.profileImageButton)
+                owner.handleProfileImageButtonTap()
+            }
+            .disposed(by: disposeBag)
+        
+        managePostsButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.managePostsButton)
+                owner.handleManagePostsButtonTap()
+            }
+            .disposed(by: disposeBag)
+        
+        editProfileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.editProfileButton)
+                owner.handleEditProfileButtonTap()
+            }
+            .disposed(by: disposeBag)
+        
+        viewFollowingButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.viewFollowingButton)
+                owner.handleViewFollowingButtonTap()
+            }
+            .disposed(by: disposeBag)
+        
+        viewFollowersButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.viewFollowersButton)
+                owner.handleViewFollowersButtonTap()
+            }
+            .disposed(by: disposeBag)
+        
+        logoutButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.logoutButton)
+                owner.handleLogout()
+            }
+            .disposed(by: disposeBag)
+        
+        deleteAccountButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.deleteAccountButton)
+                owner.deleteAccount()
+            }
+            .disposed(by: disposeBag)
     }
 }
 
 extension EditProfileViewController {
+    private func handleProfileImageButtonTap() {
+        print("프로필 이미지 버튼이 눌렸습니다.")
+    }
     
-    func deletePostID() {
-            guard let profile = myProfile else {
-                print("프로필 정보가 없습니다.")
-                return
-            }
-            
-            let postIDs = profile.posts
-            guard !postIDs.isEmpty else {
-                print("삭제할 포스트가 없습니다.")
-                return
-            }
-            
-            for postID in postIDs {
-                PostNetworkManager.shared.deletePost(postID: postID) { result in
-                    switch result {
-                    case .success:
-                        print("포스트 \(postID)가 성공적으로 삭제되었습니다.")
-                    case .failure(let error):
-                        print("포스트 \(postID) 삭제 중 오류 발생: \(error.localizedDescription)")
-                    }
+    private func handleManagePostsButtonTap() {
+        print("게시글 관리 버튼이 눌렸습니다.")
+    }
+    
+    private func handleEditProfileButtonTap() {
+        print("프로필 수정 버튼이 눌렸습니다.")
+    }
+    
+    private func handleViewFollowingButtonTap() {
+        print("팔로잉 목록 버튼이 눌렸습니다.")
+    }
+    
+    private func handleViewFollowersButtonTap() {
+        print("팔로워 목록 버튼이 눌렸습니다.")
+    }
+    
+    private func handleLogout() {
+        print("로그아웃 버튼 눌림")
+    }
+    
+    private func deleteAccount() {
+        print("탈퇴하기 버튼 눌림")
+    }
+}
+
+
+
+extension EditProfileViewController {
+    
+    func deleteAllPosts() {
+        guard let profile = userProfile else {
+            print("프로필 정보가 없습니다.")
+            return
+        }
+        
+        let postIDs = profile.posts
+        guard !postIDs.isEmpty else {
+            print("삭제할 포스트가 없습니다.")
+            return
+        }
+        
+        for postID in postIDs {
+            PostNetworkManager.shared.deletePost(postID: postID) { result in
+                switch result {
+                case .success:
+                    print("포스트 \(postID)가 성공적으로 삭제되었습니다.")
+                case .failure(let error):
+                    print("포스트 \(postID) 삭제 중 오류 발생: \(error.localizedDescription)")
                 }
             }
         }
-    
-    
+    }
     
     // 내 프로필 가져오기
-    func fetchMyProfile() {
+    func fetchUserProfile() {
         FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
             switch result {
             case .success(let profile):
-                self?.myProfile = profile
-                print("내 프로필 가져오는데 성공했어요🥰", profile)
+                self?.userProfile = profile
+                //   print("내 프로필 가져오는데 성공했어요🥰", profile)
                 self?.updateUIWithProfileData()
             case .failure(let error):
                 print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
             }
         }
     }
-
+    
     // 프로필 데이터를 기반으로 UI 업데이트
     private func updateUIWithProfileData() {
-        guard let profile = myProfile else { return }
+        guard let profile = userProfile else { return }
         
         // 팔로워, 팔로잉, 게시물 수 업데이트
-        followersLabel?.text = "\(profile.followers.count)\n팔로워"
-        followingLabel?.text = "\(profile.following.count)\n팔로잉"
-        postsLabel?.text = "\(profile.posts.count)\n게시물수"
+        userNameLabel.text = profile.nick
+        userEmailLabel.text = profile.email
+        followersCountLabel?.text = "\(profile.followers.count)\n팔로워"
+        followingCountLabel?.text = "\(profile.following.count)\n팔로잉"
+        postsCountLabel?.text = "\(profile.posts.count)\n게시물수"
     }
 }
+
+

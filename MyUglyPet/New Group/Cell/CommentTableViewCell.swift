@@ -1,6 +1,3 @@
-
-
-
 //
 //  CommentTableViewCell.swift
 //  MyUglyPet
