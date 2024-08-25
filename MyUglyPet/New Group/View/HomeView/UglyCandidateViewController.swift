@@ -15,6 +15,7 @@ import Alamofire
 class UglyCandidateViewController: UIViewController {
 
     let disposeBag = DisposeBag()
+    let viewModel = UglyCandidateViewModel()
 
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -69,13 +70,13 @@ class UglyCandidateViewController: UIViewController {
         return button
     }()
     
-    var selectedImageViews: [UIView] = []  // 선택된 이미지를 담은 UIView 배열
+    var selectedImage = BehaviorSubject<UIImage?>(value: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        setupBindings()
+        bindViewModel()
     }
 
     func setupViews() {
@@ -126,26 +127,43 @@ class UglyCandidateViewController: UIViewController {
         }
     }
 
-    func setupBindings() {
-        // 이미지 버튼 클릭 이벤트 처리
-        imageButton.rx.tap
+    func bindViewModel() {
+        let input = UglyCandidateViewModel.Input(
+            imageButtonTap: imageButton.rx.tap.asObservable(),
+            submitButtonTap: submitButton.rx.tap.asObservable(),
+            selectedImage: selectedImage.asObservable(),
+            photoTitle: helloNameTextField.rx.text.asObservable(),
+            userName: subtitleTextField.rx.text.asObservable()
+        )
+
+        let output = viewModel.transform(input: input)
+
+        output.presentImagePicker
             .bind(with: self) { owner, _ in
-                owner.imageButtonTapped()
+                owner.presentImagePicker()
             }
             .disposed(by: disposeBag)
 
-        // 제출 버튼 클릭 이벤트 처리
-        submitButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.submitButtonTapped()
+        output.validationError
+            .bind(with: self) { owner, message in
+                owner.showAlert(message: message)
+            }
+            .disposed(by: disposeBag)
+
+        output.uploadResult
+            .bind(with: self) { owner, result in
+                switch result {
+                case .success:
+                    print("업로드 성공")
+                    owner.resetForm()
+                case .failure(let error):
+                    owner.showAlert(message: "업로드 실패: \(error.localizedDescription)")
+                }
             }
             .disposed(by: disposeBag)
     }
 
-    func imageButtonTapped() {
-        print("이미지 버튼 탭!")
-        AnimationZip.animateButtonPress(imageButton)
-
+    func presentImagePicker() {
         var configuration = PHPickerConfiguration()
         configuration.selectionLimit = 1
         configuration.filter = .images
@@ -155,148 +173,19 @@ class UglyCandidateViewController: UIViewController {
         present(picker, animated: true, completion: nil)
     }
 
-    func submitButtonTapped() {
-        print("후보등록 버튼 클릭!")
-        AnimationZip.animateButtonPress(submitButton)
-
-        if validateFields() {
-            // 텍스트 필드와 선택된 이미지의 내용을 출력
-            if let photoTitle = helloNameTextField.text, let userName = subtitleTextField.text {
-                print("사진 제목: \(photoTitle)")
-                print("사용자 이름: \(userName)")
-            }
-            
-            if selectedImageViews.isEmpty {
-                uploadPost(withImageURLs: [])
-            } else {
-                uploadImagesAndPost()
-            }
-        }
-    }
-
-    func validateFields() -> Bool {
-        var errorMessage = ""
-        
-        if selectedImageViews.isEmpty {
-            errorMessage += "이미지를 선택해주세요.\n"
-        }
-        if helloNameTextField.text?.isEmpty ?? true {
-            errorMessage += "사진 제목을 입력해주세요.\n"
-        }
-        if subtitleTextField.text?.isEmpty ?? true {
-            errorMessage += "사용자 이름을 입력해주세요.\n"
-        }
-        
-        if !errorMessage.isEmpty {
-            showAlert(message: errorMessage)
-            return false
-        }
-        
-        return true
-    }
-
     func showAlert(message: String) {
-        let alert = UIAlertController(title: "필수 입력 항목 누락", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 
-    func addSelectedCandidateImage(_ image: UIImage) {
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-
-        let imageViewContainer = UIView()
-        imageViewContainer.addSubview(imageView)
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        selectedImageViews.append(imageViewContainer)
-        imageButton.setImage(image, for: .normal)
-    }
-
-    // MARK: - 이미지 및 게시글 업로드 함수
-    func uploadImagesAndPost() {
-        var uploadedImageUrls: [String] = []
-        let dispatchGroup = DispatchGroup()
-
-        for (index, imageViewContainer) in selectedImageViews.enumerated() {
-            print("처리 중인 이미지 인덱스: \(index)")
-            
-            guard let imageView = imageViewContainer.subviews.first as? UIImageView,
-                  let image = imageView.image,
-                  let imageData = image.jpegData(compressionQuality: 0.8) else {
-                print("이미지 데이터 생성 실패")
-                continue
-            }
-            
-            print("이미지 데이터 크기: \(imageData.count) bytes")
-            
-            dispatchGroup.enter()
-            
-            let imageUploadQuery = ImageUploadQuery(files: imageData)
-            
-            PostNetworkManager.shared.uploadPostImage(query: imageUploadQuery) { result in
-                switch result {
-                case .success(let imageUrls):
-                    if imageUrls.isEmpty {
-                        print("서버에서 빈 이미지 URL 배열을 반환했습니다.")
-                    } else {
-                        print("이미지 업로드 성공!!: \(imageUrls)")
-                        uploadedImageUrls.append(contentsOf: imageUrls)
-                    }
-                case .failure(let error):
-                    print("이미지 업로드 실패: \(error.localizedDescription)")
-                }
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.notify(queue: .main) {
-            if uploadedImageUrls.isEmpty {
-                print("모든 이미지 업로드 실패")
-                let alert = UIAlertController(title: "오류", message: "모든 이미지 업로드에 실패했습니다.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                print("모든 이미지 업로드 성공, 업로드된 이미지 URLs: \(uploadedImageUrls)")
-                self.uploadPost(withImageURLs: uploadedImageUrls)
-            }
-        }
-    }
-
-    func uploadPost(withImageURLs imageUrls: [String]) {
-        guard let photoTitle = helloNameTextField.text, !photoTitle.isEmpty else {
-            print("사진 제목이 없습니다.")
-            return
-        }
-        let userName = subtitleTextField.text ?? ""
-        let productId: String? = "못난이후보등록"
-
-        print("업로드할 이미지 URL: \(imageUrls)")
-
-        PostNetworkManager.shared.createPost(
-            title: photoTitle,
-            content: "",
-            content1: userName,
-            productId: productId,
-            fileURLs: imageUrls
-        ) { result in
-            switch result {
-            case .success:
-                print("게시글 업로드 성공")
-                self.helloNameTextField.text = ""
-                self.subtitleTextField.text = ""
-                self.selectedImageViews.removeAll()
-                self.imageButton.setImage(UIImage(named: "기본냥멍3"), for: .normal)
-            case .failure(let error):
-                print("게시글 업로드 실패: \(error.localizedDescription)")
-            }
-        }
+    func resetForm() {
+        helloNameTextField.text = ""
+        subtitleTextField.text = ""
+        selectedImage.onNext(nil)
+        imageButton.setImage(UIImage(named: "기본냥멍3"), for: .normal)
     }
 }
-
 
 // MARK: - PHPicker 사진 선택
 extension UglyCandidateViewController: PHPickerViewControllerDelegate {
@@ -309,11 +198,11 @@ extension UglyCandidateViewController: PHPickerViewControllerDelegate {
                 
                 if let image = image as? UIImage {
                     DispatchQueue.main.async {
-                        self.addSelectedCandidateImage(image)
+                        self.selectedImage.onNext(image)
+                        self.imageButton.setImage(image, for: .normal)
                     }
                 }
             }
         }
     }
 }
-
