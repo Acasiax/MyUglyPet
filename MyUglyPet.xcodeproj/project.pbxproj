@@ -28,6 +28,7 @@
 		AA6474452C7B42D30079ECE0 /* exam.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474442C7B42D30079ECE0 /* exam.swift */; };
 		AA6474472C7B672A0079ECE0 /* EditProfileViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */; };
 		AA6474492C7B69BE0079ECE0 /* EditProfileUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */; };
+		AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -113,6 +114,7 @@
 		AA6474442C7B42D30079ECE0 /* exam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exam.swift; sourceTree = "<group>"; };
 		AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewLayout.swift; sourceTree = "<group>"; };
 		AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileUI.swift; sourceTree = "<group>"; };
+		AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMapViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -220,6 +222,14 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		AA64744A2C7B7C4E0079ECE0 /* MyMapView */ = {
+			isa = PBXGroup;
+			children = (
+				AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */,
+			);
+			path = MyMapView;
+			sourceTree = "<group>";
+		};
 		AA7272A82C6C967C007551C4 = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +292,7 @@
 		AA7272E82C6DD8BF007551C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
 				AA7273092C704145007551C4 /* HomeView */,
 				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273072C704079007551C4 /* Gameview */,
@@ -593,6 +604,7 @@
 				AA7273542C71D032007551C4 /* Header.swift in Sources */,
 				AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
+				AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,
 				AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */,
