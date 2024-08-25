@@ -7,100 +7,48 @@
 
 import UIKit
 import MapKit
-import CoreLocation
 
-class MyMapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
-    var locationManager: CLLocationManager = {
-        let manager = CLLocationManager()
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        return manager
-    }()
+class MyMapViewController: UIViewController, MKMapViewDelegate {
     
     let mapView = MKMapView()
     let sesacCoordinate = CLLocationCoordinate2D(latitude: 37.51818789942772, longitude: 126.88541765534976) // 새싹 영등포 캠퍼스 위치
-    var hasReceivedLocation = false // 위치 업데이트를 한 번만 처리하기 위한 플래그
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        mapView.showsUserLocation = true
         // 지도 설정
         mapView.frame = view.bounds
         mapView.delegate = self
         view.addSubview(mapView)
         
-        // 델리게이트 설정
-        locationManager.delegate = self
-        // 사용자에게 위치 권한 요청
-        getLocationUsagePermission()
+        // 위치 권한 요청 및 위치 업데이트 시작
+        LocationManager.shared.requestLocationPermission()
+        LocationManager.shared.startUpdatingLocation()
+        
+        // 위치 업데이트 콜백 등록
+        LocationManager.shared.locationUpdateCallback = { [weak self] coordinate in
+            self?.updateMapLocation(coordinate)
+        }
         
         // 특정 위치에 핀 추가
         addCustomPin()
         
-        // 특정 위치로 이동
+        // 초기 지도 설정: 만약 사용자가 위치를 허용하지 않았을 경우, 새싹 캠퍼스로 기본 위치 설정
         mapView.setRegion(MKCoordinateRegion(center: sesacCoordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // viewWillAppear가 호출될 때 위치 업데이트 시작
-        checkUserLocationServicesAuthorization()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        // viewDidDisappear가 호출될 때 위치 업데이트 중지
-        locationManager.stopUpdatingLocation()
+        
+        // 확대/축소 버튼 추가
+        addZoomButtons()
     }
 
-    // 위치 권한 상태가 변경될 때마다 호출되는 메서드
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkUserLocationServicesAuthorization()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 위치 업데이트 중지
+        LocationManager.shared.stopUpdatingLocation()
     }
 
-    private func getLocationUsagePermission() {
-        self.locationManager.requestWhenInUseAuthorization()
-    }
-
-    private func checkUserLocationServicesAuthorization() {
-        if CLLocationManager.locationServicesEnabled() {
-            switch locationManager.authorizationStatus {
-            case .authorizedWhenInUse, .authorizedAlways:
-                // 권한이 있을 때만 위치 업데이트 시작
-                locationManager.startUpdatingLocation()
-                mapView.showsUserLocation = true
-                print("위치 업데이트를 시작합니다.")
-            case .denied, .restricted:
-                print("위치 접근이 거부되었거나 제한되었습니다.")
-                getLocationUsagePermission()
-            case .notDetermined:
-                print("위치 접근이 아직 결정되지 않았습니다.")
-                getLocationUsagePermission()
-            @unknown default:
-                print("새로운 상태가 도입되었습니다. 이에 대해 처리해야 합니다.")
-            }
-        } else {
-            print("위치 서비스가 활성화되지 않았습니다.")
-        }
-    }
-    
-    // 위치가 업데이트될 때 한 번만 위도와 경도를 받아옴
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last, !hasReceivedLocation {
-            hasReceivedLocation = true
-            print("위도: \(location.coordinate.latitude)")
-            print("경도: \(location.coordinate.longitude)")
-            
-            // 사용자의 현재 위치로 지도 이동
-            mapView.setRegion(MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-            
-            // 위치 업데이트 중지
-            locationManager.stopUpdatingLocation()
-        }
-    }
-    
-    // 위치 업데이트와 관련된 에러를 처리
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
+    // 사용자의 현재 위치로 지도 이동
+    private func updateMapLocation(_ coordinate: CLLocationCoordinate2D) {
+        mapView.setRegion(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
     }
     
     // 특정 위치에 커스텀 핀 추가
@@ -112,26 +60,97 @@ class MyMapViewController: UIViewController, CLLocationManagerDelegate, MKMapVie
         mapView.addAnnotation(pin)
     }
     
-    // 재사용 가능한 어노테이션 뷰 제공
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !annotation.isKind(of: MKUserLocation.self) else {
-            return nil
-        }
+    // 확대/축소 버튼 추가 함수
+    private func addZoomButtons() {
+        let zoomInButton = UIButton(type: .system)
+        zoomInButton.setTitle("+", for: .normal)
+        zoomInButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
+        zoomInButton.frame = CGRect(x: view.frame.width - 60, y: view.frame.height - 200, width: 50, height: 50)
+        zoomInButton.backgroundColor = .white
+        zoomInButton.layer.cornerRadius = 25
+        zoomInButton.addTarget(self, action: #selector(zoomInTapped), for: .touchUpInside)
+        view.addSubview(zoomInButton)
         
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "Custom")
-        if annotationView == nil {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "Custom")
-            annotationView?.canShowCallout = true
-            
-            let miniButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-            miniButton.setImage(UIImage(systemName: "person"), for: .normal)
-            miniButton.tintColor = .blue
-            annotationView?.rightCalloutAccessoryView = miniButton
-        } else {
-            annotationView?.annotation = annotation
-        }
-        
-        annotationView?.image = UIImage(named: "Circle")
-        return annotationView
+        let zoomOutButton = UIButton(type: .system)
+        zoomOutButton.setTitle("-", for: .normal)
+        zoomOutButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
+        zoomOutButton.frame = CGRect(x: view.frame.width - 60, y: view.frame.height - 140, width: 50, height: 50)
+        zoomOutButton.backgroundColor = .white
+        zoomOutButton.layer.cornerRadius = 25
+        zoomOutButton.addTarget(self, action: #selector(zoomOutTapped), for: .touchUpInside)
+        view.addSubview(zoomOutButton)
+    }
+    
+    // 확대 버튼 액션
+    @objc private func zoomInTapped() {
+        var region = mapView.region
+        region.span.latitudeDelta /= 2.0
+        region.span.longitudeDelta /= 2.0
+        mapView.setRegion(region, animated: true)
+    }
+    
+    // 축소 버튼 액션
+    @objc private func zoomOutTapped() {
+        var region = mapView.region
+        region.span.latitudeDelta *= 2.0
+        region.span.longitudeDelta *= 2.0
+        mapView.setRegion(region, animated: true)
     }
 }
+
+
+import UIKit
+import CoreLocation
+
+class LocationManager: NSObject, CLLocationManagerDelegate {
+    
+    static let shared = LocationManager()
+    
+    private let locationManager = CLLocationManager()
+    
+    var currentLocation: CLLocationCoordinate2D?
+    var locationUpdateCallback: ((CLLocationCoordinate2D) -> Void)?
+    
+    private override init() {
+        super.init()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    func requestLocationPermission() {
+        locationManager.requestWhenInUseAuthorization()
+    }
+    
+    func startUpdatingLocation() {
+        if CLLocationManager.locationServicesEnabled() {
+            switch locationManager.authorizationStatus {
+            case .authorizedWhenInUse, .authorizedAlways:
+                locationManager.startUpdatingLocation()
+            case .denied, .restricted, .notDetermined:
+                requestLocationPermission()
+            @unknown default:
+                fatalError("Unhandled case in location authorization status")
+            }
+        } else {
+            print("Location services are not enabled")
+        }
+    }
+    
+    func stopUpdatingLocation() {
+        locationManager.stopUpdatingLocation()
+    }
+    
+    // CLLocationManagerDelegate methods
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            currentLocation = location.coordinate
+            locationUpdateCallback?(location.coordinate)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to get user location: \(error.localizedDescription)")
+    }
+}
+
+
