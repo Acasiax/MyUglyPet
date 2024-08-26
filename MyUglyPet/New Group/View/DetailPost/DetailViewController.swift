@@ -146,10 +146,9 @@ final class DetailViewController: BaseDetailView {
             switch result {
             case .success(let updatedPosts):
                 print("🙌 특정유저별에서 가져온 값: \(updatedPosts)")
-                // 최신 포스트 데이터를 가져오면, 이를 UI에 반영합니다.
-                // 새로 받아온 첫 번째 포스트를 기존 post 객체에 업데이트
-                self?.post = updatedPosts.first // 필요한 경우 로직을 조정하세요
-                self?.tableView.reloadData() // 테이블뷰를 리로드하여 최신 포스트가 반영되도록 합니다.
+          
+                self?.post = updatedPosts.first
+                self?.tableView.reloadData() // 테이블뷰를 리로드하여 최신 포스트가 반영되도록
 
             case .failure(let error):
                 print("포스트 데이터를 불러오는 데 실패했습니다: \(error.localizedDescription)")

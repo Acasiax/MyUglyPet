@@ -31,8 +31,9 @@
 		AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */; };
 		AA64744E2C7BA0B80079ECE0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */; };
 		AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */; };
-		AA64745B2C7C467D0079ECE0 /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745A2C7C467D0079ECE0 /* PostsViewController.swift */; };
+		AA64745B2C7C467D0079ECE0 /* MyLikedPostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */; };
 		AA64745D2C7C46A50079ECE0 /* MyFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */; };
+		AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -121,8 +122,9 @@
 		AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMapViewController.swift; sourceTree = "<group>"; };
 		AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersViewController.swift; sourceTree = "<group>"; };
-		AA64745A2C7C467D0079ECE0 /* PostsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
+		AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLikedPostsViewController.swift; sourceTree = "<group>"; };
 		AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowingViewController.swift; sourceTree = "<group>"; };
+		AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPostersViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -244,8 +246,9 @@
 			isa = PBXGroup;
 			children = (
 				AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */,
-				AA64745A2C7C467D0079ECE0 /* PostsViewController.swift */,
+				AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */,
 				AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */,
+				AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */,
 			);
 			path = MyFollersPost;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,
 				AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */,
+				AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */,
 				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
 				AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */,
@@ -659,7 +663,7 @@
 				AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */,
 				AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */,
 				AA72735A2C71DA95007551C4 /* CreatePostViewLayout.swift in Sources */,
-				AA64745B2C7C467D0079ECE0 /* PostsViewController.swift in Sources */,
+				AA64745B2C7C467D0079ECE0 /* MyLikedPostsViewController.swift in Sources */,
 				AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */,
 				AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,

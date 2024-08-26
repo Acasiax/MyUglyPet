@@ -133,7 +133,7 @@ class PasswordInputViewController: UIViewController {
         
         fetchSignup(email: email, nickname: nickname, password: password)
     }
-
+    
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
             nextButton.backgroundColor = UIColor.orange
@@ -143,9 +143,9 @@ class PasswordInputViewController: UIViewController {
             nextButton.isEnabled = false
         }
     }
-
-
-
+    
+    
+    
     func showAlert(message: String) {
         let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
         print("회원가입에러: \(message)")
@@ -160,7 +160,7 @@ extension PasswordInputViewController {
     func fetchSignup(email: String, nickname: String, password: String) {
         
         // 전달된 매개변수들을 출력
-               print("fetchSignup - email: \(email), nickname: \(nickname), password: \(password)")
+        print("fetchSignup - email: \(email), nickname: \(nickname), password: \(password)")
         
         SignUpPostNetworkManager.registerUser(email: email, password: password, nick: nickname, phoneNum: "11", birthDay: "2000") { result in
             switch result {

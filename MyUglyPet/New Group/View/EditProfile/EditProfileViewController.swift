@@ -229,12 +229,15 @@ extension EditProfileViewController {
         navigationController?.pushViewController(followersVC, animated: true)
     }
     
+    
+    //🌟
     private func navigateToPosts() {
-        let postsVC = PostsViewController()
+        let postsVC = MyPostersViewController()
+        postsVC.myProfile = self.userProfile
         navigationController?.pushViewController(postsVC, animated: true)
     }
     
-    //🌟팔로잉 화면(내가 추가한 친구들)
+    //팔로잉 화면(내가 추가한 친구들)
     private func navigateToFollowing() {
         let followingVC = MyFollowingViewController()
         followingVC.myProfile = self.userProfile
@@ -251,6 +254,8 @@ extension EditProfileViewController {
     
     private func MyLikedPostsButtonTap() {
         print("좋아요한 게시글 버튼이 눌렸습니다.")
+        let postsVC = MyLikedPostsViewController()
+        navigationController?.pushViewController(postsVC, animated: true)
     }
     
     private func handleEditProfileButtonTap() {
