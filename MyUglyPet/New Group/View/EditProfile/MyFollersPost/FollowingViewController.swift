@@ -34,59 +34,7 @@ class HiViewController: UIViewController {
         button.tintColor = .black
         return button
     }()
-    
-    // 배너 섹션 헤더
-    let bannerHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.text = "배너"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
-    // 배너 컬렉션 뷰
-    let bannerCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 150)
-        layout.minimumLineSpacing = 10
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(BannerCollectionViewCell.self, forCellWithReuseIdentifier: BannerCollectionViewCell.identifier)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isPagingEnabled = true
-        collectionView.backgroundColor = .clear
-        return collectionView
-    }()
-    
-    // 페이지 컨트롤
-    let pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.currentPage = 0
-        pageControl.pageIndicatorTintColor = .lightGray
-        pageControl.currentPageIndicatorTintColor = .black
-        return pageControl
-    }()
-    
-    // 순위 섹션 헤더
-    let rankHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.text = "순위"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
-    // 순위 컬렉션 뷰
-    let rankCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 160)
-        layout.minimumLineSpacing = 10
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(RankCollectionViewCell.self, forCellWithReuseIdentifier: RankCollectionViewCell.identifier)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = CustomColors.softPink
-        return collectionView
-    }()
-    
+
     // 취미 카드 섹션 헤더
     let hobbyCardHeaderLabel: UILabel = {
         let label = UILabel()
@@ -121,28 +69,17 @@ class HiViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bannerCollectionView.dataSource = self
-        rankCollectionView.dataSource = self
+       
         hobbyCardCollectionView.dataSource = self
         
-        bannerCollectionView.delegate = self
-        rankCollectionView.delegate = self
+      
         hobbyCardCollectionView.delegate = self
-        
-        // 배너의 페이지 수에 맞춰 페이지 컨트롤 설정
-        pageControl.numberOfPages = bannerData.count
+   
         
         setupSubviews()
         setupConstraints()
         
-        // Rx 방식으로 pageControl의 값 변경 이벤트 처리
-        pageControl.rx.controlEvent(.valueChanged)
-            .withUnretained(self)  // [weak self] 대신 bind(with: self)를 사용하여 owner에 self 바인딩
-            .bind { owner, _ in
-                let indexPath = IndexPath(item: owner.pageControl.currentPage, section: 0)
-                owner.bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            }
-            .disposed(by: disposeBag)
+      
     }
     
     func setupSubviews() {
@@ -162,14 +99,7 @@ class HiViewController: UIViewController {
         headerStackView.spacing = 16
         contentStackView.addArrangedSubview(headerStackView)
         
-        // 배너 섹션 추가
-        contentStackView.addArrangedSubview(bannerHeaderLabel)
-        contentStackView.addArrangedSubview(bannerCollectionView)
-        contentStackView.addArrangedSubview(pageControl)
-        
-        // 순위 섹션 추가
-        contentStackView.addArrangedSubview(rankHeaderLabel)
-        contentStackView.addArrangedSubview(rankCollectionView)
+       
         
         // 취미 카드 섹션 추가
         contentStackView.addArrangedSubview(hobbyCardHeaderLabel)
@@ -187,24 +117,14 @@ class HiViewController: UIViewController {
             make.width.equalTo(scrollView)
         }
         
-        bannerCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(150)
-        }
-        
-        rankCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(230)
-        }
+      
         
         hobbyCardCollectionView.snp.makeConstraints { make in
             make.height.equalTo(400) // 필요 시 조정 가능
         }
     }
     
-    // 페이지 컨트롤 값 변경 시 호출되는 메서드 (더 이상 사용되지 않음)
-    // @objc func pageControlValueChanged(_ sender: UIPageControl) {
-    //     let indexPath = IndexPath(item: sender.currentPage, section: 0)
-    //     bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    // }
+   
 }
 
 
@@ -217,13 +137,7 @@ extension HiViewController: UICollectionViewDataSource, UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
             
-        case bannerCollectionView:
-            return bannerData.count
-            
-        case rankCollectionView:
-            print("👺\(rankedGroups.count)")
-            return rankedGroups.count
-            
+      
             
         case hobbyCardCollectionView:
             return serverPosts.count
@@ -240,72 +154,7 @@ extension HiViewController: UICollectionViewDataSource, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
-        case bannerCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.identifier, for: indexPath) as! BannerCollectionViewCell
-            let data = bannerData[indexPath.item]
-            cell.configure(with: data.image, title: data.title)
-            return cell
-            
-        case rankCollectionView:
-               guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
-                   return UICollectionViewCell()
-               }
-
-               let group = rankedGroups[indexPath.item]
-               let rank = indexPath.item + 1
-
-               // 셀의 기본 UI를 설정 (이미지 제외)
-               cell.configure(
-                   with: UIImage(systemName: "star"),  // 임시 또는 기본 이미지
-                   name: " \(group.key.title)",
-                   description: "\(group.key.content1)",
-                   rank: "\(rank)등"
-               )
-
-               // 비동기적으로 이미지를 로드
-               if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
-                   let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
-                   print("🙇‍♀️\(fullImageURLString)")
-
-                   if let imageURL = URL(string: fullImageURLString) {
-                       let headers: [String: String] = [
-                           Header.sesacKey.rawValue: APIKey.key,
-                           Header.authorization.rawValue: UserDefaultsManager.shared.token ?? ""
-                       ]
-
-                       let modifier = AnyModifier { request in
-                           var r = request
-                           r.allHTTPHeaderFields = headers
-                           return r
-                       }
-
-                       cell.profileImageView.kf.setImage(
-                           with: imageURL,
-                           placeholder: UIImage(systemName: "photo"),  // 기본 placeholder 이미지
-                           options: [.requestModifier(modifier)]
-                       ) { result in
-                           switch result {
-                           case .success(let value):
-                               print("이미지 로드 성공😊: \(value.source.url?.absoluteString ?? "")")
-                               // 이미지 로드 성공 후, 셀의 UI를 다시 구성
-                               cell.configure(
-                                   with: value.image,  // 로드된 이미지로 업데이트
-                                   name: " \(group.key.title)",
-                                   description: "\(group.key.content1)",
-                                   rank: "\(rank)등"
-                               )
-
-                           case .failure(let error):
-                               print("이미지 로드 실패🥹: \(error.localizedDescription)")
-                               // 실패 시 기본 이미지를 설정할 수도 있습니다.
-                           }
-                       }
-                   } else {
-                       print("URL 변환에 실패했습니다🥹: \(fullImageURLString)")
-                   }
-               }
-
-               return cell
+      
             
         case hobbyCardCollectionView:
                   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
@@ -340,12 +189,8 @@ extension HiViewController: UICollectionViewDataSource, UICollectionViewDelegate
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == bannerCollectionView {
-            let page = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
-            pageControl.currentPage = page
-        }
-    }
+ 
+    
 }
 
 
@@ -478,7 +323,7 @@ extension HiViewController {
         
         self.rankedGroups = rankedGroups
       //  print("그룹이 잘 들어갔나?: \(rankedGroups)")
-        rankCollectionView.reloadData()
+     
         
         
     }
