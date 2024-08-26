@@ -58,7 +58,7 @@ extension EditProfileViewController {
             make.top.equalTo(profileStatsStackView.snp.bottom).offset(30)
             make.centerX.equalToSuperview()
             make.left.right.equalToSuperview().inset(80)
-            make.height.equalTo(buttonStackView.snp.width) 
+            make.height.equalTo(buttonStackView.snp.width)
         }
         
         notificationLabel.snp.makeConstraints { make in

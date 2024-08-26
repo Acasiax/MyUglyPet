@@ -93,6 +93,7 @@ final class EditProfileViewController: UIViewController {
             .bind(with: self) { owner, _ in
                 AnimationZip.animateButtonPress(owner.followersButton)
                 print("팔로워 버튼이 눌렸습니다.")
+                owner.navigateToFollowers()
             }
             .disposed(by: disposeBag)
         
@@ -100,6 +101,7 @@ final class EditProfileViewController: UIViewController {
             .bind(with: self) { owner, _ in
                 AnimationZip.animateButtonPress(owner.postsButton)
                 print("전체 게시물수 버튼이 눌렸습니다.")
+                owner.navigateToPosts()
             }
             .disposed(by: disposeBag)
         
@@ -107,6 +109,7 @@ final class EditProfileViewController: UIViewController {
             .bind(with: self) { owner, _ in
                 AnimationZip.animateButtonPress(owner.followingButton)
                 print("팔로잉 버튼이 눌렸습니다.")
+                owner.navigateToFollowing()
             }
             .disposed(by: disposeBag)
         
@@ -246,3 +249,47 @@ extension EditProfileViewController {
     }
 }
 
+//MARK: - 화면 이동 함수
+extension EditProfileViewController {
+    private func navigateToFollowers() {
+            let followersVC = FollowersViewController()
+            navigationController?.pushViewController(followersVC, animated: true)
+        }
+        
+        private func navigateToPosts() {
+            let postsVC = PostsViewController()
+            navigationController?.pushViewController(postsVC, animated: true)
+        }
+        
+        private func navigateToFollowing() {
+            let followingVC = FollowingViewController()
+            navigationController?.pushViewController(followingVC, animated: true)
+        }
+}
+
+
+
+// Placeholder View Controllers for demonstration purposes
+class FollowersViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        title = "Followers"
+    }
+}
+
+class PostsViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        title = "Posts"
+    }
+}
+
+class FollowingViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        title = "Following"
+    }
+}
