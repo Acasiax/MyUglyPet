@@ -9,11 +9,81 @@
 import UIKit
 import Alamofire
 
+
+
+struct RegistrationResponse: Encodable {
+    let email: String
+    let password: String
+    let nick: String
+    let phoneNum: String?
+    let birthDay: String?
+}
+
+
+struct ProfileModel: Decodable {
+    let id: String
+    let email: String
+    let nick: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "user_id"
+        case email, nick
+    }
+}
+
+struct ServerResponse: Decodable {
+    let message: String
+}
+
 class SignUpPostNetworkManager {
     
     static let shared = SignUpPostNetworkManager()
     
     private init() {}
+    
+    
+    // MARK: - 회원가입 기능 추가
+       static func registerUser(email: String, password: String, nick: String, phoneNum: String?, birthDay: String?, completion: @escaping (Result<String, Error>) -> Void) {
+           
+           // 전달된 매개변수들을 출력
+           print("registerUser - email: \(email), password: \(password), nick: \(nick), phoneNum: \(phoneNum ?? ""), birthDay: \(birthDay ?? "")")
+           
+           do {
+               let query = RegistrationResponse(email: email, password: password, nick: nick, phoneNum: nil, birthDay: nil)
+               
+               // JSON 데이터로 인코딩 후 출력
+               let jsonData = try JSONEncoder().encode(query)
+               if let jsonString = String(data: jsonData, encoding: .utf8) {
+                   print("전송할 JSON 데이터: \(jsonString)")
+               }
+               
+               let request = try Router.register(query: query).asURLRequest()
+               
+               // 요청 URL 및 헤더 출력
+               print("요청 URL: \(request.url?.absoluteString ?? "URL 없음")")
+               print("요청 헤더: \(request.allHTTPHeaderFields ?? [:])")
+               
+               AF.request(request).responseJSON { response in
+                   // 서버 응답 전체 출력
+                   if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                       print("서버 응답 전체: \(jsonString)")
+                   }
+                   
+                   switch response.result {
+                   case .success(let success):
+                       print("서버 응답 메시지: \(success)")
+                       completion(.success("회원가입 성공: \(success)"))
+                   case .failure(let failure):
+                       print("서버 응답 실패: \(failure)")
+                       completion(.failure(failure))
+                   }
+               }
+           } catch {
+               print("error \(error)")
+               completion(.failure(error))
+           }
+       }
+    
     
     // MARK: - 이메일 중복 확인 기능 추가
     func validateEmail(_ email: String, completion: @escaping (Result<String, Error>) -> Void) {

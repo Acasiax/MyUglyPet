@@ -6,15 +6,15 @@
 //
 
 import Foundation
+//
+//struct ProfileModel: Decodable {
+//    let id: String
+//    let email: String
+//    let nick: String
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case id = "user_id"
+//        case email, nick
+//    }
+//}
 
-struct ProfileModel: Decodable {
-    let id: String
-    let email: String
-    let nick: String
-    
-    enum CodingKeys: String, CodingKey {
-        case id = "user_id"
-        case email
-        case nick
-    }
-}

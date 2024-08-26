@@ -35,7 +35,6 @@ class PasswordInputViewController: UIViewController {
         textField.borderStyle = .none
         textField.textAlignment = .center
         textField.font = UIFont.systemFont(ofSize: 20)
-        // 초기에는 비밀번호가 보이도록 설정
         textField.isSecureTextEntry = false
         let bottomLine = UIView()
         bottomLine.backgroundColor = .lightGray
@@ -48,7 +47,6 @@ class PasswordInputViewController: UIViewController {
         return textField
     }()
     
-    // "비번 가리기" 버튼 추가
     let togglePasswordVisibilityButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("비번 가리기", for: .normal)
@@ -79,14 +77,12 @@ class PasswordInputViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .white
         
-        // Add subviews
         view.addSubview(progressBar)
         view.addSubview(titleLabel)
         view.addSubview(passwordTextField)
         view.addSubview(togglePasswordVisibilityButton)
         view.addSubview(nextButton)
         
-        // Set up SnapKit constraints
         progressBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.left.right.equalTo(view).inset(40)
@@ -121,10 +117,7 @@ class PasswordInputViewController: UIViewController {
     }
     
     @objc func togglePasswordVisibility() {
-        // 현재 설정된 isSecureTextEntry 속성을 반전시킵니다.
         passwordTextField.isSecureTextEntry.toggle()
-        
-        // 토글된 상태에 따라 버튼의 제목을 변경합니다.
         if passwordTextField.isSecureTextEntry {
             togglePasswordVisibilityButton.setTitle("비번 보이기", for: .normal)
         } else {
@@ -133,14 +126,14 @@ class PasswordInputViewController: UIViewController {
     }
     
     @objc func nextButtonTapped() {
-        // 닉네임과 이메일, 비밀번호를 출력합니다.
-        print("닉네임: \(nickname ?? "닉네임 없음"), 이메일: \(email ?? "이메일 없음"), 비밀번호: \(passwordTextField.text ?? "비밀번호 없음")")
+        guard let email = email, let nickname = nickname, let password = passwordTextField.text else {
+            showAlert(message: "필수 정보가 누락되었습니다.")
+            return
+        }
         
-        let welcomeVC = WelcomeViewController()
-        navigationController?.pushViewController(welcomeVC, animated: true)
+        fetchSignup(email: email, nickname: nickname, password: password)
     }
 
-    
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
             nextButton.backgroundColor = UIColor.orange
@@ -150,4 +143,40 @@ class PasswordInputViewController: UIViewController {
             nextButton.isEnabled = false
         }
     }
+
+
+
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
+        print("회원가입에러: \(message)")
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        self.present(alert, animated: true)
+    }
+}
+
+
+extension PasswordInputViewController {
+    
+    func fetchSignup(email: String, nickname: String, password: String) {
+        
+        // 전달된 매개변수들을 출력
+               print("fetchSignup - email: \(email), nickname: \(nickname), password: \(password)")
+        
+        SignUpPostNetworkManager.registerUser(email: email, password: password, nick: nickname, phoneNum: "11", birthDay: "2000") { result in
+            switch result {
+                
+            case .success(let successMessage):
+                DispatchQueue.main.async {
+                    self.showAlert(message: successMessage)
+                    let welcomeVC = WelcomeViewController()
+                    self.navigationController?.pushViewController(welcomeVC, animated: true)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.showAlert(message: "회원가입 실패: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
 }
