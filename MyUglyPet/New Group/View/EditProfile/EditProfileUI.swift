@@ -70,7 +70,7 @@ struct EditProfileUI {
     }
     
     static func managePostsButton() -> UIButton {
-        return button(withTitle: "게시글 관리", backgroundColor: CustomColors.warmYellow)
+        return button(withTitle: "좋아요한 게시글", backgroundColor: CustomColors.warmYellow)
     }
     
     static func editProfileButton() -> UIButton {

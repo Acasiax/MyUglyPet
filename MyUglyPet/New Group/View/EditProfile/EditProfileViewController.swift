@@ -164,35 +164,6 @@ final class EditProfileViewController: UIViewController {
     }
 }
 
-extension EditProfileViewController {
-    private func handleProfileImageButtonTap() {
-        print("프로필 이미지 버튼이 눌렸습니다.")
-    }
-    
-    private func MyLikedPostsButtonTap() {
-        print("좋아요한 게시글 버튼이 눌렸습니다.")
-    }
-    
-    private func handleEditProfileButtonTap() {
-        print("프로필 수정 버튼이 눌렸습니다.")
-    }
-    
-    private func handleViewFollowingButtonTap() {
-        print("팔로잉 목록 버튼이 눌렸습니다.")
-    }
-    
-    private func handleViewFollowersButtonTap() {
-        print("팔로워 목록 버튼이 눌렸습니다.")
-    }
-    
-    private func handleLogout() {
-        print("로그아웃 버튼 눌림")
-    }
-    
-    private func deleteAccount() {
-        print("탈퇴하기 버튼 눌림")
-    }
-}
 
 extension EditProfileViewController {
     func deleteAllPosts() {
@@ -249,8 +220,9 @@ extension EditProfileViewController {
     }
 }
 
-//MARK: - 화면 이동 함수
+//MARK: - 위에 3개 화면 이동 함수
 extension EditProfileViewController {
+    //팔로워 화면(나를 추가한 친구들)
     private func navigateToFollowers() {
         let followersVC = FollowersViewController()
         followersVC.myProfile = self.userProfile
@@ -262,13 +234,49 @@ extension EditProfileViewController {
         navigationController?.pushViewController(postsVC, animated: true)
     }
     
-    //🌟
+    //🌟팔로잉 화면(내가 추가한 친구들)
     private func navigateToFollowing() {
         let followingVC = MyFollowingViewController()
         followingVC.myProfile = self.userProfile
-        print("🌟 \(followingVC.myProfile)")
+       // print("🌟 \(followingVC.myProfile)")
         navigationController?.pushViewController(followingVC, animated: true)
     }
 }
 
-
+//MARK: - 이미지뷰 + 네모4개 버튼뷰 화면 이동 함수
+extension EditProfileViewController {
+    private func handleProfileImageButtonTap() {
+        print("프로필 이미지 버튼이 눌렸습니다.")
+    }
+    
+    private func MyLikedPostsButtonTap() {
+        print("좋아요한 게시글 버튼이 눌렸습니다.")
+    }
+    
+    private func handleEditProfileButtonTap() {
+        print("프로필 수정 버튼이 눌렸습니다.")
+    }
+    
+    private func handleViewFollowingButtonTap() {
+        print("팔로잉 목록 버튼이 눌렸습니다.")
+        let followingVC = MyFollowingViewController()
+        followingVC.myProfile = self.userProfile
+      //  print("🌟 \(followingVC.myProfile)")
+        navigationController?.pushViewController(followingVC, animated: true)
+    }
+    
+    private func handleViewFollowersButtonTap() {
+        print("팔로워 목록 버튼이 눌렸습니다.")
+        let followersVC = FollowersViewController()
+        followersVC.myProfile = self.userProfile
+        navigationController?.pushViewController(followersVC, animated: true)
+    }
+    
+    private func handleLogout() {
+        print("로그아웃 버튼 눌림")
+    }
+    
+    private func deleteAccount() {
+        print("탈퇴하기 버튼 눌림")
+    }
+}

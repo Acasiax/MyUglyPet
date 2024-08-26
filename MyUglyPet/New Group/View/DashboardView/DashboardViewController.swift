@@ -114,7 +114,7 @@ class DashboardViewController: UIViewController {
     // 취미 카드 섹션 헤더
     let hobbyCardHeaderLabel: UILabel = {
         let label = UILabel()
-        label.text = "내 친구들"
+        label.text = "게시글 작성한 친구들"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -411,6 +411,7 @@ extension DashboardViewController {
         }
     }
     
+   
     
     // 해시태그를 사용하여 포스팅 가져오기
     private func fetchHashtagPosts(hashTag: String) {
