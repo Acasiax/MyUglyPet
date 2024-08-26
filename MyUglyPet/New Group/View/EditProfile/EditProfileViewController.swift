@@ -227,7 +227,7 @@ extension EditProfileViewController {
                 self?.userProfile = profile
                 self?.updateUIWithProfileData()
             case .failure(let error):
-                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+                print("내 프로필 가져오는데 실패했어요!!: \(error.localizedDescription)")
             }
         }
     }
@@ -263,6 +263,7 @@ extension EditProfileViewController {
         
         private func navigateToFollowing() {
             let followingVC = HiViewController()
+            followingVC.myProfile = self.userProfile
             navigationController?.pushViewController(followingVC, animated: true)
         }
 }
