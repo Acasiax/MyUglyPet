@@ -10,7 +10,9 @@ import SnapKit
 
 class EmailInputViewController: UIViewController {
     
-    // UI Components
+    var nickname: String?
+    
+
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progress = 0.40
@@ -264,9 +266,16 @@ class EmailInputViewController: UIViewController {
         return emailPred.evaluate(with: email)
     }
     
+ 
+}
+
+extension EmailInputViewController {
+    
     func checkEmailDuplicate(email: String) -> Bool {
         // 여기에 중복 검사 로직을 구현
         // 예시로 무작위로 중복 여부 결정
         return Bool.random()
     }
+    
+    
 }

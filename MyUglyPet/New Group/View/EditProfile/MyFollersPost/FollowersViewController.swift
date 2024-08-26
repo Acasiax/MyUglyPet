@@ -34,7 +34,7 @@ class FollowersViewController: UIViewController {
 
     let hobbyCardHeaderLabel: UILabel = {
         let label = UILabel()
-        label.text = "내 친구들"
+        label.text = "나를 추가한 친구들"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()

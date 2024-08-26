@@ -99,10 +99,16 @@ class NameInputViewController: UIViewController {
     }
     
     @objc func nextButtonTapped() {
-        print("다음버튼탭")
-           let emailInputVC = EmailInputViewController()
-           navigationController?.pushViewController(emailInputVC, animated: true)
-       }
+        if let nickname = nameTextField.text {
+            print("입력한 닉네임: \(nickname)")
+            
+            let emailInputVC = EmailInputViewController()
+            emailInputVC.nickname = nickname  // 닉네임을 전달
+            
+            navigationController?.pushViewController(emailInputVC, animated: true)
+        }
+    }
+
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
