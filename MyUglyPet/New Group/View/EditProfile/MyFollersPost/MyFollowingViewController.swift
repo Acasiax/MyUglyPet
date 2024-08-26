@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-class HiViewController: UIViewController {
+class MyFollowingViewController: UIViewController {
     
     let scrollView = UIScrollView()
     let contentStackView = UIStackView()
@@ -55,7 +55,7 @@ class HiViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //fetchAllFeedPosts() // 필요한 경우 추가적인 데이터를 가져오는 함수 호출
+       
     }
  
     override func viewDidLoad() {
@@ -104,7 +104,7 @@ class HiViewController: UIViewController {
     }
 }
 
-extension HiViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension MyFollowingViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -120,16 +120,18 @@ extension HiViewController: UICollectionViewDataSource, UICollectionViewDelegate
         
         if let followingUser = myProfile?.following[indexPath.row] {
             cell.userID = followingUser.user_id
-            cell.nickNameLabel.text = myProfile?.nick // 사용자 닉네임
+            cell.nickNameLabel.text = followingUser.nick // 사용자 닉네임
             cell.emailLabel.text = myProfile?.email // 사용자 이메일
             
-            // 예제 이미지 URL 설정
-            if let profileImageURL = followingUser.profileImage{
+            // 프로필 이미지 설정
+            if let profileImageURL = followingUser.profileImage {
                 let url = URL(string: profileImageURL)
                 cell.imageView.kf.setImage(with: url)
+            } else {
+                cell.imageView.image = UIImage(named: "기본냥멍3")
             }
             
-            // 팔로우 버튼 설정
+            // 팔로우 버튼 설정 (이미 팔로우 상태로 가정)
             cell.configureFollowButton(isFollowing: true)
         }
         

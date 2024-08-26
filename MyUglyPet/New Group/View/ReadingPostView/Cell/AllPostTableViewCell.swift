@@ -250,19 +250,27 @@ final class AllPostTableViewCell: UITableViewCell {
             followButton.isHidden = false
             deleteButton.isHidden = true
         }
+        
+        
     }
     
     private func followButtonTapped() {
-        guard let userID = userID else {
+        guard let myBuddyuserID = userID else {
             print("userID가 없습니다.")
             return
         }
+        print("내가 친구하고 싶은 유저ID:\(myBuddyuserID)")
+        
+        //내 유저 아이디 넣어주기!
+//        let myBuddyuserID = UserDefaultsManager.shared.id
+//        print("내 유저아이디ID:\(myBuddyuserID)")
+
         
         isFollowing.toggle()
         updateFollowButtonUI()
         
         if isFollowing {
-            FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
+            FollowPostNetworkManager.shared.followUser(userID: myBuddyuserID) { [weak self] result in
                 switch result {
                 case .success:
                     print("팔로우 성공")
@@ -275,7 +283,7 @@ final class AllPostTableViewCell: UITableViewCell {
                 }
             }
         } else {
-            FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
+            FollowPostNetworkManager.shared.unfollowUser(userID: myBuddyuserID) { [weak self] result in
                 switch result {
                 case .success:
                     print("언팔로우 성공")

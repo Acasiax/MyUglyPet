@@ -36,6 +36,7 @@ class FollowPostNetworkManager {
            }
        }
     
+    
     func followUser(userID: String, completion: @escaping (Result<FollowResponse, Error>) -> Void) {
         let router = Router.follow(userID: userID)
         

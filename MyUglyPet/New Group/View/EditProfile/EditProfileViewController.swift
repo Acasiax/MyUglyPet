@@ -252,20 +252,23 @@ extension EditProfileViewController {
 //MARK: - 화면 이동 함수
 extension EditProfileViewController {
     private func navigateToFollowers() {
-            let followersVC = FollowersViewController()
-            navigationController?.pushViewController(followersVC, animated: true)
-        }
-        
-        private func navigateToPosts() {
-            let postsVC = PostsViewController()
-            navigationController?.pushViewController(postsVC, animated: true)
-        }
-        
-        private func navigateToFollowing() {
-            let followingVC = HiViewController()
-            followingVC.myProfile = self.userProfile
-            navigationController?.pushViewController(followingVC, animated: true)
-        }
+        let followersVC = FollowersViewController()
+        followersVC.myProfile = self.userProfile
+        navigationController?.pushViewController(followersVC, animated: true)
+    }
+    
+    private func navigateToPosts() {
+        let postsVC = PostsViewController()
+        navigationController?.pushViewController(postsVC, animated: true)
+    }
+    
+    //🌟
+    private func navigateToFollowing() {
+        let followingVC = MyFollowingViewController()
+        followingVC.myProfile = self.userProfile
+        print("🌟 \(followingVC.myProfile)")
+        navigationController?.pushViewController(followingVC, animated: true)
+    }
 }
 
 
