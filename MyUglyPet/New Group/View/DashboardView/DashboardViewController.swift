@@ -332,32 +332,31 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                return cell
             
         case hobbyCardCollectionView:
-                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
-                  
-                  let post = serverPosts[indexPath.row]
-                  cell.postID = post.postId
-                  cell.userID = post.creator.userId
-                  cell.descriptionLabel.text = post.title // 포스트 제목 설정
-                  cell.titleLabel.text = post.creator.nick // 사용자 닉네임
-                  cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
-                  cell.delegate = self  // 델리게이트 설정
-                  
-                  // 팔로우 상태를 확인하고 버튼을 설정
-                  if let myProfile = myProfile {
-                      let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
-                      cell.configureFollowButton(isFollowing: isFollowing)
-                  }
-            
-            // '나자신' 타이틀 설정을 위한 비교
-               if let userID = cell.userID, userID == UserDefaultsManager.shared.id {
-                   cell.followButton.setTitle("나자신", for: .normal)
-                   cell.followButton.isEnabled = false // 자신의 계정을 팔로우하지 않도록 버튼 비활성화
-                   cell.followButton.backgroundColor = .gray
-               }
-            
-            cell.backgroundColor = CustomColors.softBlue
-                  
-                  return cell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
+                
+                let post = serverPosts[indexPath.row]
+                cell.postID = post.postId
+                cell.userID = post.creator.userId
+                cell.descriptionLabel.text = post.title // 포스트 제목 설정
+                cell.titleLabel.text = post.creator.nick // 사용자 닉네임
+                cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
+                cell.delegate = self  // 델리게이트 설정
+                
+                // 팔로우 상태를 확인하고 버튼을 설정
+                if let myProfile = myProfile {
+                    let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
+                    cell.configureFollowButton(isFollowing: isFollowing)
+                }
+                
+                // '나자신' 타이틀 설정을 위한 비교
+                if let userID = cell.userID, userID == UserDefaultsManager.shared.id {
+                    cell.followButton.setTitle("나자신", for: .normal)
+                    cell.followButton.isEnabled = false // 자신의 계정을 팔로우하지 않도록 버튼 비활성화
+                    cell.followButton.backgroundColor = .gray
+                }
+                
+                cell.backgroundColor = CustomColors.softBlue
+                return cell
             
         default:
             return UICollectionViewCell()
@@ -403,14 +402,35 @@ extension DashboardViewController {
             switch result {
             case .success(let posts):
                 self?.serverPosts = posts
-                self?.hobbyCardCollectionView.reloadData() // 데이터 로드 후 테이블뷰 리로드
+                // 필터링 및 정렬 후, 중복된 사용자 게시물 처리
+                self?.filterAndSortPostsByUserId()
+                self?.hobbyCardCollectionView.reloadData() // 데이터 로드 후 컬렉션 뷰 리로드
                 print("allFeed 포스팅을 가져오는데 성공했어요🥰")
             case .failure(let error):
                 print("allFeed 포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
             }
         }
     }
-    
+
+    private func filterAndSortPostsByUserId() {
+        // 먼저 최신 포스트가 앞에 오도록 정렬
+        serverPosts.sort { $0.createdAt > $1.createdAt }
+        
+        // Dictionary를 사용하여 중복된 userId를 제거하면서 최신 포스트만 유지
+        var uniquePostsDict: [String: PostsModel] = [:]
+        
+        for post in serverPosts {
+            let userId = post.creator.userId  // userId는 이제 String 타입입니다.
+            
+            // 만약 해당 userId가 이미 존재하지 않는다면 추가 (존재하면 추가하지 않음)
+            if uniquePostsDict[userId] == nil {
+                uniquePostsDict[userId] = post
+            }
+        }
+        
+        // 중복 제거된 게시물 배열을 생성
+        serverPosts = Array(uniquePostsDict.values)
+    }
    
     
     // 해시태그를 사용하여 포스팅 가져오기
