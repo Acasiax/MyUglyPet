@@ -122,6 +122,12 @@ struct Comment: Codable {
 }
 
 
+//MARK: - 이메일 중복 확인
+struct EmailValidationResponse: Codable {
+    let message: String
+}
+
+
 //MARK: - 댓글
 struct CommentResponse: Codable {
     let commentId: String

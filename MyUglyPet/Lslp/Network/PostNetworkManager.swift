@@ -9,6 +9,35 @@
 import UIKit
 import Alamofire
 
+class SignUpPostNetworkManager {
+    
+    static let shared = SignUpPostNetworkManager()
+    
+    private init() {}
+    
+    // MARK: - 이메일 중복 확인 기능 추가
+    func validateEmail(_ email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        do {
+            let router = Router.validateEmail(email: email)
+            let request = try router.asURLRequest()
+            
+            AF.request(request)
+                .validate(statusCode: 200..<300)
+                .responseDecodable(of: EmailValidationResponse.self) { response in
+                    switch response.result {
+                    case .success(let validationResponse):
+                        completion(.success(validationResponse.message))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+}
+
+
 // MARK: - 팔로우 기능
 class FollowPostNetworkManager {
 

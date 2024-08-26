@@ -11,8 +11,8 @@ import SnapKit
 class EmailInputViewController: UIViewController {
     
     var nickname: String?
+    var isEmailValid: Bool = false // 이메일 중복검사 결과를 저장하는 변수
     
-
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progress = 0.40
@@ -63,26 +63,6 @@ class EmailInputViewController: UIViewController {
         return button
     }()
     
-    let customDomainTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "도메인을 입력해 주세요"
-        textField.borderStyle = .none
-        textField.textAlignment = .left
-        textField.font = UIFont.systemFont(ofSize: 20)
-        textField.keyboardType = .emailAddress
-        textField.autocapitalizationType = .none
-        textField.isHidden = true
-        let bottomLine = UIView()
-        bottomLine.backgroundColor = .lightGray
-        textField.addSubview(bottomLine)
-        bottomLine.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.left.right.equalTo(textField)
-            make.bottom.equalTo(textField.snp.bottom).offset(-8)
-        }
-        return textField
-    }()
-    
     let duplicateCheckButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("중복검사", for: .normal)
@@ -106,7 +86,7 @@ class EmailInputViewController: UIViewController {
     }()
     
     var isCheckingDuplicate = false
-    var domains = ["gmail.com", "naver.com", "직접 입력"]
+    var domains = ["gmail.com", "naver.com"]
     var selectedDomain = "gmail.com"
     
     override func viewDidLoad() {
@@ -124,7 +104,6 @@ class EmailInputViewController: UIViewController {
         view.addSubview(usernameTextField)
         view.addSubview(atLabel)
         view.addSubview(domainButton)
-        view.addSubview(customDomainTextField)
         view.addSubview(duplicateCheckButton)
         view.addSubview(nextButton)
         
@@ -158,15 +137,8 @@ class EmailInputViewController: UIViewController {
             make.right.equalTo(view).inset(40)
         }
         
-        customDomainTextField.snp.makeConstraints { make in
-            make.top.equalTo(domainButton.snp.bottom).offset(10)
-            make.left.equalTo(atLabel.snp.right).offset(10)
-            make.right.equalTo(view).inset(40)
-            make.height.equalTo(50)
-        }
-        
         duplicateCheckButton.snp.makeConstraints { make in
-            make.top.equalTo(customDomainTextField.snp.bottom).offset(10)
+            make.top.equalTo(domainButton.snp.bottom).offset(10)
             make.left.equalTo(view).inset(40)
             make.right.equalTo(view).inset(40)
             make.height.equalTo(40)
@@ -177,24 +149,16 @@ class EmailInputViewController: UIViewController {
             make.left.right.equalTo(view).inset(40)
             make.height.equalTo(50)
         }
-        
-        
     }
     
     func configureTextField() {
         usernameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        customDomainTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-    
-    
-    @objc func nextButtonTapped() {
-        print("다음버튼탭")
-           let passwordInputVC = PasswordInputViewController()
-           navigationController?.pushViewController(passwordInputVC, animated: true)
-       }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         let email = getEmailAddress()
+
+        // 이메일 유효성 검사 수행
         if isValidEmail(email) {
             duplicateCheckButton.isEnabled = true
             duplicateCheckButton.backgroundColor = UIColor.orange
@@ -202,8 +166,9 @@ class EmailInputViewController: UIViewController {
             duplicateCheckButton.isEnabled = false
             duplicateCheckButton.backgroundColor = UIColor.lightGray
         }
+        resetDuplicateCheck() // 텍스트가 변경될 때 중복 검사 결과 초기화
     }
-    
+
     @objc func domainButtonTapped() {
         let alertController = UIAlertController(title: "도메인 선택", message: nil, preferredStyle: .actionSheet)
         
@@ -211,8 +176,8 @@ class EmailInputViewController: UIViewController {
             let action = UIAlertAction(title: domain, style: .default) { _ in
                 self.selectedDomain = domain
                 self.domainButton.setTitle(domain, for: .normal)
-                self.customDomainTextField.isHidden = (domain != "직접 입력")
                 self.textFieldDidChange(self.usernameTextField)
+                self.resetDuplicateCheck() // 도메인이 변경될 때 중복 검사 결과 초기화
             }
             alertController.addAction(action)
         }
@@ -230,22 +195,39 @@ class EmailInputViewController: UIViewController {
         // 중복 검사 요청 상태 표시
         setButtonLoadingState(isLoading: true)
         
-        // 여기서 중복 검사 API 호출, 아래는 예시를 위한 딜레이 처리
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        // 실제 중복 검사 API 호출
+        SignUpPostNetworkManager.shared.validateEmail(email) { result in
             self.setButtonLoadingState(isLoading: false)
-            
-            // 중복 검사 결과 처리
-            let isDuplicate = self.checkEmailDuplicate(email: email) // 이 부분은 실제 API 결과에 따라 변경
-            if isDuplicate {
+            switch result {
+            case .success(let message):
+                print("이메일 확인 성공: \(message)")
+                if message == "사용 가능한 이메일입니다." {
+                    self.isEmailValid = true
+                    self.duplicateCheckButton.backgroundColor = UIColor.green
+                    self.duplicateCheckButton.setTitle("사용 가능", for: .normal)
+                    self.nextButton.isEnabled = true
+                    self.nextButton.backgroundColor = UIColor.orange
+                } else {
+                    self.isEmailValid = false
+                    self.duplicateCheckButton.backgroundColor = UIColor.red
+                    self.duplicateCheckButton.setTitle("이미 사용 중", for: .normal)
+                }
+            case .failure(let error):
+                print("이메일 확인 실패: \(error.localizedDescription)")
+                self.isEmailValid = false
                 self.duplicateCheckButton.backgroundColor = UIColor.red
-                self.duplicateCheckButton.setTitle("이미 사용 중", for: .normal)
-            } else {
-                self.duplicateCheckButton.backgroundColor = UIColor.green
-                self.duplicateCheckButton.setTitle("사용 가능", for: .normal)
-                self.nextButton.isEnabled = true
-                self.nextButton.backgroundColor = UIColor.orange
+                self.duplicateCheckButton.setTitle("오류 발생", for: .normal)
             }
         }
+    }
+    
+    func resetDuplicateCheck() {
+        // 중복 검사 초기화 (버튼 색상 및 텍스트 재설정)
+        duplicateCheckButton.backgroundColor = UIColor.orange
+        duplicateCheckButton.setTitle("중복검사", for: .normal)
+        nextButton.isEnabled = false
+        nextButton.backgroundColor = UIColor.lightGray
+        isEmailValid = false
     }
     
     func setButtonLoadingState(isLoading: Bool) {
@@ -256,8 +238,7 @@ class EmailInputViewController: UIViewController {
     
     func getEmailAddress() -> String {
         let username = usernameTextField.text ?? ""
-        let domain = selectedDomain == "직접 입력" ? customDomainTextField.text ?? "" : selectedDomain
-        return "\(username)@\(domain)"
+        return "\(username)@\(selectedDomain)"
     }
     
     func isValidEmail(_ email: String) -> Bool {
@@ -266,16 +247,25 @@ class EmailInputViewController: UIViewController {
         return emailPred.evaluate(with: email)
     }
     
- 
-}
-
-extension EmailInputViewController {
-    
-    func checkEmailDuplicate(email: String) -> Bool {
-        // 여기에 중복 검사 로직을 구현
-        // 예시로 무작위로 중복 여부 결정
-        return Bool.random()
+    @objc func nextButtonTapped() {
+        guard let nickname = nickname else {
+            print("닉네임이 설정되지 않았습니다.")
+            return
+        }
+        
+        let email = getEmailAddress()
+        
+        if isEmailValid {
+            print("닉네임: \(nickname), 이메일 \(email)은 사용 가능합니다.")
+            
+            // 다음 화면으로 이동
+            let passwordInputVC = PasswordInputViewController()
+            passwordInputVC.nickname = nickname  // 닉네임 전달
+            passwordInputVC.email = email        // 이메일 전달
+            navigationController?.pushViewController(passwordInputVC, animated: true)
+        } else {
+            print("이메일 중복 검사를 통과하지 못했습니다.")
+        }
     }
-    
-    
+
 }

@@ -10,6 +10,9 @@ import SnapKit
 
 class PasswordInputViewController: UIViewController {
     
+    var nickname: String?
+    var email: String?
+    
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progress = 0.66
@@ -32,7 +35,8 @@ class PasswordInputViewController: UIViewController {
         textField.borderStyle = .none
         textField.textAlignment = .center
         textField.font = UIFont.systemFont(ofSize: 20)
-        textField.isSecureTextEntry = true
+        // 초기에는 비밀번호가 보이도록 설정
+        textField.isSecureTextEntry = false
         let bottomLine = UIView()
         bottomLine.backgroundColor = .lightGray
         textField.addSubview(bottomLine)
@@ -42,6 +46,15 @@ class PasswordInputViewController: UIViewController {
             make.bottom.equalTo(textField.snp.bottom).offset(-8)
         }
         return textField
+    }()
+    
+    // "비번 가리기" 버튼 추가
+    let togglePasswordVisibilityButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("비번 가리기", for: .normal)
+        button.setTitleColor(.orange, for: .normal)
+        button.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        return button
     }()
     
     let nextButton: UIButton = {
@@ -59,6 +72,8 @@ class PasswordInputViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         configureTextField()
+        
+        print("이메일뷰에서 전달 받은 닉네임: \(nickname ?? ""), 이메일: \(email ?? "")")
     }
     
     func setupUI() {
@@ -68,6 +83,7 @@ class PasswordInputViewController: UIViewController {
         view.addSubview(progressBar)
         view.addSubview(titleLabel)
         view.addSubview(passwordTextField)
+        view.addSubview(togglePasswordVisibilityButton)
         view.addSubview(nextButton)
         
         // Set up SnapKit constraints
@@ -88,8 +104,13 @@ class PasswordInputViewController: UIViewController {
             make.height.equalTo(50)
         }
         
+        togglePasswordVisibilityButton.snp.makeConstraints { make in
+            make.top.equalTo(passwordTextField.snp.bottom).offset(10)
+            make.right.equalTo(passwordTextField.snp.right)
+        }
+        
         nextButton.snp.makeConstraints { make in
-            make.top.equalTo(passwordTextField.snp.bottom).offset(40)
+            make.top.equalTo(togglePasswordVisibilityButton.snp.bottom).offset(30)
             make.left.right.equalTo(view).inset(40)
             make.height.equalTo(50)
         }
@@ -99,14 +120,26 @@ class PasswordInputViewController: UIViewController {
         passwordTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
+    @objc func togglePasswordVisibility() {
+        // 현재 설정된 isSecureTextEntry 속성을 반전시킵니다.
+        passwordTextField.isSecureTextEntry.toggle()
+        
+        // 토글된 상태에 따라 버튼의 제목을 변경합니다.
+        if passwordTextField.isSecureTextEntry {
+            togglePasswordVisibilityButton.setTitle("비번 보이기", for: .normal)
+        } else {
+            togglePasswordVisibilityButton.setTitle("비번 가리기", for: .normal)
+        }
+    }
     
     @objc func nextButtonTapped() {
-        print("다음버튼탭")
-//           let phoneNumberInputVC = PhoneNumberInputViewController()
-//           navigationController?.pushViewController(phoneNumberInputVC, animated: true)
+        // 닉네임과 이메일, 비밀번호를 출력합니다.
+        print("닉네임: \(nickname ?? "닉네임 없음"), 이메일: \(email ?? "이메일 없음"), 비밀번호: \(passwordTextField.text ?? "비밀번호 없음")")
+        
         let welcomeVC = WelcomeViewController()
         navigationController?.pushViewController(welcomeVC, animated: true)
-       }
+    }
+
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
@@ -118,4 +151,3 @@ class PasswordInputViewController: UIViewController {
         }
     }
 }
-
