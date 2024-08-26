@@ -146,6 +146,12 @@ final class AllPostTableViewCell: UITableViewCell {
         return label
     }()
     
+    // 좋아요 버튼 상태를 저장할 변수
+    var isPostLiked: Bool?
+    
+    // 서버에서 받은 좋아요 상태를 저장할 변수
+    var serverLike: [String]?
+    
     // 각 셀의 포스트 ID를 저장하는 프로퍼티
     var postID: String?
     var userID: String? {
@@ -161,6 +167,7 @@ final class AllPostTableViewCell: UITableViewCell {
     }
     
     private var isFollowing = false
+    private var isLiked = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -182,9 +189,22 @@ final class AllPostTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+ 
   
     private func bindUI() {
+        likeButton.rx.tap
+                 .bind(with: self) { owner, _ in
+                     guard let postID = owner.postID else {
+                         print("포스트 ID가 없습니다.")
+                         return
+                     }
+                     owner.toggleLikeButton()
+                     // 좋아요 상태를 토글한 후, 서버에 요청
+                     let newLikeStatus = !(owner.isPostLiked ?? false)
+                     owner.likePost(postID: postID, likeStatus: newLikeStatus)
+                 }
+                 .disposed(by: disposeBag)
+        
         followButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.followButtonTapped()
@@ -203,6 +223,23 @@ final class AllPostTableViewCell: UITableViewCell {
             }
             .disposed(by: disposeBag)
     }
+    
+    private func toggleLikeButton() {
+        isLiked.toggle()  // 상태를 토글
+
+        // UI 업데이트
+        let heartImage = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+        likeButton.setImage(heartImage, for: .normal)
+        likeButton.tintColor = isLiked ? .red : .black
+
+        // 현재 상태를 출력
+        if isLiked {
+            print("좋아요가 눌렸습니다. 상태: 좋아요")
+        } else {
+            print("좋아요가 취소되었습니다. 상태: 좋아요 취소")
+        }
+    }
+
     
     private func checkAndHideButtons() {
         let currentUserID = UserDefaultsManager.shared.id
@@ -352,4 +389,29 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
     }
+}
+
+extension AllPostTableViewCell {
+ 
+    func likePost(postID: String, likeStatus: Bool) {
+            PostNetworkManager.shared.likePost(postID: postID, likeStatus: likeStatus) { [weak self] result in
+                
+                switch result {
+                case .success(let liked):
+                    self?.isPostLiked = liked
+                    print("포스트 좋아요 상태: \(liked)")
+                    
+                    // 추가로 UI 업데이트 등을 여기에 작성할 수 있습니다.
+                    if liked {
+                        print("포스트에 좋아요가 성공적으로 설정되었습니다.")
+                    } else {
+                        print("포스트에 대한 좋아요가 취소되었습니다.")
+                    }
+
+                case .failure(let error):
+                    print("좋아요 요청 실패: \(error.localizedDescription)")
+                    self?.isPostLiked = nil  // 요청이 실패했을 때, 상태를 nil로 설정하거나 적절히 처리
+                }
+            }
+        }
 }

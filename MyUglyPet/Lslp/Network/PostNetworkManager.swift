@@ -80,6 +80,27 @@ class PostNetworkManager {
     static let shared = PostNetworkManager()
     
     private init() {}
+    //MARK: - 게시글 좋아요 설정 및 취소
+    func likePost(postID: String, likeStatus: Bool, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let query = LikePostQuery(like_status: likeStatus)
+        let request = Router.likePost(postID: postID, query: query).asURLRequest
+        
+        AF.request(request)
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    do {
+                        // 서버에서 반환된 데이터를 확인 (예: 좋아요 상태 반환 여부)
+                        let result = try JSONDecoder().decode(LikePostQuery.self, from: data)
+                        completion(.success(result.like_status))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
 
     
     

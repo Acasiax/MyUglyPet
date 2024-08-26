@@ -159,6 +159,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         cell.titleLabel.text = post.title
         cell.contentLabel.text = post.content
         cell.imageFiles = post.files ?? []
+        cell.serverLike = post.likes
         cell.delegate = self
         
         if let myProfile = myProfile {
