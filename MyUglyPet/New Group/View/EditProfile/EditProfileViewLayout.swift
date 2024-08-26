@@ -37,7 +37,7 @@ extension EditProfileViewController {
     }
     
     func setupBottomSectionConstraints() {
-        let rowStackView1 = UIStackView(arrangedSubviews: [managePostsButton, editProfileButton])
+        let rowStackView1 = UIStackView(arrangedSubviews: [myLikedPostsButton, editProfileButton])
         rowStackView1.axis = .horizontal
         rowStackView1.distribution = .fillEqually
         rowStackView1.spacing = 10

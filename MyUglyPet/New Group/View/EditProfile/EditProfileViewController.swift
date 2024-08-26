@@ -19,12 +19,12 @@ final class EditProfileViewController: UIViewController {
     lazy var notificationLabel = EditProfileUI.notificationLabel()
     lazy var logoutButton = EditProfileUI.logoutButton()
     lazy var deleteAccountButton = EditProfileUI.deleteAccountButton()
-    lazy var managePostsButton = EditProfileUI.managePostsButton()
+    lazy var myLikedPostsButton = EditProfileUI.managePostsButton()
     lazy var editProfileButton = EditProfileUI.editProfileButton()
     lazy var viewFollowingButton = EditProfileUI.viewFollowingButton()
     lazy var viewFollowersButton = EditProfileUI.viewFollowersButton()
     lazy var buttonStackView = EditProfileUI.buttonStackView(withButtons: [
-        managePostsButton, editProfileButton, viewFollowingButton, viewFollowersButton
+        myLikedPostsButton, editProfileButton, viewFollowingButton, viewFollowersButton
     ])
     
     private let disposeBag = DisposeBag()
@@ -117,10 +117,10 @@ final class EditProfileViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        managePostsButton.rx.tap
+        myLikedPostsButton.rx.tap
             .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.managePostsButton)
-                owner.handleManagePostsButtonTap()
+                AnimationZip.animateButtonPress(owner.myLikedPostsButton)
+                owner.MyLikedPostsButtonTap()
             }
             .disposed(by: disposeBag)
         
@@ -166,8 +166,8 @@ extension EditProfileViewController {
         print("프로필 이미지 버튼이 눌렸습니다.")
     }
     
-    private func handleManagePostsButtonTap() {
-        print("게시글 관리 버튼이 눌렸습니다.")
+    private func MyLikedPostsButtonTap() {
+        print("좋아요한 게시글 버튼이 눌렸습니다.")
     }
     
     private func handleEditProfileButtonTap() {
