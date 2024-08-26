@@ -30,6 +30,9 @@
 		AA6474492C7B69BE0079ECE0 /* EditProfileUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */; };
 		AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */; };
 		AA64744E2C7BA0B80079ECE0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */; };
+		AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */; };
+		AA64745B2C7C467D0079ECE0 /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745A2C7C467D0079ECE0 /* PostsViewController.swift */; };
+		AA64745D2C7C46A50079ECE0 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745C2C7C46A50079ECE0 /* FollowingViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -90,7 +93,7 @@
 		AA7273792C72DBC3007551C4 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = AA7273782C72DBC3007551C4 /* FirebaseCrashlytics */; };
 		AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72737F2C7397BE007551C4 /* DashboardViewController.swift */; };
 		AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */; };
-		AA7273842C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */; };
+		AA7273842C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273832C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +120,9 @@
 		AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileUI.swift; sourceTree = "<group>"; };
 		AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMapViewController.swift; sourceTree = "<group>"; };
 		AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersViewController.swift; sourceTree = "<group>"; };
+		AA64745A2C7C467D0079ECE0 /* PostsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
+		AA64745C2C7C46A50079ECE0 /* FollowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -170,7 +176,7 @@
 		AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNetworkManager.swift; sourceTree = "<group>"; };
 		AA72737F2C7397BE007551C4 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankCollectionViewCell.swift; sourceTree = "<group>"; };
-		AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HobbyCardCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA7273832C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBuddyCardCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +202,7 @@
 		AA6474232C7A35650079ECE0 /* EditProfile */ = {
 			isa = PBXGroup;
 			children = (
+				AA6474572C7C46050079ECE0 /* MyFollersPost */,
 				AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */,
 				AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */,
 				AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */,
@@ -231,6 +238,16 @@
 				AA64744D2C7BA0B80079ECE0 /* LocationManager.swift */,
 			);
 			path = MyMapView;
+			sourceTree = "<group>";
+		};
+		AA6474572C7C46050079ECE0 /* MyFollersPost */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */,
+				AA64745A2C7C467D0079ECE0 /* PostsViewController.swift */,
+				AA64745C2C7C46A50079ECE0 /* FollowingViewController.swift */,
+			);
+			path = MyFollersPost;
 			sourceTree = "<group>";
 		};
 		AA7272A82C6C967C007551C4 = {
@@ -454,7 +471,7 @@
 			children = (
 				AA72737F2C7397BE007551C4 /* DashboardViewController.swift */,
 				AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */,
-				AA7273832C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift */,
+				AA7273832C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift */,
 				AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */,
 			);
 			path = DashboardView;
@@ -590,6 +607,7 @@
 				AA7273552C71D032007551C4 /* NetworkManager.swift in Sources */,
 				AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */,
 				AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */,
+				AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */,
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
 				AA64742D2C7B23C50079ECE0 /* MainHomeViewLayout.swift in Sources */,
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
@@ -635,11 +653,13 @@
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,
 				AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */,
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
+				AA64745D2C7C46A50079ECE0 /* FollowingViewController.swift in Sources */,
 				AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */,
 				AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */,
 				AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */,
 				AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */,
 				AA72735A2C71DA95007551C4 /* CreatePostViewLayout.swift in Sources */,
+				AA64745B2C7C467D0079ECE0 /* PostsViewController.swift in Sources */,
 				AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */,
 				AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
@@ -648,7 +668,7 @@
 				AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,
 				AA6474252C7A35810079ECE0 /* EditProfileViewController.swift in Sources */,
-				AA7273842C73A4F6007551C4 /* HobbyCardCollectionViewCell.swift in Sources */,
+				AA7273842C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

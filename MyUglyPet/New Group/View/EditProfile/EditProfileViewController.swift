@@ -262,34 +262,9 @@ extension EditProfileViewController {
         }
         
         private func navigateToFollowing() {
-            let followingVC = FollowingViewController()
+            let followingVC = HiViewController()
             navigationController?.pushViewController(followingVC, animated: true)
         }
 }
 
 
-
-// Placeholder View Controllers for demonstration purposes
-class FollowersViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "Followers"
-    }
-}
-
-class PostsViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "Posts"
-    }
-}
-
-class FollowingViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "Following"
-    }
-}
