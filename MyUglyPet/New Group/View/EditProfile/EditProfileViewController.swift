@@ -29,9 +29,9 @@ final class EditProfileViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
-    var followersCountLabel: UILabel?
-    var postsCountLabel: UILabel?
-    var followingCountLabel: UILabel?
+    var followersButton = UIButton()
+    var postsButton = UIButton()
+    var followingButton = UIButton()
     
     var userProfile: MyProfileResponse?
     
@@ -64,13 +64,13 @@ final class EditProfileViewController: UIViewController {
     }
     
     private func setupStatsSection() {
-        followersCountLabel = EditProfileUI.statLabel(number: "0", title: "팔로워")
-        postsCountLabel = EditProfileUI.statLabel(number: "0", title: "전체 게시물수")
-        followingCountLabel = EditProfileUI.statLabel(number: "0", title: "팔로잉")
+        followersButton = EditProfileUI.statButton(number: "0", title: "팔로워")
+        postsButton = EditProfileUI.statButton(number: "0", title: "전체 게시물수")
+        followingButton = EditProfileUI.statButton(number: "0", title: "팔로잉")
         
-        profileStatsStackView.addArrangedSubview(followersCountLabel!)
-        profileStatsStackView.addArrangedSubview(postsCountLabel!)
-        profileStatsStackView.addArrangedSubview(followingCountLabel!)
+        profileStatsStackView.addArrangedSubview(followersButton)
+        profileStatsStackView.addArrangedSubview(postsButton)
+        profileStatsStackView.addArrangedSubview(followingButton)
         
         view.addSubview(profileStatsStackView)
         
@@ -89,6 +89,26 @@ final class EditProfileViewController: UIViewController {
     // MARK: - Action Methods
     
     private func bindButtons() {
+        followersButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.followersButton)
+                print("팔로워 버튼이 눌렸습니다.")
+            }
+            .disposed(by: disposeBag)
+        
+        postsButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.postsButton)
+                print("전체 게시물수 버튼이 눌렸습니다.")
+            }
+            .disposed(by: disposeBag)
+        
+        followingButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.followingButton)
+                print("팔로잉 버튼이 눌렸습니다.")
+            }
+            .disposed(by: disposeBag)
         
         profileImageButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -171,10 +191,7 @@ extension EditProfileViewController {
     }
 }
 
-
-
 extension EditProfileViewController {
-    
     func deleteAllPosts() {
         guard let profile = userProfile else {
             print("프로필 정보가 없습니다.")
@@ -205,7 +222,6 @@ extension EditProfileViewController {
             switch result {
             case .success(let profile):
                 self?.userProfile = profile
-                //   print("내 프로필 가져오는데 성공했어요🥰", profile)
                 self?.updateUIWithProfileData()
             case .failure(let error):
                 print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
@@ -217,13 +233,16 @@ extension EditProfileViewController {
     private func updateUIWithProfileData() {
         guard let profile = userProfile else { return }
         
-        // 팔로워, 팔로잉, 게시물 수 업데이트
         userNameLabel.text = profile.nick
         userEmailLabel.text = profile.email
-        followersCountLabel?.text = "\(profile.followers.count)\n팔로워"
-        followingCountLabel?.text = "\(profile.following.count)\n팔로잉"
-        postsCountLabel?.text = "\(profile.posts.count)\n게시물수"
+        
+        let followersTitle = "\(profile.followers.count)\n팔로워"
+        let followingTitle = "\(profile.following.count)\n팔로잉"
+        let postsTitle = "\(profile.posts.count)\n게시물수"
+        
+        followersButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.followers.count)", title: "팔로워").attributedTitle(for: .normal), for: .normal)
+        followingButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.following.count)", title: "팔로잉").attributedTitle(for: .normal), for: .normal)
+        postsButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.posts.count)", title: "게시물수").attributedTitle(for: .normal), for: .normal)
     }
 }
-
 
