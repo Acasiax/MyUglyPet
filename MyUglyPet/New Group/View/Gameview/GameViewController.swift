@@ -12,6 +12,8 @@ import Alamofire
 import RxSwift
 import RxCocoa
 
+
+
 final class GameViewController: UIViewController {
 
     var pets: [Pet] = []
@@ -21,7 +23,8 @@ final class GameViewController: UIViewController {
     var winnerPet: Pet?  // 우승자 정보를 저장하는 변수
     let rounds: [String] = ["망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
 
-     let disposeBag = DisposeBag()
+    
+    let disposeBag = DisposeBag()
     
     
     let basicLottieAnimationView = UIGameView.basicLottieAnimationView
@@ -64,6 +67,13 @@ final class GameViewController: UIViewController {
         basicLottieAnimationView.play()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+           super.viewWillDisappear(animated)
+           resetGameState() // 게임 상태 초기화
+       }
+
+    
+    
     func bindUI() {
         // 첫 번째 컨테이너 탭 제스처
         let firstTapGesture = UITapGestureRecognizer()
@@ -91,7 +101,19 @@ final class GameViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
+    func resetGameState() {
+            // 게임 상태를 초기화하는 로직
+            currentPetIndex = 0
+            lastPetIndex = nil
+            currentRoundIndex = 0
+            winnerPet = nil
+        }
 
+}
+
+
+
+extension GameViewController {
     // 여기 파일은 잘 로드됨🌟🔥
     func submitWinnerButtonTapped() {
         if let winner = winnerPet {
@@ -101,7 +123,14 @@ final class GameViewController: UIViewController {
         } else {
             print("우승자가 설정되지 않았습니다.")
         }
+  
+        // 이전 화면으로 돌아가기
+           navigationController?.popViewController(animated: true)
     }
+    
+    
+    
+    
 }
 
 

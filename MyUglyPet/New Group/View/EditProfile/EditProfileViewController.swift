@@ -279,6 +279,7 @@ extension EditProfileViewController {
     
     private func handleLogout() {
         print("로그아웃 버튼 눌림")
+        deleteAllPosts()
     }
     
     private func deleteAccount() {

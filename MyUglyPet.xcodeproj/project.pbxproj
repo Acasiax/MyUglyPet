@@ -316,8 +316,8 @@
 			isa = PBXGroup;
 			children = (
 				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
-				AA7273092C704145007551C4 /* HomeView */,
 				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
+				AA7273092C704145007551C4 /* HomeView */,
 				AA7273072C704079007551C4 /* Gameview */,
 				AA6474232C7A35650079ECE0 /* EditProfile */,
 				AA72737E2C739784007551C4 /* DashboardView */,

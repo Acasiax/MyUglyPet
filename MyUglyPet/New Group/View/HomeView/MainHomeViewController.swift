@@ -67,6 +67,7 @@ extension MainHomeViewController {
         
         let output = viewModel.transform(input: input, petButton: petButton, uploadButton: uploadButton)
         
+        //화면 이동
         output.missionToShow
             .subscribe(onNext: { [weak self] viewController in
                 self?.navigationController?.pushViewController(viewController, animated: true)
