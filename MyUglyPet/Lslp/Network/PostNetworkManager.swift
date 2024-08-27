@@ -171,6 +171,28 @@ class PostNetworkManager {
     static let shared = PostNetworkManager()
     
     private init() {}
+    
+    //MARK: - 좋아요한 포스트 조회
+      func fetchLikedPosts(query: FetchLikedPostsQuery, completion: @escaping (Result<[PostsModel], Error>) -> Void) {
+          let request = Router.fetchLikedPosts(query: query).asURLRequest
+          
+          AF.request(request)
+              .responseData { response in
+                  switch response.result {
+                  case .success(let data):
+                      do {
+                          let result = try JSONDecoder().decode(PostsResponse.self, from: data)
+                          completion(.success(result.data))
+                      } catch {
+                          completion(.failure(error))
+                      }
+                  case .failure(let error):
+                      completion(.failure(error))
+                  }
+              }
+      }
+    
+    
     //MARK: - 게시글 좋아요 설정 및 취소
     func likePost(postID: String, likeStatus: Bool, completion: @escaping (Result<Bool, Error>) -> Void) {
         let query = LikePostQuery(like_status: likeStatus)

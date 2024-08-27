@@ -216,7 +216,7 @@ extension EditProfileViewController {
         
         followersButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.followers.count)", title: "팔로워").attributedTitle(for: .normal), for: .normal)
         followingButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.following.count)", title: "팔로잉").attributedTitle(for: .normal), for: .normal)
-        postsButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.posts.count)", title: "게시물수").attributedTitle(for: .normal), for: .normal)
+        postsButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.posts.count)", title: "내가 작성한\n게시물수").attributedTitle(for: .normal), for: .normal)
     }
 }
 

@@ -56,7 +56,8 @@ final class MyLikedPostsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         // 데이터 로드
-        fetchPosts()
+      //  fetchPosts()
+        fetchLikedPosts()
         fetchMyProfile()
     }
     
@@ -106,6 +107,40 @@ final class MyLikedPostsViewController: UIViewController {
             self.navigationController?.pushViewController(postCreationVC, animated: true)
         }
     }
+
+    
+    
+    
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        // 기능 지웠음
+    }
+}
+
+
+
+extension MyLikedPostsViewController{
+    
+    
+    
+    //좋아요한 포스트 가져오기
+    func fetchLikedPosts() {
+            let query = FetchLikedPostsQuery(next: nil, limit: "10") // 쿼리 설정 (next와 limit 값은 필요에 따라 설정)
+            
+            PostNetworkManager.shared.fetchLikedPosts(query: query) { [weak self] result in
+                switch result {
+                case .success(let posts):
+                  //  self?.likedPosts = posts
+                    self?.serverPosts = posts
+                    DispatchQueue.main.async {
+                        self?.tableView.reloadData()
+                    }
+                case .failure(let error):
+                    print("Failed to fetch liked posts: \(error.localizedDescription)")
+                    // 에러 처리를 추가로 구현할 수 있습니다.
+                }
+            }
+        }
+    
     
     // 내 프로필 가져오기
     func fetchMyProfile() {
@@ -133,11 +168,18 @@ final class MyLikedPostsViewController: UIViewController {
             }
         }
     }
+
     
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        // 기능 지웠음
-    }
+    
 }
+
+
+
+
+
+
+
+
 
 extension MyLikedPostsViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
