@@ -51,9 +51,10 @@ final class RankCollectionViewCell: UICollectionViewCell {
     
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "꼬질이님"
+        label.text = "사진제목"
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .center
+        label.numberOfLines = 3
         return label
     }()
     
@@ -63,6 +64,7 @@ final class RankCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 14)
         label.textAlignment = .center
         label.textColor = .gray
+        label.numberOfLines = 3
         return label
     }()
     
