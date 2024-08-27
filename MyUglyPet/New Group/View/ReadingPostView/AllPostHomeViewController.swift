@@ -160,6 +160,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         cell.contentLabel.text = post.content
         cell.imageFiles = post.files ?? []
         cell.serverLike = post.likes
+        //print("셀에 보낸 좋아요 값: \(cell.serverLike)")
         cell.delegate = self
         
         if let myProfile = myProfile {

@@ -150,7 +150,11 @@ final class AllPostTableViewCell: UITableViewCell {
     var isPostLiked: Bool?
     
     // 서버에서 받은 좋아요 상태를 저장할 변수
-    var serverLike: [String]?
+    var serverLike: [String]? {
+        didSet {
+            updateLikeButton()
+        }
+    }
     
     // 각 셀의 포스트 ID를 저장하는 프로퍼티
     var postID: String?
@@ -189,7 +193,6 @@ final class AllPostTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
- 
   
     private func bindUI() {
         likeButton.rx.tap
@@ -239,7 +242,32 @@ final class AllPostTableViewCell: UITableViewCell {
             print("좋아요가 취소되었습니다. 상태: 좋아요 취소")
         }
     }
+    
+    private func updateLikeButton() {
+        // serverLike 값 출력
+        if let serverLike = serverLike {
+            print("서버에서 받은 좋아요 상태: \(serverLike)")
+            
+            // 좋아요 상태가 있는지 확인하고 버튼 상태 업데이트
+            if !serverLike.isEmpty {
+                isLiked = true
+                updateLikeButtonUI()
+            } else {
+                isLiked = false
+                updateLikeButtonUI()
+            }
+        } else {
+            print("serverLike 값이 없습니다.")
+            isLiked = false
+            updateLikeButtonUI()
+        }
+    }
 
+    private func updateLikeButtonUI() {
+        let heartImage = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+        likeButton.setImage(heartImage, for: .normal)
+        likeButton.tintColor = isLiked ? .red : .black
+    }
     
     private func checkAndHideButtons() {
         let currentUserID = UserDefaultsManager.shared.id
@@ -250,8 +278,6 @@ final class AllPostTableViewCell: UITableViewCell {
             followButton.isHidden = false
             deleteButton.isHidden = true
         }
-        
-        
     }
     
     private func followButtonTapped() {
@@ -260,11 +286,6 @@ final class AllPostTableViewCell: UITableViewCell {
             return
         }
         print("내가 친구하고 싶은 유저ID:\(myBuddyuserID)")
-        
-        //내 유저 아이디 넣어주기!
-//        let myBuddyuserID = UserDefaultsManager.shared.id
-//        print("내 유저아이디ID:\(myBuddyuserID)")
-
         
         isFollowing.toggle()
         updateFollowButtonUI()
@@ -398,6 +419,7 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
         return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
     }
 }
+
 
 extension AllPostTableViewCell {
  
