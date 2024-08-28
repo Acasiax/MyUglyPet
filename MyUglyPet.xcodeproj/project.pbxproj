@@ -34,6 +34,7 @@
 		AA64745B2C7C467D0079ECE0 /* MyLikedPostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */; };
 		AA64745D2C7C46A50079ECE0 /* MyFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */; };
 		AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */; };
+		AA64747A2C7F18810079ECE0 /* TestPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474792C7F18810079ECE0 /* TestPhoto.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -125,6 +126,7 @@
 		AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLikedPostsViewController.swift; sourceTree = "<group>"; };
 		AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowingViewController.swift; sourceTree = "<group>"; };
 		AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPostersViewController.swift; sourceTree = "<group>"; };
+		AA6474792C7F18810079ECE0 /* TestPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPhoto.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 		AA7272E82C6DD8BF007551C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AA6474792C7F18810079ECE0 /* TestPhoto.swift */,
 				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
 				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273092C704145007551C4 /* HomeView */,
@@ -668,6 +671,7 @@
 				AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
 				AA6474292C7B11A90079ECE0 /* UglyCandidateViewModel.swift in Sources */,
+				AA64747A2C7F18810079ECE0 /* TestPhoto.swift in Sources */,
 				AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */,
 				AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,
