@@ -51,7 +51,6 @@ class DashboardViewController: UIViewController {
         return label
     }()
     
-
     let searchButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
@@ -67,21 +66,7 @@ class DashboardViewController: UIViewController {
         return label
     }()
     
-    // 배너 컬렉션 뷰
-    let bannerCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 150)
-        layout.minimumLineSpacing = 10
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(BannerCollectionViewCell.self, forCellWithReuseIdentifier: BannerCollectionViewCell.identifier)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isPagingEnabled = true
-        collectionView.backgroundColor = .clear
-        return collectionView
-    }()
-    
-    // 페이지 컨트롤
+    // 페이지 컨트롤 (배너가 사라졌으므로 이 부분도 제거할 수 있음)
     let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPage = 0
@@ -145,28 +130,14 @@ class DashboardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bannerCollectionView.dataSource = self
         rankCollectionView.dataSource = self
         hobbyCardCollectionView.dataSource = self
         
-        bannerCollectionView.delegate = self
         rankCollectionView.delegate = self
         hobbyCardCollectionView.delegate = self
         
-        // 배너의 페이지 수에 맞춰 페이지 컨트롤 설정
-        pageControl.numberOfPages = bannerData.count
-        
         setupSubviews()
         setupConstraints()
-        
-        // Rx 방식으로 pageControl의 값 변경 이벤트 처리
-        pageControl.rx.controlEvent(.valueChanged)
-            .withUnretained(self)  // [weak self] 대신 bind(with: self)를 사용하여 owner에 self 바인딩
-            .bind { owner, _ in
-                let indexPath = IndexPath(item: owner.pageControl.currentPage, section: 0)
-                owner.bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            }
-            .disposed(by: disposeBag)
     }
     
     func setupSubviews() {
@@ -186,10 +157,13 @@ class DashboardViewController: UIViewController {
         headerStackView.spacing = 16
         contentStackView.addArrangedSubview(headerStackView)
         
-        // 배너 섹션 추가
+        // 배너 섹션 추가 (배너 대신 CardCarouselViewController 추가)
         contentStackView.addArrangedSubview(bannerHeaderLabel)
-        contentStackView.addArrangedSubview(bannerCollectionView)
-        contentStackView.addArrangedSubview(pageControl)
+        
+        let cardCarouselVC = CardCarouselViewController()
+        addChild(cardCarouselVC)
+        contentStackView.addArrangedSubview(cardCarouselVC.view)
+        cardCarouselVC.didMove(toParent: self)
         
         // 순위 섹션 추가
         contentStackView.addArrangedSubview(rankHeaderLabel)
@@ -199,7 +173,6 @@ class DashboardViewController: UIViewController {
         contentStackView.addArrangedSubview(hobbyCardHeaderLabel)
         contentStackView.addArrangedSubview(hobbyCardCollectionView)
     }
-    
     func setupConstraints() {
         // ScrollView 제약 조건
         scrollView.snp.makeConstraints { make in
@@ -211,8 +184,11 @@ class DashboardViewController: UIViewController {
             make.width.equalTo(scrollView)
         }
         
-        bannerCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(150)
+        // CardCarouselViewController의 view에 대한 제약 조건 설정
+        let cardCarouselView = contentStackView.arrangedSubviews[2]
+        cardCarouselView.snp.makeConstraints { make in
+            //make.height.equalTo(view.snp.height).multipliedBy(0.3)
+            make.height.equalTo(210)
         }
         
         rankCollectionView.snp.makeConstraints { make in
@@ -223,13 +199,9 @@ class DashboardViewController: UIViewController {
             make.height.equalTo(400) // 필요 시 조정 가능
         }
     }
-    
-    // 페이지 컨트롤 값 변경 시 호출되는 메서드 (더 이상 사용되지 않음)
-    // @objc func pageControlValueChanged(_ sender: UIPageControl) {
-    //     let indexPath = IndexPath(item: sender.currentPage, section: 0)
-    //     bannerCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    // }
+
 }
+
 
 
 
@@ -240,9 +212,6 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
-            
-        case bannerCollectionView:
-            return bannerData.count
             
         case rankCollectionView:
             print("👺\(rankedGroups.count)")
@@ -264,11 +233,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
-        case bannerCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.identifier, for: indexPath) as! BannerCollectionViewCell
-            let data = bannerData[indexPath.item]
-            cell.configure(with: data.image, title: data.title)
-            return cell
+    
             
         case rankCollectionView:
                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
@@ -363,12 +328,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == bannerCollectionView {
-            let page = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
-            pageControl.currentPage = page
-        }
-    }
+
 }
 
 

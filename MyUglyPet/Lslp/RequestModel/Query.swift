@@ -165,7 +165,8 @@ struct Mission {
 struct MissionData {
     static let missions: [Mission] = [
         Mission(iconName: "icon1", title: "망한 사진 월드컵 대회참여하기", carrotCount: 2),
-        Mission(iconName: "icon2", title: "후보 구경하기", carrotCount: 3)
+        Mission(iconName: "icon2", title: "후보 구경하기", carrotCount: 3),
+        Mission(iconName: "icon1", title: "개발자 집 사주기", carrotCount: 2)
     ]
 }
 

@@ -25,10 +25,15 @@ struct MainHomeViewModel {
     func transform(input: Input, petButton: UIButton, uploadButton: UIButton) -> Output {
         let missionToShow = input.missionSelected
             .map { index -> UIViewController in
-                if index == 0 {
+                switch index {
+                case 0:
                     return GameViewController()
-                } else {
+                case 1:
                     return IntroUglyCandidateViewController()
+                case 2:
+                    return GameViewController()
+                default:
+                    return UIViewController() // 기본값으로 빈 UIViewController를 반환하거나 다른 뷰 컨트롤러를 지정할 수 있습니다.
                 }
             }
 
@@ -48,4 +53,5 @@ struct MainHomeViewModel {
             animateUploadButton: animateUploadButton
         )
     }
+
 }

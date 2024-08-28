@@ -15,7 +15,7 @@ class CardCarouselViewController: UIViewController, UICollectionViewDataSource, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = CustomColors.softBlue
         
         // 이미지 데이터를 추가합니다. 여기서는 샘플 이미지를 사용합니다.
         images = [
@@ -30,7 +30,10 @@ class CardCarouselViewController: UIViewController, UICollectionViewDataSource, 
         
         // 캐러셀 레이아웃을 설정합니다.
         let layout = CarouselLayout()
-        layout.itemSize = CGSize(width: view.frame.width * 0.7, height: view.frame.height * 0.5)
+       // layout.itemSize = CGSize(width: view.frame.width * 0.7, height: view.frame.height * 0.5)
+        
+        layout.itemSize = CGSize(width: view.frame.width * 0.35, height: view.frame.height * 0.25)
+
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -42,10 +45,9 @@ class CardCarouselViewController: UIViewController, UICollectionViewDataSource, 
         
         // SnapKit을 사용하여 컬렉션 뷰의 오토레이아웃 설정
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.height.equalTo(view.snp.height).multipliedBy(0.6)
+            make.edges.equalToSuperview() 
         }
+
     }
     
     // UICollectionViewDataSource 메서드 구현

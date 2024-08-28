@@ -35,6 +35,103 @@ struct ServerResponse: Decodable {
     let message: String
 }
 
+//영수증 검증 응답 코드
+struct ReceiptValidationResponse: Codable {
+    let buyer_id: String
+    let post_id: String
+    let merchant_uid: String
+    let productName: String
+    let price: Int
+    let paidAt: String
+}
+
+
+//영수증 리스트 가져오기 응답코드
+struct PaymentHistory: Decodable {
+    let buyerID: String
+    let postID: String
+    let merchantUID: String
+    let productName: String
+    let price: Int
+    let paidAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case buyerID = "buyer_id"
+        case postID = "post_id"
+        case merchantUID = "merchant_uid"
+        case productName = "productName"
+        case price
+        case paidAt = "paidAt"
+    }
+}
+
+
+
+
+// MARK: - 결제
+class PayNetworkManager {
+    
+    static let shared = PayNetworkManager()
+    
+    private init() {}
+    
+    // 영수증 검증
+    func payValidateReceipt(imp_uid: String, post_id: String, completion: @escaping (Result<ReceiptValidationResponse, Error>) -> Void) {
+        // 1. 영수증 검증에 필요한 데이터를 준비합니다.
+        let query = ValidateReceiptQuery(imp_uid: imp_uid, post_id: post_id)
+        
+        // 2. Router를 사용하여 요청을 생성합니다.
+        let router = Router.validateReceipt(query: query)
+        
+        // 3. Alamofire를 사용하여 요청을 전송합니다.
+        if let urlRequest = try? router.asURLRequest() {
+            AF.request(urlRequest)
+                .validate()
+                .responseDecodable(of: ReceiptValidationResponse.self) { response in
+                    switch response.result {
+                    case .success(let receiptResponse):
+                        completion(.success(receiptResponse))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+        } else {
+            // URLRequest 생성에 실패한 경우 에러를 반환합니다.
+            completion(.failure(NSError(domain: "PayNetworkManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate URLRequest"])))
+        }
+    }
+    
+    // 결제 내역 가져오기
+    func fetchPaymentHistory(completion: @escaping (Result<[PaymentHistory], Error>) -> Void) {
+        // 1. Router를 사용하여 요청을 생성합니다.
+        let router = Router.fetchPaymentHistory
+        
+        // 2. Alamofire를 사용하여 요청을 전송합니다.
+        if let urlRequest = try? router.asURLRequest() {
+            AF.request(urlRequest)
+                .validate()
+                .responseDecodable(of: [PaymentHistory].self) { response in
+                    switch response.result {
+                    case .success(let paymentHistory):
+                        completion(.success(paymentHistory))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+        } else {
+            // URLRequest 생성에 실패한 경우 에러를 반환합니다.
+            completion(.failure(NSError(domain: "PayNetworkManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate URLRequest"])))
+        }
+    }
+}
+
+
+
+
+
+
+
+
 class SignUpPostNetworkManager {
     
     static let shared = SignUpPostNetworkManager()
