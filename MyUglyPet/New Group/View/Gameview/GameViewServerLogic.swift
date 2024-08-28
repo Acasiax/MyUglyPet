@@ -53,10 +53,10 @@ extension GameViewController {
             print("4강 우승자(사진제목): \(selectedPet.name), 사용자이름: \(selectedPet.userName)")
             
             UIView.animate(withDuration: 0.5, animations: {
-                self.titleLabel.alpha = 0
-                self.firstContainerView.alpha = 0
-                self.secondContainerView.alpha = 0
-                self.vsLabel.alpha = 0
+                self.titleLabel.alpha = 1
+                self.firstContainerView.alpha = 1
+                self.secondContainerView.alpha = 1
+                self.vsLabel.alpha = 1
             }) { _ in
                 self.titleLabel.isHidden = true
                 self.firstContainerView.isHidden = true

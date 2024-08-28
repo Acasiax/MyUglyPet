@@ -57,24 +57,56 @@ final class GameViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print(#function)
+        fetchPosts()
         AnimationZip.startAnimations(firstContainerView: firstContainerView, secondContainerView: secondContainerView, titleLabel: titleLabel, worldCupLabel: worldCupLabel, in: view)
         showInitialPets()
+ 
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(#function)
         view.backgroundColor = CustomColors.lightBeige
         addsub()
         setupUI()
         bindUI()
-        fetchPosts()
+        
         basicLottieAnimationView.play()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
            super.viewWillDisappear(animated)
-           resetGameState() // 게임 상태 초기화
+        
+         
        }
+
+    
+    func resetGameState() {
+        print(#function)
+        // 게임 상태를 초기화
+        currentPetIndex = 0
+        lastPetIndex = nil
+        currentRoundIndex = 0
+        winnerPet = nil
+
+        // UI 상태 초기화
+        winnerContainerView.isHidden = true
+        winnerTitleLabel.isHidden = true
+        submitWinnerButton.isHidden = true
+        
+        // 초기 컨테이너 및 라벨 보이기
+        firstContainerView.isHidden = false
+        secondContainerView.isHidden = false
+        titleLabel.isHidden = false
+        vsLabel.isHidden = false
+        descriptionLabel.text = rounds[0] // 초기 라운드 레이블 설정
+        
+        // 초기 애니메이션 숨김
+        basicLottieAnimationView.isHidden = false
+        pinkLottieAnimationView.isHidden = false
+        congratulationAnimationView.isHidden = true
+    }
 
     
     
@@ -105,13 +137,7 @@ final class GameViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    func resetGameState() {
-            // 게임 상태를 초기화하는 로직
-            currentPetIndex = 0
-            lastPetIndex = nil
-            currentRoundIndex = 0
-            winnerPet = nil
-        }
+
 
 }
 
@@ -127,14 +153,16 @@ extension GameViewController {
         } else {
             print("우승자가 설정되지 않았습니다.")
         }
-  
+        
+        // Delegate를 통해 게임 종료를 알림
+           delegate?.gameDidFinish()
         // 이전 화면으로 돌아가기
            navigationController?.popViewController(animated: true)
+        resetGameState()
+        
     }
     
-    
-    
-    
+   
 }
 
 
