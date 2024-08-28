@@ -37,6 +37,7 @@
 		AA64747A2C7F18810079ECE0 /* TestPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474792C7F18810079ECE0 /* TestPhoto.swift */; };
 		AA64747C2C7F29B80079ECE0 /* CarouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64747B2C7F29B80079ECE0 /* CarouselViewController.swift */; };
 		AA6474802C7F343D0079ECE0 /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64747F2C7F343D0079ECE0 /* PayViewController.swift */; };
+		AA6474832C7F52370079ECE0 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = AA6474822C7F52370079ECE0 /* iamport-ios */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -197,6 +198,7 @@
 				AA7272CF2C6CA082007551C4 /* SnapKit in Frameworks */,
 				AA7272DA2C6CA0B0007551C4 /* RxSwift in Frameworks */,
 				AA7272D82C6CA0B0007551C4 /* RxCocoa in Frameworks */,
+				AA6474832C7F52370079ECE0 /* iamport-ios in Frameworks */,
 				AA7272D22C6CA091007551C4 /* Alamofire in Frameworks */,
 				AA7273792C72DBC3007551C4 /* FirebaseCrashlytics in Frameworks */,
 				AA7272F52C6F8389007551C4 /* Lottie in Frameworks */,
@@ -532,6 +534,7 @@
 				AA72731F2C70E03A007551C4 /* IQKeyboardManagerSwift */,
 				AA7273762C72DBC3007551C4 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				AA7273782C72DBC3007551C4 /* FirebaseCrashlytics */,
+				AA6474822C7F52370079ECE0 /* iamport-ios */,
 			);
 			productName = MyUglyPet;
 			productReference = AA7272B12C6C967C007551C4 /* MyUglyPet.app */;
@@ -569,6 +572,7 @@
 				AA7272F32C6F8388007551C4 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				AA72731E2C70E03A007551C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				AA7273752C72DBC3007551C4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AA6474812C7F52370079ECE0 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
 			productRefGroup = AA7272B22C6C967C007551C4 /* Products */;
 			projectDirPath = "";
@@ -938,6 +942,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AA6474812C7F52370079ECE0 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.2;
+			};
+		};
 		AA7272CD2C6CA082007551C4 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -997,6 +1009,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AA6474822C7F52370079ECE0 /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA6474812C7F52370079ECE0 /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
+		};
 		AA7272CE2C6CA082007551C4 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA7272CD2C6CA082007551C4 /* XCRemoteSwiftPackageReference "SnapKit" */;

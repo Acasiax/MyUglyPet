@@ -2,15 +2,62 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakaokompassauth</string>
+		<string>kftc-bankpay</string>
+		<string>ispmobile</string>
+		<string>itms-apps</string>
+		<string>hdcardappcardansimclick</string>
+		<string>smhyundaiansimclick</string>
+		<string>shinhan-sr-ansimclick</string>
+		<string>smshinhancardansimclick</string>
+		<string>kb-acp</string>
+		<string>samsungpay</string>
+		<string>lottesmartpay</string>
+		<string>payco</string>
+		<string>supertoss</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string></string>
+			<key>CFBundleURLName</key>
+			<string>slp.example</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sesac</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>이 앱은 사용자의 현재 위치를 찾기 위해 위치 데이터를 사용합니다.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>이 앱은 사용자의 현재 위치를 찾기 위해 위치 데이터를 사용합니다.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>sesac.co.kr</key>
+            <dict>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+                <key>NSExceptionMinimumTLSVersion</key>
+                <string>TLSv1.0</string>
+                <key>NSExceptionPorts</key>
+                <array>
+                    <integer>31819</integer>
+                </array>
+            </dict>
+        </dict>
+    </dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
