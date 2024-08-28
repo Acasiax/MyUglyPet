@@ -10,6 +10,20 @@ import Lottie
 
 class AnimationZip {
     
+    // 뷰에 작아졌다 복구되는 애니메이션을 적용하는 함수
+    static func animatePress(on view: UIView, scale: CGFloat = 0.9, duration: TimeInterval = 0.1, completion: (() -> Void)? = nil) {
+        UIView.animate(withDuration: duration, animations: {
+            view.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }) { _ in
+            UIView.animate(withDuration: duration, animations: {
+                view.transform = CGAffineTransform.identity
+            }, completion: { _ in
+                completion?() // 애니메이션이 끝난 후 호출할 클로저
+            })
+        }
+    }
+    
+    
     // 버튼에 작아졌다 복구되는 애니메이션을 적용하는 함수
     static func animateButtonPress(_ button: UIButton, scale: CGFloat = 0.9, duration: TimeInterval = 0.1) {
         UIView.animate(withDuration: duration, animations: {
@@ -20,6 +34,7 @@ class AnimationZip {
             }
         }
     }
+    
     
     
     
