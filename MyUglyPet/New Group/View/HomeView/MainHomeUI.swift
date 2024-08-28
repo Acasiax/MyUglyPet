@@ -11,6 +11,7 @@ import Lottie
 
 struct MainHomeUI {
 
+   
     static func UiArrowupLottieAnimationView() -> LottieAnimationView {
         let animationView = LottieAnimationView(name: "arrowup")
         animationView.contentMode = .scaleAspectFit

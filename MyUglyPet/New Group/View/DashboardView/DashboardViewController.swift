@@ -89,6 +89,7 @@ class DashboardViewController: UIViewController {
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 120, height: 160)
         layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 10) 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(RankCollectionViewCell.self, forCellWithReuseIdentifier: RankCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false

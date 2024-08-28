@@ -25,6 +25,14 @@ final class MainHomeViewController: UIViewController {
     lazy var feedLabel: UILabel = MainHomeUI.UiFeedLabel()
     lazy var panGestureRecognizer = UIPanGestureRecognizer()
     
+    lazy var lottieView: LottieAnimationView = {
+            let view = LottieAnimationView(name: "Congratulation") // Lottie 애니메이션 파일 이름
+            view.contentMode = .scaleAspectFit
+            view.loopMode = .playOnce
+            view.isHidden = true // 초기에는 숨기기
+            return view
+        }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +62,21 @@ final class MainHomeViewController: UIViewController {
         arrowupLottieAnimationView.isHidden = false
         arrowupLottieAnimationView.play()
     }
+    
+    func animateLottieAnimation() {
+        DispatchQueue.main.async {
+            // lottieView를 표시합니다.
+            self.lottieView.isHidden = false
+            
+            // 애니메이션을 재생합니다.
+            self.lottieView.play { [weak self] _ in
+                // 애니메이션이 완료된 후 lottieView를 숨깁니다.
+                self?.lottieView.isHidden = true
+            }
+        }
+    }
+
+    
 }
 
 // MARK: - rx로 바인딩한거
@@ -74,9 +97,19 @@ extension MainHomeViewController {
             })
             .disposed(by: disposeBag)
         
+//        output.animatePetButton
+//            .subscribe()
+//            .disposed(by: disposeBag)
+        
+       //  petButton이 클릭되면 lottieView 애니메이션 실행
         output.animatePetButton
-            .subscribe()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                self?.animateLottieAnimation()
+            })
             .disposed(by: disposeBag)
+
+
         
         output.animateUploadButton
             .subscribe(onNext: { [weak self] in
@@ -151,3 +184,5 @@ extension MainHomeViewController {
         }
     }
 }
+
+

@@ -57,7 +57,7 @@ struct EditProfileUI {
     
     static func logoutButton() -> UIButton {
         let button = UIButton()
-        button.setTitle("로그아웃", for: .normal)
+        button.setTitle("게시글 초기화", for: .normal)
         button.setTitleColor(.systemGray, for: .normal)
         return button
     }

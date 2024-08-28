@@ -12,15 +12,19 @@ extension MainHomeViewController {
     
     func setupLayout() {
         view.addGestureRecognizer(panGestureRecognizer)
+        
+        // 다른 뷰들을 먼저 추가합니다.
         view.addSubview(petButton)
         view.addSubview(uploadButton)
         view.addSubview(collectionView)
         view.addSubview(feedLabel)
         view.addSubview(arrowupLottieAnimationView)
         
+        // 마지막에 lottieView를 추가하여 가장 앞에 배치합니다.
+        view.addSubview(lottieView)
+        
         setupConstraints()
     }
-    
     
     func setupConstraints() {
         petButton.snp.makeConstraints { make in
@@ -49,11 +53,16 @@ extension MainHomeViewController {
             make.height.equalTo(arrowupLottieAnimationView.snp.width).multipliedBy(1.0)
         }
         
+        // lottieView의 제약 조건 설정
+        lottieView.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(-30)
+                make.centerX.equalToSuperview() // X축(가로축)에서 가운데 정렬
+            }
+            
+        
         feedLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
-    
-    
 }
