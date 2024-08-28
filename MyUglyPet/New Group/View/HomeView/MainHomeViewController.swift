@@ -80,6 +80,7 @@ extension MainHomeViewController {
         
         output.animateUploadButton
             .subscribe(onNext: { [weak self] in
+              
                 let uglyCandidateVC = UglyCandidateViewController()
                 self?.navigationController?.pushViewController(uglyCandidateVC, animated: true)
             })
