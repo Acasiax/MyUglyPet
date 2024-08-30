@@ -41,6 +41,7 @@
 		AA6474852C7F67F00079ECE0 /* catPawprint.json in Resources */ = {isa = PBXBuildFile; fileRef = AA6474842C7F67F00079ECE0 /* catPawprint.json */; };
 		AA6474922C80C5C90079ECE0 /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */; };
 		AA6474942C80C6800079ECE0 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474932C80C6800079ECE0 /* CustomFonts.swift */; };
+		AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -138,6 +139,7 @@
 		AA6474842C7F67F00079ECE0 /* catPawprint.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = catPawprint.json; sourceTree = "<group>"; };
 		AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "omyu pretty.ttf"; sourceTree = "<group>"; };
 		AA6474932C80C6800079ECE0 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
+		AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				AA7272DB2C6CE55B007551C4 /* DetailViewController.swift */,
 				AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */,
 				AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */,
+				AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */,
 			);
 			path = DetailPost;
 			sourceTree = "<group>";
@@ -660,6 +663,7 @@
 				AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */,
 				AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */,
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
+				AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */,
 				AA64742D2C7B23C50079ECE0 /* MainHomeViewLayout.swift in Sources */,
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
 				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,

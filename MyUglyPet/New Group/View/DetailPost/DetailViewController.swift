@@ -30,7 +30,7 @@ struct UserComment {
 final class DetailViewController: BaseDetailView {
     private let disposeBag = DisposeBag()
     var imageFiles: [String] = [] // 이미지 URL 배열을 저장할 프로퍼티
-    var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티 //🔥
+    var post: PostsModel? // 전달받은 포스트 데이터를 저장할 프로퍼티
     
     var comments: [Comment] = []  // 댓글을 저장하는 배열
     var postId: String?
@@ -56,88 +56,89 @@ final class DetailViewController: BaseDetailView {
             contentLabel.text = post.content
             collectionView.reloadData()
             tableView.reloadData()
-            // 추가적으로 titleLabel, userNameLabel 등에도 포스트 데이터를 반영할 수 있음
         }
         
         collectionView.reloadData() // 컬렉션뷰 리로드
         
-        
-        // 전달받은 postId와 commentId를 출력하거나 사용
-//        if let postId = postId {
-//            print("Post ID: \(postId)")
-//        }
-//        
-//        if let commentId = commentId {
-//            print("Comment ID: \(commentId)")
-//        }
-//        
-        // post 객체에서 postId와 comments를 통해 Comment ID를 출력
         if let post = post {
             print("Post ID (post 객체): \(post.postId)")
             
-            // 첫 번째 댓글의 Comment ID 출력
             if let firstComment = post.comments.first {
                 print("Comment ID (첫 번째 댓글): \(firstComment.commentId)")
             }
         }
     }
     
-    
     private func setupRx() {
-           followButton.rx.tap
-               .bind(with: self) { owner, _ in
-                   owner.handleFollowButtonTap()
-               }
-               .disposed(by: disposeBag)
-           
-           sendButton.rx.tap
-               .bind(with: self) { owner, _ in
-                   owner.handleSendButtonTap()
-               }
-               .disposed(by: disposeBag)
-       }
-
+        followButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.handleFollowButtonTap()
+            }
+            .disposed(by: disposeBag)
+        
+        sendButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.handleSendButtonTap()
+            }
+            .disposed(by: disposeBag)
+    }
+    
     private func handleFollowButtonTap() {
-           print("팔로우 버튼 탭")
-           
-           isFollowing.toggle()
-           
-           let newTitle = isFollowing ? "수정중" : "수정"
-           let newColor = isFollowing ? CustomColors.softPink : UIColor.systemBlue
-           
-           AnimationZip.animateButtonPress(followButton)
-           
-           DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-               self?.followButton.setTitle(newTitle, for: .normal)
-               self?.followButton.backgroundColor = newColor
-           }
-       }
-       
-       private func handleSendButtonTap() {
-           guard let text = commentTextField.text, !text.isEmpty else { return }
-           guard let postID = post?.postId else {
-               print("Post ID를 찾을 수 없습니다.")
-               return
-           }
-           guard let userID = post?.creator.userId else {
-               print("User ID를 찾을 수 없습니다.")
-               return
-           }
-           
-           print("사용할 Post ID: \(postID)")
+        print("수정 버튼 탭")
+        
+        isFollowing.toggle()
+        
+        let newTitle = isFollowing ? "수정중" : "수정"
+        let newColor = isFollowing ? CustomColors.softPink : UIColor.systemBlue
+        
+        AnimationZip.animateButtonPress(followButton)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            self?.followButton.setTitle(newTitle, for: .normal)
+            self?.followButton.backgroundColor = newColor
+        }
+        
+        let editVC = EditPostViewController()
+        editVC.postTitle = post?.title
+        editVC.postContent = post?.content
+        
+        editVC.onUpdate = { [weak self] updatedTitle, updatedContent in
+            self?.post?.title = updatedTitle
+            self?.post?.content = updatedContent
+            self?.updatePost()
+        }
+        
+        editVC.modalPresentationStyle = .overFullScreen
+        editVC.modalTransitionStyle = .crossDissolve
+        present(editVC, animated: true, completion: nil)
+    }
 
-           PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
-               switch result {
-               case .success:
-                   print("댓글 작성 성공!")
-                   self?.fetchLatestPostData(userID: userID)
-                   self?.commentTextField.text = ""
-               case .failure(let error):
-                   print("댓글 작성 실패: \(error.localizedDescription)")
-                   self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요.")
-               }
-           }
-       }
+    
+    private func handleSendButtonTap() {
+        guard let text = commentTextField.text, !text.isEmpty else { return }
+        guard let postID = post?.postId else {
+            print("Post ID를 찾을 수 없습니다.")
+            return
+        }
+        guard let userID = post?.creator.userId else {
+            print("User ID를 찾을 수 없습니다.")
+            return
+        }
+        
+        print("사용할 Post ID: \(postID)")
+
+        PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
+            switch result {
+            case .success:
+                print("댓글 작성 성공!")
+                self?.fetchLatestPostData(userID: userID)
+                self?.commentTextField.text = ""
+            case .failure(let error):
+                print("댓글 작성 실패: \(error.localizedDescription)")
+                self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요.")
+            }
+        }
+    }
 
     private func fetchLatestPostData(userID: String) {
         let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
@@ -146,22 +147,44 @@ final class DetailViewController: BaseDetailView {
             switch result {
             case .success(let updatedPosts):
                 print("🙌 특정유저별에서 가져온 값: \(updatedPosts)")
-          
                 self?.post = updatedPosts.first
-                self?.tableView.reloadData() // 테이블뷰를 리로드하여 최신 포스트가 반영되도록
-
+                self?.tableView.reloadData()
             case .failure(let error):
                 print("포스트 데이터를 불러오는 데 실패했습니다: \(error.localizedDescription)")
                 self?.showErrorAlert(message: "포스트 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.")
             }
         }
     }
+}
 
 
 
 
-
+extension DetailViewController {
+    // 서버에 포스트 수정 요청을 보내는 메서드
     
+    func updatePost() {
+        guard let postID = post?.postId else {
+            print("포스트 ID를 찾을 수 없습니다.")
+            return
+        }
+        
+        let parameters: [String: Any] = [
+            "title": post?.title ?? "",
+            "content": post?.content ?? ""
+        ]
+        
+        PostNetworkManager.shared.updatePost(postID: postID, parameters: parameters) { [weak self] result in
+            switch result {
+            case .success:
+                print("포스트 수정 성공!")
+                self?.fetchLatestPostData(userID: self?.post?.creator.userId ?? "")
+            case .failure(let error):
+                print("포스트 수정 실패: \(error.localizedDescription)")
+                self?.showErrorAlert(message: "포스트 수정에 실패했습니다. 나중에 다시 시도해주세요.")
+            }
+        }
+    }
 }
 
 

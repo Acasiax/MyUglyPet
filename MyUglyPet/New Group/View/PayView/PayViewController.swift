@@ -113,12 +113,21 @@ class PaymentViewController: UIViewController {
             }))
             self.present(alert, animated: true, completion: nil)
         }
-        validateReceipt(imp_uid: impUid, post_id: "test_post_id")
+        validateReceipt(imp_uid: impUid, post_id: "66d17ed51691d4013e5523af")
         fetchPaymentHistory()
     }
     
+    //"post_id": "66d170dfdfc656014224bf35",
+    //    "product_id": "개발자돈주기",
+    //    "title": "10원 기부하기",
+    //    "content": "10원 기부할게요",
+    
     private func validateReceipt(imp_uid: String, post_id: String) {
+        
+        print("검증에 사용되는 imp_uid: \(imp_uid), post_id: \(post_id)")
+        
         PayNetworkManager.shared.payValidateReceipt(imp_uid: imp_uid, post_id: post_id) { result in
+            
             switch result {
             case .success(let receiptResponse):
                 print("영수증 검증 성공: \(receiptResponse)")

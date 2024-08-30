@@ -58,9 +58,9 @@ struct PostQuery: Encodable {
 struct PostsModel: Codable {
     let postId: String            // 게시글 ID
     let productId: String?        // 제품 ID (선택적)
-    let title: String?            // 게시글 제목 (선택적)
-    let content: String?          // 게시글 본문 (선택적)
-    let content1: String?         // 추가 콘텐츠 필드 (선택적)
+    var title: String?            // 게시글 제목 (선택적)
+    var content: String?          // 게시글 본문 (선택적)
+    var content1: String?         // 추가 콘텐츠 필드 (선택적)
     let content2: String?         // 추가 콘텐츠 필드 (선택적)
     let content3: String?         // 추가 콘텐츠 필드 (선택적)
     let content4: String?         // 추가 콘텐츠 필드 (선택적)
