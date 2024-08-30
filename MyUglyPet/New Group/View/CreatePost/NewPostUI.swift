@@ -76,7 +76,7 @@ struct NewPostUI {
         let label = UILabel()
         label.text = "사진 첨부 시 150M → 500M 지급"
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .orange
+        label.textColor = CustomColors.softPink
         return label
     }
     

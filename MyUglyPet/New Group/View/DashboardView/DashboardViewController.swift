@@ -47,7 +47,7 @@ class DashboardViewController: UIViewController {
     let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "냥멍난이"
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = CustomFonts.omyuprettyFont(size: 30)
         return label
     }()
     
@@ -62,7 +62,7 @@ class DashboardViewController: UIViewController {
     let bannerHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "배너"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = CustomFonts.omyuprettyFont(size: 25)
         return label
     }()
     
@@ -79,7 +79,7 @@ class DashboardViewController: UIViewController {
     let rankHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "순위"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = CustomFonts.omyuprettyFont(size: 25)
         return label
     }()
     
@@ -87,13 +87,13 @@ class DashboardViewController: UIViewController {
     let rankCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 160)
+        layout.itemSize = CGSize(width: 160, height: 200)
         layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 10) 
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 10)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(RankCollectionViewCell.self, forCellWithReuseIdentifier: RankCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = CustomColors.softPink
+        collectionView.backgroundColor = CustomColors.lightBeige
         return collectionView
     }()
     
@@ -106,7 +106,7 @@ class DashboardViewController: UIViewController {
     }()
     
     // 취미 카드 컬렉션 뷰
-    let hobbyCardCollectionView: UICollectionView = {
+    let MyBuddyCardCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 100)
@@ -114,7 +114,7 @@ class DashboardViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MyBuddyCardCollectionViewCell.self, forCellWithReuseIdentifier: MyBuddyCardCollectionViewCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = CustomColors.softPurple
+        collectionView.backgroundColor = CustomColors.lightBeige
         return collectionView
     }()
     
@@ -132,10 +132,10 @@ class DashboardViewController: UIViewController {
         super.viewDidLoad()
         
         rankCollectionView.dataSource = self
-        hobbyCardCollectionView.dataSource = self
+        MyBuddyCardCollectionView.dataSource = self
         
         rankCollectionView.delegate = self
-        hobbyCardCollectionView.delegate = self
+        MyBuddyCardCollectionView.delegate = self
         
         setupSubviews()
         setupConstraints()
@@ -172,7 +172,7 @@ class DashboardViewController: UIViewController {
         
         // 취미 카드 섹션 추가
         contentStackView.addArrangedSubview(hobbyCardHeaderLabel)
-        contentStackView.addArrangedSubview(hobbyCardCollectionView)
+        contentStackView.addArrangedSubview(MyBuddyCardCollectionView)
     }
     func setupConstraints() {
         // ScrollView 제약 조건
@@ -193,10 +193,10 @@ class DashboardViewController: UIViewController {
         }
         
         rankCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(230)
+            make.height.equalTo(250)
         }
         
-        hobbyCardCollectionView.snp.makeConstraints { make in
+        MyBuddyCardCollectionView.snp.makeConstraints { make in
             make.height.equalTo(400) // 필요 시 조정 가능
         }
     }
@@ -219,7 +219,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             return rankedGroups.count
             
             
-        case hobbyCardCollectionView:
+        case MyBuddyCardCollectionView:
             return serverPosts.count
             
         default:
@@ -297,7 +297,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
 
                return cell
             
-        case hobbyCardCollectionView:
+        case MyBuddyCardCollectionView:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
                 
                 let post = serverPosts[indexPath.row]
@@ -319,9 +319,16 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
                     cell.followButton.setTitle("나자신", for: .normal)
                     cell.followButton.isEnabled = false // 자신의 계정을 팔로우하지 않도록 버튼 비활성화
                     cell.followButton.backgroundColor = .gray
+                    
                 }
                 
-                cell.backgroundColor = CustomColors.softBlue
+            cell.layer.cornerRadius = 10.0  // 모서리 둥글게 설정
+            cell.layer.masksToBounds = true  // 둥근 모서리가 클립되도록 설정
+
+            cell.backgroundColor = CustomColors.lightBeige
+            cell.layer.borderWidth = 0.8  // 테두리 굵기 설정
+            cell.layer.borderColor = UIColor.gray.cgColor  // 테두리 색상 설정
+
                 return cell
             
         default:
@@ -330,10 +337,27 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            if collectionView == rankCollectionView {
+             //   let selectedGroup = rankedGroups[indexPath.item]
+               // let detailVC = RankDetailViewController() // RankDetailViewController는 상세보기 화면으로 교체
+           //     detailVC.group = selectedGroup
+            //   navigationController?.pushViewController(detailVC, animated: true)
+            } else if collectionView == MyBuddyCardCollectionView {
+                let selectedPost = serverPosts[indexPath.row]
+                let postDetailVC = EditProfileViewController()
+               // postDetailVC.serverPosts = selectedPost
+                postDetailVC.serverUserID = selectedPost.creator.userId
+                navigationController?.pushViewController(postDetailVC, animated: true)
+            }
+        }
+    
+    
 }
 
 
-extension DashboardViewController {
+extension DashboardViewController {  
+    
     //내 프로필 가져오기
     func fetchMyProfile() {
             // FollowPostNetworkManager 싱글턴 인스턴스를 사용하여 프로필 요청
@@ -365,7 +389,7 @@ extension DashboardViewController {
                 self?.serverPosts = posts
                 // 필터링 및 정렬 후, 중복된 사용자 게시물 처리
                 self?.filterAndSortPostsByUserId()
-                self?.hobbyCardCollectionView.reloadData() // 데이터 로드 후 컬렉션 뷰 리로드
+                self?.MyBuddyCardCollectionView.reloadData() // 데이터 로드 후 컬렉션 뷰 리로드
                 print("allFeed 포스팅을 가져오는데 성공했어요🥰")
             case .failure(let error):
                 print("allFeed 포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")

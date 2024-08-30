@@ -112,7 +112,7 @@ class NameInputViewController: UIViewController {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, !text.isEmpty {
-            nextButton.backgroundColor = UIColor.orange
+            nextButton.backgroundColor = CustomColors.softPink
             nextButton.isEnabled = true
         } else {
             nextButton.backgroundColor = UIColor.lightGray

@@ -53,7 +53,7 @@ class IndexMenuCollectionCell: UICollectionViewCell {
         iconImageView.contentMode = .scaleAspectFit
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         carrotLabel.font = UIFont.systemFont(ofSize: 14)
-        carrotLabel.textColor = .orange
+        carrotLabel.textColor = CustomColors.softPink
         actionButton.setTitleColor(.white, for: .normal)
         actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         actionButton.backgroundColor = CustomColors.softPink

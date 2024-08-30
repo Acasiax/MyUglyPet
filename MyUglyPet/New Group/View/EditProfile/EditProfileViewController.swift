@@ -34,6 +34,9 @@ final class EditProfileViewController: UIViewController {
     var followingButton = UIButton()
     
     var userProfile: MyProfileResponse?
+    var serverUserID: String?
+   // var serverPosts: PostsModel?
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

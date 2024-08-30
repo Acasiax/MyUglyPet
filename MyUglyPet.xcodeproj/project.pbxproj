@@ -39,6 +39,8 @@
 		AA6474802C7F343D0079ECE0 /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64747F2C7F343D0079ECE0 /* PayViewController.swift */; };
 		AA6474832C7F52370079ECE0 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = AA6474822C7F52370079ECE0 /* iamport-ios */; };
 		AA6474852C7F67F00079ECE0 /* catPawprint.json in Resources */ = {isa = PBXBuildFile; fileRef = AA6474842C7F67F00079ECE0 /* catPawprint.json */; };
+		AA6474922C80C5C90079ECE0 /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */; };
+		AA6474942C80C6800079ECE0 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474932C80C6800079ECE0 /* CustomFonts.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -134,6 +136,8 @@
 		AA64747B2C7F29B80079ECE0 /* CarouselViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselViewController.swift; sourceTree = "<group>"; };
 		AA64747F2C7F343D0079ECE0 /* PayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayViewController.swift; sourceTree = "<group>"; };
 		AA6474842C7F67F00079ECE0 /* catPawprint.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = catPawprint.json; sourceTree = "<group>"; };
+		AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "omyu pretty.ttf"; sourceTree = "<group>"; };
+		AA6474932C80C6800079ECE0 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -280,6 +284,14 @@
 			path = PayView;
 			sourceTree = "<group>";
 		};
+		AA64748F2C80C41D0079ECE0 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		AA7272A82C6C967C007551C4 = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +314,7 @@
 		AA7272B32C6C967C007551C4 /* MyUglyPet */ = {
 			isa = PBXGroup;
 			children = (
+				AA64748F2C80C41D0079ECE0 /* Font */,
 				AA7273432C71CC28007551C4 /* Lslp */,
 				AA7273012C70286A007551C4 /* Animation */,
 				AA7272C82C6C97E9007551C4 /* New Group */,
@@ -325,6 +338,7 @@
 				AA7272CB2C6C98D5007551C4 /* TabBarController.swift */,
 				AA7272E82C6DD8BF007551C4 /* View */,
 				AA7272E32C6DC7D7007551C4 /* Cell */,
+				AA6474932C80C6800079ECE0 /* CustomFonts.swift */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
@@ -343,7 +357,6 @@
 			isa = PBXGroup;
 			children = (
 				AA64747E2C7F34180079ECE0 /* PayView */,
-				AA64747D2C7F34030079ECE0 /* AlbumView */,
 				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
 				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273092C704145007551C4 /* HomeView */,
@@ -506,6 +519,7 @@
 				AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */,
 				AA7273832C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift */,
 				AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */,
+				AA64747D2C7F34030079ECE0 /* AlbumView */,
 			);
 			path = DashboardView;
 			sourceTree = "<group>";
@@ -600,6 +614,7 @@
 				AA7272FC2C6F975D007551C4 /* Congratulation.json in Resources */,
 				AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */,
 				AA7272C12C6C967E007551C4 /* Base in Resources */,
+				AA6474922C80C5C90079ECE0 /* omyu pretty.ttf in Resources */,
 				AA7272BC2C6C967C007551C4 /* Base in Resources */,
 				AA6474852C7F67F00079ECE0 /* catPawprint.json in Resources */,
 			);
@@ -662,6 +677,7 @@
 				AA7273542C71D032007551C4 /* Header.swift in Sources */,
 				AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
+				AA6474942C80C6800079ECE0 /* CustomFonts.swift in Sources */,
 				AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
 				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,

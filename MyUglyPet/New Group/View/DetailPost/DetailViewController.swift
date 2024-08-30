@@ -103,7 +103,7 @@ final class DetailViewController: BaseDetailView {
            isFollowing.toggle()
            
            let newTitle = isFollowing ? "수정중" : "수정"
-           let newColor = isFollowing ? UIColor.orange : UIColor.systemBlue
+           let newColor = isFollowing ? CustomColors.softPink : UIColor.systemBlue
            
            AnimationZip.animateButtonPress(followButton)
            

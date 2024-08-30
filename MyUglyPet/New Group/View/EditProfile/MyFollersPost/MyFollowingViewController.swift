@@ -178,7 +178,7 @@ class HHiCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setTitle("팔로우", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .orange
+        button.backgroundColor = CustomColors.softPink
         button.layer.cornerRadius = 5
         return button
     }()
@@ -288,7 +288,7 @@ class HHiCollectionViewCell: UICollectionViewCell {
             followButton.backgroundColor = .green
         } else {
             followButton.setTitle("팔로우", for: .normal)
-            followButton.backgroundColor = .orange
+            followButton.backgroundColor = CustomColors.softPink
         }
     }
     

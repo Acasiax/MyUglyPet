@@ -42,11 +42,11 @@ final class AllPostTableViewCell: UITableViewCell {
         return label
     }()
     
-    lazy var infoLabel: UILabel = {
+    lazy var postTitle: UILabel = {
         let label = UILabel()
-        label.text = "2세 남아, 푸들"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .darkGray
+        label.text = "제목"
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = .black
         return label
     }()
     

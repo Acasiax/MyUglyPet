@@ -107,7 +107,7 @@ extension CreatePostViewController {
     func updateSubmitButtonState() {
         let isTextValid = reviewTextView.text.count >= 5
         submitButton.isEnabled = isTextValid
-        submitButton.backgroundColor = isTextValid ? .orange : .lightGray
+        submitButton.backgroundColor = isTextValid ? CustomColors.softPink : .lightGray
     }
 }
 

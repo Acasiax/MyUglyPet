@@ -27,7 +27,7 @@ struct MainHomeUI {
         button.imageView?.contentMode = .scaleAspectFill
         button.clipsToBounds = true
         button.layer.cornerRadius = 75
-        button.layer.borderColor = UIColor.orange.cgColor
+        button.layer.borderColor = CustomColors.softPink.cgColor
         button.layer.borderWidth = 2
         return button
     }
@@ -35,7 +35,7 @@ struct MainHomeUI {
     static func UiUploadButton() -> UIButton {
         let button = UIButton()
         button.setTitle("울 애기 사진 업로드하기", for: .normal)
-        button.backgroundColor = .orange
+        button.backgroundColor = CustomColors.softPink
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.layer.cornerRadius = 10

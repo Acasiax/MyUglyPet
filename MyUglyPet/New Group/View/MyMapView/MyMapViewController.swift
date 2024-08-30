@@ -32,11 +32,12 @@ class MyMapViewController: UIViewController, MKMapViewDelegate {
         // 위치 권한 요청 및 위치 업데이트 시작
         LocationManager.shared.requestLocationPermission()
         LocationManager.shared.fetchCurrentLocation()
+        //updateMapLocation(LocationManager.shared.currentLocation)
         
         // 위치 업데이트 콜백 등록
-        LocationManager.shared.locationUpdateCallback = { [weak self] coordinate in
-            self?.updateMapLocation(coordinate)
-        }
+//        LocationManager.shared.locationUpdateCallback = { [weak self] coordinate in
+//            self?.updateMapLocation(coordinate)
+//        }
         
         // 확대/축소 버튼 추가
         addZoomButtons()

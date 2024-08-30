@@ -24,12 +24,13 @@ final class AllPostHomeViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     let colors: [UIColor] = [
-        CustomColors.deepPurple,
-        UIColor(red: 1.00, green: 0.78, blue: 0.87, alpha: 1.00),
-        UIColor(red: 0.73, green: 0.96, blue: 0.48, alpha: 1.00),
-        CustomColors.softPink,
-        CustomColors.softBlue,
-        CustomColors.softPurple
+        CustomColors.softBlue
+//        CustomColors.deepPurple,
+//        UIColor(red: 1.00, green: 0.78, blue: 0.87, alpha: 1.00),
+//        UIColor(red: 0.73, green: 0.96, blue: 0.48, alpha: 1.00),
+//        CustomColors.softPink,
+//        CustomColors.softBlue,
+//        CustomColors.softPurple
     ]
     
     let plusButton: UIButton = {
@@ -37,7 +38,7 @@ final class AllPostHomeViewController: UIViewController {
         button.setTitle("+", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        button.backgroundColor = .orange
+        button.backgroundColor = UIColor(red: 1.00, green: 0.74, blue: 0.40, alpha: 1.00)
         button.layer.cornerRadius = 30
         button.clipsToBounds = true
         return button
@@ -46,8 +47,8 @@ final class AllPostHomeViewController: UIViewController {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(AllPostTableViewCell.self, forCellReuseIdentifier: AllPostTableViewCell.identifier)
-        tableView.backgroundColor = CustomColors.lightBeige
-        tableView.separatorStyle = .singleLine
+        tableView.backgroundColor = CustomColors.softIvory
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -62,7 +63,7 @@ final class AllPostHomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0.83, green: 0.84, blue: 0.00, alpha: 1.00)
+        view.backgroundColor = .white
         view.addSubview(tableView)
         view.addSubview(plusButton)
         tableView.delegate = self
@@ -157,7 +158,7 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         cell.postID = post.postId
         cell.userID = post.creator.userId
         cell.userNameLabel.text = post.creator.nick
-        cell.infoLabel.text = post.title
+        cell.postTitle.text = post.title
         cell.titleLabel.text = post.title
         cell.contentLabel.text = post.content
         cell.imageFiles = post.files ?? []
@@ -220,6 +221,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.image = UIImage(named: "기본냥멍2")
+        imageView.backgroundColor = CustomColors.softIvory
         return imageView
     }()
     

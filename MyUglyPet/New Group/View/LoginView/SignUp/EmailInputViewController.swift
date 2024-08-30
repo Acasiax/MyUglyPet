@@ -161,7 +161,7 @@ class EmailInputViewController: UIViewController {
         // 이메일 유효성 검사 수행
         if isValidEmail(email) {
             duplicateCheckButton.isEnabled = true
-            duplicateCheckButton.backgroundColor = UIColor.orange
+            duplicateCheckButton.backgroundColor = CustomColors.softPink
         } else {
             duplicateCheckButton.isEnabled = false
             duplicateCheckButton.backgroundColor = UIColor.lightGray
@@ -206,7 +206,7 @@ class EmailInputViewController: UIViewController {
                     self.duplicateCheckButton.backgroundColor = UIColor.green
                     self.duplicateCheckButton.setTitle("사용 가능", for: .normal)
                     self.nextButton.isEnabled = true
-                    self.nextButton.backgroundColor = UIColor.orange
+                    self.nextButton.backgroundColor = CustomColors.softPink
                 } else {
                     self.isEmailValid = false
                     self.duplicateCheckButton.backgroundColor = UIColor.red
@@ -223,7 +223,7 @@ class EmailInputViewController: UIViewController {
     
     func resetDuplicateCheck() {
         // 중복 검사 초기화 (버튼 색상 및 텍스트 재설정)
-        duplicateCheckButton.backgroundColor = UIColor.orange
+        duplicateCheckButton.backgroundColor = CustomColors.softPink
         duplicateCheckButton.setTitle("중복검사", for: .normal)
         nextButton.isEnabled = false
         nextButton.backgroundColor = UIColor.lightGray

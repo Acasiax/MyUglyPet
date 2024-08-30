@@ -13,7 +13,7 @@ extension AllPostTableViewCell {
     func configureHierarchy() {
         containerView.addSubview(userProfileImageView)
         containerView.addSubview(userNameLabel)
-        containerView.addSubview(infoLabel)
+        containerView.addSubview(postTitle)
         containerView.addSubview(locationTimeLabel)
         containerView.addSubview(timeLabel)
         containerView.addSubview(deleteButton)
@@ -37,18 +37,14 @@ extension AllPostTableViewCell {
             make.left.equalTo(userProfileImageView.snp.right).offset(10)
         }
         
-        infoLabel.snp.makeConstraints { make in
+      
+        locationTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(userNameLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
         }
         
-        locationTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoLabel.snp.bottom).offset(4)
-            make.left.equalTo(userNameLabel)
-        }
-        
         timeLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoLabel.snp.bottom).offset(4)
+            make.top.equalTo(userNameLabel.snp.bottom).offset(4)
             make.left.equalTo(locationTimeLabel.snp.right).offset(8)
         }
         
@@ -59,23 +55,31 @@ extension AllPostTableViewCell {
         
         followButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(10)
-            make.right.equalTo(deleteButton.snp.left).offset(-10)
+            make.right.equalToSuperview().inset(10)
         }
-        
-        contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(locationTimeLabel.snp.bottom).offset(25)
-            make.left.equalTo(userProfileImageView)
-        }
+
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(10)
+            make.top.equalTo(timeLabel.snp.bottom).offset(10)
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(200)
         }
         
-        likeButton.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(10)
+        
+        postTitle.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom).offset(20)
             make.left.equalTo(collectionView)
+        }
+        
+        contentLabel.snp.makeConstraints { make in
+            make.top.equalTo(postTitle.snp.bottom).offset(10)
+            make.left.equalTo(postTitle)
+        }
+        
+        
+        likeButton.snp.makeConstraints { make in
+            make.top.equalTo(contentLabel.snp.bottom).offset(20)
+            make.left.equalTo(contentLabel)
             make.bottom.equalToSuperview().inset(10)
         }
         

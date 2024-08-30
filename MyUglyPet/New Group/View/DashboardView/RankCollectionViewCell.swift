@@ -8,11 +8,12 @@
 import UIKit
 import SnapKit
 
+
 final class RankCollectionViewCell: UICollectionViewCell {
     
     let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = CustomColors.softBlue
+      //  view.backgroundColor = CustomColors.softBlue
         view.layer.cornerRadius = 20
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1
@@ -25,24 +26,28 @@ final class RankCollectionViewCell: UICollectionViewCell {
         let view = UIView()
         view.backgroundColor = .clear
         view.clipsToBounds = true
+        view.layer.cornerRadius = 10 // profileImageContainerView 둥글게 설정
         return view
     }()
     
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = CustomColors.softPurple
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "figure.stand")
-        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(systemName: "pawprint")
+        imageView.layer.cornerRadius = 40 // profileImageView 둥글게 설정
+        imageView.clipsToBounds = true // 둥근 모서리를 적용하기 위해 설정
+        imageView.layer.borderWidth = 5 // 테두리 두께 설정
+        imageView.layer.borderColor = UIColor.white.cgColor // 오렌지색 테두리 설정
         return imageView
     }()
+
     
     let rankLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = UIColor.yellow
         label.textColor = .black
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = CustomFonts.omyuprettyFont(size: 20)
         label.layer.cornerRadius = 10
         label.layer.masksToBounds = true
         label.text = "1등"
@@ -52,7 +57,7 @@ final class RankCollectionViewCell: UICollectionViewCell {
     let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "사진제목"
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = CustomFonts.omyuprettyFont(size: 18)
         label.textAlignment = .center
         label.numberOfLines = 3
         return label
@@ -61,7 +66,7 @@ final class RankCollectionViewCell: UICollectionViewCell {
     let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "견생 5년차"
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = CustomFonts.omyuprettyFont(size: 16)
         label.textAlignment = .center
         label.textColor = .gray
         label.numberOfLines = 3
@@ -90,9 +95,10 @@ final class RankCollectionViewCell: UICollectionViewCell {
         }
         
         profileImageContainerView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(-20)
+            make.top.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(120)
+            make.width.equalTo(150)
+            make.height.equalTo(150)
         }
         
         profileImageView.snp.makeConstraints { make in
@@ -108,27 +114,19 @@ final class RankCollectionViewCell: UICollectionViewCell {
         
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(profileImageContainerView.snp.bottom).offset(10)
-            make.centerX.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
         }
-        
+
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
+            make.top.equalTo(nameLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(12)
         }
-        
-        // 초기 cornerRadius 설정
-        profileImageContainerView.layer.cornerRadius = 60 // 120의 절반
-        profileImageView.layer.cornerRadius = 60 // 120의 절반
+
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateCornerRadius()
-    }
-    
-    private func updateCornerRadius() {
-        profileImageContainerView.layer.cornerRadius = profileImageContainerView.bounds.width / 2
-        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
+        // layoutSubviews에서 둥근 모서리 설정을 재확인할 필요가 없습니다.
     }
     
     func configure(with image: UIImage?, name: String, description: String, rank: String) {
@@ -137,10 +135,7 @@ final class RankCollectionViewCell: UICollectionViewCell {
         descriptionLabel.text = description
         rankLabel.text = rank
         
-        // 레이아웃 업데이트 및 cornerRadius 재설정
         setNeedsLayout()
-        layoutIfNeeded()
-        updateCornerRadius()
     }
 }
 

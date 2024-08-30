@@ -29,7 +29,7 @@ final class MyPostersViewController: UIViewController {
         button.setTitle("+", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        button.backgroundColor = .orange
+        button.backgroundColor = CustomColors.softPink
         button.layer.cornerRadius = 30
         button.clipsToBounds = true
         return button

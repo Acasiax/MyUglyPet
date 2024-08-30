@@ -86,9 +86,9 @@ struct Appearance {
     }
     
     static func setupNavigationBarAppearance() {
-        UINavigationBar.appearance().barTintColor = CustomColors.softBlue
-        UINavigationBar.appearance().tintColor = .black
-        UINavigationBar.appearance().backgroundColor = CustomColors.softPurple
+        UINavigationBar.appearance().barTintColor =  CustomColors.lightBeige
+        UINavigationBar.appearance().tintColor = .blue
+        UINavigationBar.appearance().backgroundColor = .clear
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: CustomColors.softPink]
         
         let backBarButtonItem = UIBarButtonItem.appearance()

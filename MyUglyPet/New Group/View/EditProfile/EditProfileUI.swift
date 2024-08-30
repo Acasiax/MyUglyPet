@@ -17,7 +17,7 @@ struct EditProfileUI {
         button.layer.cornerRadius = 40 // 버튼 크기의 절반 (80 / 2)
         // 테두리 설정
         button.layer.borderWidth = 3
-        button.layer.borderColor = UIColor.orange.cgColor
+        button.layer.borderColor = CustomColors.softPink.cgColor
         button.layer.masksToBounds = true
         
         return button

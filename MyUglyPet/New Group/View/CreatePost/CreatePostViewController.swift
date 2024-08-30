@@ -70,7 +70,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
         output.isSubmitButtonEnabled
             .drive(onNext: { [weak self] isEnabled in
                 self?.submitButton.isEnabled = isEnabled
-                self?.submitButton.backgroundColor = isEnabled ? .orange : .lightGray
+                self?.submitButton.backgroundColor = isEnabled ? CustomColors.softPink : .lightGray
             })
             .disposed(by: disposeBag)
 
@@ -114,7 +114,7 @@ final class CreatePostViewController: UIViewController, UITextViewDelegate {
             
             if text.count >= 5 {
                 submitButton.isEnabled = true
-                submitButton.backgroundColor = .orange
+                submitButton.backgroundColor = CustomColors.softPink
             } else {
                 submitButton.isEnabled = false
                 submitButton.backgroundColor = .lightGray
