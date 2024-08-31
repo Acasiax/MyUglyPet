@@ -11,74 +11,6 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-class CustomPageControl: UIView {
-    
-    private var stackView = UIStackView()
-    private var indicators = [UIImageView]()
-    
-    var numberOfPages: Int = 0 {
-        didSet {
-            setupIndicators()
-        }
-    }
-    
-    var currentPage: Int = 0 {
-        didSet {
-            updateIndicators()
-        }
-    }
-    
-    var currentPageImage: UIImage?
-    var pageImage: UIImage?
-    var indicatorTintColor: UIColor = .gray
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupStackView()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupStackView()
-    }
-    
-    private func setupStackView() {
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.alignment = .center
-        stackView.distribution = .fillEqually
-        addSubview(stackView)
-        
-        stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    private func setupIndicators() {
-        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        indicators.removeAll()
-        
-        for _ in 0..<numberOfPages {
-            let imageView = UIImageView()
-            imageView.contentMode = .scaleAspectFit
-            imageView.tintColor = indicatorTintColor
-            imageView.image = pageImage
-            indicators.append(imageView)
-            stackView.addArrangedSubview(imageView)
-        }
-        
-        updateIndicators()
-    }
-    
-    private func updateIndicators() {
-        for (index, imageView) in indicators.enumerated() {
-            imageView.image = index == currentPage ? currentPageImage : pageImage
-        }
-    }
-}
-
-
-
 class DeepPhotoViewController: UIViewController {
     
     var photos: [String] = []
@@ -90,7 +22,7 @@ class DeepPhotoViewController: UIViewController {
         layout.minimumLineSpacing = 0
         layout.itemSize = UIScreen.main.bounds.size
         layout.sectionInset = .zero
-
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
@@ -113,7 +45,9 @@ class DeepPhotoViewController: UIViewController {
     }()
     
     private let disposeBag = DisposeBag()
-
+    private let viewModel = DeepPhotoViewModel()
+    private let selectedIndexSubject = BehaviorSubject<Int>(value: 0)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.softPurple
@@ -130,16 +64,12 @@ class DeepPhotoViewController: UIViewController {
         
         setupConstraints()
         
-        // Rx 방식으로 버튼 이벤트 처리
-        closeButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
-            }
-            .disposed(by: disposeBag)
+        bindViewModel()
         
         // 처음 선택된 이미지로 스크롤
         if selectedIndex < photos.count {
             collectionView.scrollToItem(at: IndexPath(item: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
+            selectedIndexSubject.onNext(selectedIndex)
         }
     }
     
@@ -159,9 +89,28 @@ class DeepPhotoViewController: UIViewController {
             make.width.height.equalTo(44)
         }
     }
+    
+    private func bindViewModel() {
+        let input = DeepPhotoViewModel.Input(
+            closeButtonTap: closeButton.rx.tap.asObservable(),
+            selectedIndex: selectedIndexSubject.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.currentPage
+            .drive(customPageControl.rx.currentPage)
+            .disposed(by: disposeBag)
+        
+        output.close
+            .drive(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - 상세보기 컬렉션뷰
 extension DeepPhotoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -202,10 +151,11 @@ extension DeepPhotoViewController: UICollectionViewDataSource, UICollectionViewD
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
         customPageControl.currentPage = pageIndex
+        selectedIndexSubject.onNext(pageIndex)
     }
 }
 
-// MARK: - PhotoCell
+// MARK: - 상세 사진 셀
 class PhotoCell: UICollectionViewCell {
     
     let imageView: UIImageView = {

@@ -27,7 +27,7 @@ class FollowersViewModel {
         let errorRelay = PublishRelay<String>()
         
         input.fetchFollowers
-            .compactMap { $0?.followers } // MyProfileResponse에서 followers를 추출
+            .compactMap { $0?.followers } // MyProfileResponse에서 followers를 추출한 거
             .catch { error in
                 errorRelay.accept("팔로워 데이터를 불러오는 중 에러가 발생했습니다.")
                 return Observable.just([])

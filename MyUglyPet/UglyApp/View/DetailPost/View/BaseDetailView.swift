@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 class BaseDetailView: UIViewController {
-    
    
     lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -38,7 +37,7 @@ class BaseDetailView: UIViewController {
 
     lazy var locationTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "경기도 김포시 운양동"
+        label.text = "서울시 동작구"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .lightGray
         return label
@@ -64,7 +63,6 @@ class BaseDetailView: UIViewController {
         return button
     }()
 
- 
 
     lazy var contentLabel: UILabel = {
         let label = UILabel()
@@ -104,8 +102,8 @@ class BaseDetailView: UIViewController {
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0  // 줄 간격을
-        layout.minimumInteritemSpacing = 0  // 셀 간 간격
-        layout.sectionInset = .zero  // 섹션 인셋
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = .zero
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(DetailPhotoCollectionViewCell.self, forCellWithReuseIdentifier: DetailPhotoCollectionViewCell.identifier)

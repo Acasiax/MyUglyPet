@@ -33,7 +33,7 @@ struct MainHomeViewModel {
                 case 2:
                     return PayViewController()
                 default:
-                    return UIViewController() // 기본값으로 빈 UIViewController를 반환하거나 다른 뷰 컨트롤러를 지정할 수 있습니다.
+                    return MainHomeViewController() // 기본값으로 일단 설정했음
                 }
             }
 

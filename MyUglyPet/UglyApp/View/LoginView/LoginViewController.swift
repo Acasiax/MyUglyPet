@@ -7,9 +7,11 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class LoginViewController: UIViewController {
-    
+
     let welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "반가워요!\n로그인 해주세요"
@@ -55,10 +57,13 @@ final class LoginViewController: UIViewController {
         return button
     }()
     
+
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupActions()
+        setupBindings()
     }
     
     func setupUI() {
@@ -99,19 +104,21 @@ final class LoginViewController: UIViewController {
         }
     }
     
-    func setupActions() {
-        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc func loginButtonTapped() {
-        handleLogin()
-    }
 
-    @objc func signupButtonTapped() {
-        print("회원가입버튼탭")
-        let nameInputViewController = NameInputViewController()
-        navigationController?.pushViewController(nameInputViewController, animated: true)
+    func setupBindings() {
+ 
+        loginButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.handleLogin()
+            }
+            .disposed(by: disposeBag)
+        
+ 
+        signupButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.handleSignup()
+            }
+            .disposed(by: disposeBag)
     }
     
     func handleLogin() {
@@ -124,16 +131,21 @@ final class LoginViewController: UIViewController {
         print("입력된 비밀번호: \(enteredPassword)")
         
         MyLoginNetworkManager.shared.createLogin(email: enteredUsername, password: enteredPassword) { success in
-               if success {
-                   let mainTabBarController = TabBarControllerFactory.createMainTabBarController()
-                   mainTabBarController.modalPresentationStyle = .fullScreen
-                   mainTabBarController.modalTransitionStyle = .crossDissolve
-                   self.present(mainTabBarController, animated: true, completion: nil)
-               } else {
-                   print("로그인 실패")
-                   // 여기서 로그인 실패에 대한 UI를 업데이트하거나 알림을 표시할 수 있습니다.
-               }
+            if success {
+                let mainTabBarController = TabBarControllerFactory.createMainTabBarController()
+                mainTabBarController.modalPresentationStyle = .fullScreen
+                mainTabBarController.modalTransitionStyle = .crossDissolve
+                self.present(mainTabBarController, animated: true, completion: nil)
+            } else {
+                print("로그인 실패")
+               
+            }
         }
     }
+    
+    func handleSignup() {
+        print("회원가입버튼탭")
+        let nameInputViewController = NameInputViewController()
+        navigationController?.pushViewController(nameInputViewController, animated: true)
+    }
 }
-

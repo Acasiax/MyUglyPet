@@ -5,6 +5,11 @@
 //  Created by 이윤지 on 8/31/24.
 //
 
+//"post_id": "66d170dfdfc656014224bf35",
+//    "product_id": "개발자돈주기",
+//    "title": "10원 기부하기",
+//    "content": "10원 기부할게요",
+
 import UIKit
 import WebKit
 import iamport_ios
@@ -22,14 +27,14 @@ class PaymentViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(wkWebView)
         wkWebView.snp.makeConstraints { make in
-            make.edges.equalToSuperview() // 전체 화면을 WebView로 채움
+            make.edges.equalToSuperview()
         }
         
         initiatePayment()
     }
     
     private func initiatePayment() {
-        let merchantUID = "ios_\(Date().timeIntervalSince1970)"  // 고유한 결제 ID 생성
+        let merchantUID = "ios_\(Date().timeIntervalSince1970)"  // 고유한 결제 ID 생성 새싹 키 안넣었는데 이미 고유해서 잘 되나봄?
         let payment = IamportPayment(
             pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
             merchant_uid: merchantUID,
@@ -69,10 +74,6 @@ class PaymentViewController: UIViewController {
         fetchPaymentHistory()
     }
     
-    //"post_id": "66d170dfdfc656014224bf35",
-    //    "product_id": "개발자돈주기",
-    //    "title": "10원 기부하기",
-    //    "content": "10원 기부할게요",
     
     private func validateReceipt(imp_uid: String, post_id: String) {
         

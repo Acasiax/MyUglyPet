@@ -7,11 +7,13 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class EditCommentViewController: UIViewController {
     
     var commentContent: String?
-    var onUpdate: ((String) -> Void)?  // 수정된 클로저 프로퍼티
+    var onUpdate: ((String) -> Void)?
     
     private let containerView: UIView = {
         let view = UIView()
@@ -46,6 +48,8 @@ final class EditCommentViewController: UIViewController {
         return button
     }()
     
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,7 +60,7 @@ final class EditCommentViewController: UIViewController {
         // 텍스트 필드에 기존 댓글 내용을 설정
         commentTextField.text = commentContent
         
-        confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
+        bindUI() 
     }
     
     private func setupViews() {
@@ -93,12 +97,17 @@ final class EditCommentViewController: UIViewController {
         }
     }
     
-    @objc private func didTapConfirmButton() {
-        guard let newComment = commentTextField.text else { return }
-        
-        // 클로저를 통해 수정된 데이터를 전달
-        onUpdate?(newComment)
-        
-        dismiss(animated: true, completion: nil)
+    private func bindUI() {
+      
+        confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                guard let newComment = owner.commentTextField.text else { return }
+                
+                // 클로저를 통해 수정된 데이터를 전달
+                owner.onUpdate?(newComment)
+                
+                owner.dismiss(animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
     }
 }

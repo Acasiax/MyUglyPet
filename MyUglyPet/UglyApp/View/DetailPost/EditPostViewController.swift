@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class EditPostViewController: UIViewController {
     
@@ -61,6 +63,8 @@ final class EditPostViewController: UIViewController {
         return button
     }()
     
+    private let disposeBag = DisposeBag() 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,7 +75,7 @@ final class EditPostViewController: UIViewController {
         titleTextField.text = postTitle
         contentTextField.text = postContent
         
-        confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
+        bindUI()
     }
     
     private func setupViews() {
@@ -122,12 +126,16 @@ final class EditPostViewController: UIViewController {
         }
     }
     
-    @objc private func didTapConfirmButton() {
-        guard let newTitle = titleTextField.text, let newContent = contentTextField.text else { return }
-        
-        // 클로저를 통해 수정된 데이터를 전달
-        onUpdate?(newTitle, newContent)
-        
-        dismiss(animated: true, completion: nil)
+    private func bindUI() {
+        confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                guard let newTitle = owner.titleTextField.text, let newContent = owner.contentTextField.text else { return }
+                
+                // 클로저를 통해 수정된 데이터를 전달
+                owner.onUpdate?(newTitle, newContent)
+                
+                owner.dismiss(animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
     }
 }

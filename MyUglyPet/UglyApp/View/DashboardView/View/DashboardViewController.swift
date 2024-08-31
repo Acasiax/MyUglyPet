@@ -44,84 +44,19 @@ class DashboardViewController: UIViewController {
     private var serverPosts: [PostsModel] = []
     private var myProfile: MyProfileResponse?
     
-    let logoLabel: UILabel = {
-        let label = UILabel()
-        label.text = "냥멍난이"
-        label.font = CustomFonts.omyuprettyFont(size: 30)
-        return label
-    }()
+    lazy var logoLabel = DashboardUI.logoLabel()
+    lazy var searchButton = DashboardUI.searchButton()
+    lazy var bannerHeaderLabel = DashboardUI.bannerHeaderLabel()
+    lazy var rankHeaderLabel = DashboardUI.rankHeaderLabel()
+    lazy var rankCollectionView = DashboardUI.rankCollectionView()
+    lazy var hobbyCardHeaderLabel = DashboardUI.hobbyCardHeaderLabel()
+    lazy var myBuddyCardCollectionView = DashboardUI.myBuddyCardCollectionView()
     
-    let searchButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-        button.tintColor = .black
-        return button
-    }()
-    
-    // 배너 섹션 헤더
-    let bannerHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.text = "배너"
-        label.font = CustomFonts.omyuprettyFont(size: 25)
-        return label
-    }()
-    
-    // 페이지 컨트롤 (배너가 사라졌으므로 이 부분도 제거할 수 있음)
-    let pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.currentPage = 0
-        pageControl.pageIndicatorTintColor = .lightGray
-        pageControl.currentPageIndicatorTintColor = .black
-        return pageControl
-    }()
-    
-    // 순위 섹션 헤더
-    let rankHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.text = "순위"
-        label.font = CustomFonts.omyuprettyFont(size: 25)
-        return label
-    }()
-    
-    // 순위 컬렉션 뷰
-    let rankCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 160, height: 200)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 10)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(RankCollectionViewCell.self, forCellWithReuseIdentifier: RankCollectionViewCell.identifier)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = CustomColors.lightBeige
-        return collectionView
-    }()
-    
-    // 취미 카드 섹션 헤더
-    let hobbyCardHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.text = "게시글 작성한 친구들"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
-    // 취미 카드 컬렉션 뷰
-    let MyBuddyCardCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 100)
-        layout.minimumLineSpacing = 10
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(MyBuddyCardCollectionViewCell.self, forCellWithReuseIdentifier: MyBuddyCardCollectionViewCell.identifier)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = CustomColors.lightBeige
-        return collectionView
-    }()
     
     let disposeBag = DisposeBag()
     
     var rankedGroups: [(key: PostGroup, value: [PostsModel])] = []
-
+    
     override func viewWillAppear(_ animated: Bool) {
         fetchHashtagPosts(hashTag: "1등이닷")
         fetchAllFeedPosts()
@@ -132,10 +67,10 @@ class DashboardViewController: UIViewController {
         super.viewDidLoad()
         
         rankCollectionView.dataSource = self
-        MyBuddyCardCollectionView.dataSource = self
+        myBuddyCardCollectionView.dataSource = self
         
         rankCollectionView.delegate = self
-        MyBuddyCardCollectionView.delegate = self
+        myBuddyCardCollectionView.delegate = self
         
         setupSubviews()
         setupConstraints()
@@ -152,13 +87,13 @@ class DashboardViewController: UIViewController {
         contentStackView.isLayoutMarginsRelativeArrangement = true
         contentStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0) // 좌측에 10pt 여백 추가
         
-        // 로고 및 검색 버튼 추가
+        // 로고 및 검색 버튼
         let headerStackView = UIStackView(arrangedSubviews: [logoLabel, searchButton])
         headerStackView.axis = .horizontal
         headerStackView.spacing = 16
         contentStackView.addArrangedSubview(headerStackView)
         
-        // 배너 섹션 추가 (배너 대신 CardCarouselViewController 추가)
+   
         contentStackView.addArrangedSubview(bannerHeaderLabel)
         
         let cardCarouselVC = CardCarouselViewController()
@@ -166,16 +101,15 @@ class DashboardViewController: UIViewController {
         contentStackView.addArrangedSubview(cardCarouselVC.view)
         cardCarouselVC.didMove(toParent: self)
         
-        // 순위 섹션 추가
+    
         contentStackView.addArrangedSubview(rankHeaderLabel)
         contentStackView.addArrangedSubview(rankCollectionView)
         
-        // 취미 카드 섹션 추가
+     
         contentStackView.addArrangedSubview(hobbyCardHeaderLabel)
-        contentStackView.addArrangedSubview(MyBuddyCardCollectionView)
+        contentStackView.addArrangedSubview(myBuddyCardCollectionView)
     }
     func setupConstraints() {
-        // ScrollView 제약 조건
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -196,11 +130,11 @@ class DashboardViewController: UIViewController {
             make.height.equalTo(250)
         }
         
-        MyBuddyCardCollectionView.snp.makeConstraints { make in
+        myBuddyCardCollectionView.snp.makeConstraints { make in
             make.height.equalTo(400) // 필요 시 조정 가능
         }
     }
-
+    
 }
 
 
@@ -219,7 +153,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             return rankedGroups.count
             
             
-        case MyBuddyCardCollectionView:
+        case myBuddyCardCollectionView:
             return serverPosts.count
             
         default:
@@ -230,158 +164,158 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
     func imageURLString(_ path: String) -> String {
         return path
     }
-
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
-    
+            
             
         case rankCollectionView:
-               guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
-                   return UICollectionViewCell()
-               }
-
-               let group = rankedGroups[indexPath.item]
-               let rank = indexPath.item + 1
-
-               // 셀의 기본 UI를 설정 (이미지 제외)
-               cell.configure(
-                   with: UIImage(systemName: "star"),  // 임시 또는 기본 이미지
-                   name: " \(group.key.title)",
-                   description: "\(group.key.content1)",
-                   rank: "\(rank)등"
-               )
-
-               // 비동기적으로 이미지를 로드
-               if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
-                   let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
-                   print("🙇‍♀️\(fullImageURLString)")
-
-                   if let imageURL = URL(string: fullImageURLString) {
-                       let headers: [String: String] = [
-                           Header.sesacKey.rawValue: APIKey.key,
-                           Header.authorization.rawValue: UserDefaultsManager.shared.token ?? ""
-                       ]
-
-                       let modifier = AnyModifier { request in
-                           var r = request
-                           r.allHTTPHeaderFields = headers
-                           return r
-                       }
-
-                       cell.profileImageView.kf.setImage(
-                           with: imageURL,
-                           placeholder: UIImage(systemName: "photo"),  // 기본 placeholder 이미지
-                           options: [.requestModifier(modifier)]
-                       ) { result in
-                           switch result {
-                           case .success(let value):
-                               print("이미지 로드 성공😊: \(value.source.url?.absoluteString ?? "")")
-                               // 이미지 로드 성공 후, 셀의 UI를 다시 구성
-                               cell.configure(
-                                   with: value.image,  // 로드된 이미지로 업데이트
-                                   name: " \(group.key.title)",
-                                   description: "\(group.key.content1)",
-                                   rank: "\(rank)등"
-                               )
-
-                           case .failure(let error):
-                               print("이미지 로드 실패🥹: \(error.localizedDescription)")
-                               // 실패 시 기본 이미지를 설정할 수도 있습니다.
-                           }
-                       }
-                   } else {
-                       print("URL 변환에 실패했습니다🥹: \(fullImageURLString)")
-                   }
-               }
-
-               return cell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RankCollectionViewCell.identifier, for: indexPath) as? RankCollectionViewCell else {
+                return UICollectionViewCell()
+            }
             
-        case MyBuddyCardCollectionView:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
+            let group = rankedGroups[indexPath.item]
+            let rank = indexPath.item + 1
+            
+            // 셀의 기본 UI를 설정 (이미지 제외)
+            cell.configure(
+                with: UIImage(systemName: "star"),  // 임시 또는 기본 이미지
+                name: " \(group.key.title)",
+                description: "\(group.key.content1)",
+                rank: "\(rank)등"
+            )
+            
+            // 비동기적으로 이미지를 로드
+            if let fileUrls = group.value.first?.files, let firstFileUrl = fileUrls.first {
+                let fullImageURLString = APIKey.baseURL + "v1/" + firstFileUrl
+                print("🙇‍♀️\(fullImageURLString)")
                 
-                let post = serverPosts[indexPath.row]
-                cell.postID = post.postId
-                cell.userID = post.creator.userId
-                cell.descriptionLabel.text = post.title // 포스트 제목 설정
-                cell.titleLabel.text = post.creator.nick // 사용자 닉네임
-                cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
-                cell.delegate = self  // 델리게이트 설정
-                
-                // 팔로우 상태를 확인하고 버튼을 설정
-                if let myProfile = myProfile {
-                    let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
-                    cell.configureFollowButton(isFollowing: isFollowing)
-                }
-                
-                // '나자신' 타이틀 설정을 위한 비교
-                if let userID = cell.userID, userID == UserDefaultsManager.shared.id {
-                    cell.followButton.setTitle("나자신", for: .normal)
-                    cell.followButton.isEnabled = false // 자신의 계정을 팔로우하지 않도록 버튼 비활성화
-                    cell.followButton.backgroundColor = .gray
+                if let imageURL = URL(string: fullImageURLString) {
+                    let headers: [String: String] = [
+                        Header.sesacKey.rawValue: APIKey.key,
+                        Header.authorization.rawValue: UserDefaultsManager.shared.token ?? ""
+                    ]
                     
+                    let modifier = AnyModifier { request in
+                        var r = request
+                        r.allHTTPHeaderFields = headers
+                        return r
+                    }
+                    
+                    cell.profileImageView.kf.setImage(
+                        with: imageURL,
+                        placeholder: UIImage(systemName: "photo"),  // 기본 placeholder 이미지
+                        options: [.requestModifier(modifier)]
+                    ) { result in
+                        switch result {
+                        case .success(let value):
+                            print("이미지 로드 성공😊: \(value.source.url?.absoluteString ?? "")")
+                            // 이미지 로드 성공 후, 셀의 UI를 다시 구성
+                            cell.configure(
+                                with: value.image,  // 로드된 이미지로 업데이트
+                                name: " \(group.key.title)",
+                                description: "\(group.key.content1)",
+                                rank: "\(rank)등"
+                            )
+                            
+                        case .failure(let error):
+                            print("이미지 로드 실패🥹: \(error.localizedDescription)")
+                            // 실패 시 기본 이미지를 설정할 수도 있습니다.
+                        }
+                    }
+                } else {
+                    print("URL 변환에 실패했습니다🥹: \(fullImageURLString)")
                 }
+            }
+            
+            return cell
+            
+        case myBuddyCardCollectionView:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBuddyCardCollectionViewCell.identifier, for: indexPath) as! MyBuddyCardCollectionViewCell
+            
+            let post = serverPosts[indexPath.row]
+            cell.postID = post.postId
+            cell.userID = post.creator.userId
+            cell.descriptionLabel.text = post.title // 포스트 제목 설정
+            cell.titleLabel.text = post.creator.nick // 사용자 닉네임
+            cell.imageFiles = post.files ?? [] // 이미지 URL 배열 전달
+            cell.delegate = self  // 델리게이트 설정
+            
+            // 팔로우 상태를 확인하고 버튼을 설정
+            if let myProfile = myProfile {
+                let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
+                cell.configureFollowButton(isFollowing: isFollowing)
+            }
+            
+            // '나자신' 타이틀 설정을 위한 비교
+            if let userID = cell.userID, userID == UserDefaultsManager.shared.id {
+                cell.followButton.setTitle("나자신", for: .normal)
+                cell.followButton.isEnabled = false // 자신의 계정을 팔로우하지 않도록 버튼 비활성화
+                cell.followButton.backgroundColor = .gray
                 
+            }
+            
             cell.layer.cornerRadius = 10.0  // 모서리 둥글게 설정
             cell.layer.masksToBounds = true  // 둥근 모서리가 클립되도록 설정
-
+            
             cell.backgroundColor = CustomColors.lightBeige
             cell.layer.borderWidth = 0.8  // 테두리 굵기 설정
             cell.layer.borderColor = UIColor.gray.cgColor  // 테두리 색상 설정
-
-                return cell
+            
+            return cell
             
         default:
             return UICollectionViewCell()
         }
     }
     
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            if collectionView == rankCollectionView {
-             //   let selectedGroup = rankedGroups[indexPath.item]
-               // let detailVC = RankDetailViewController() // RankDetailViewController는 상세보기 화면으로 교체
-           //     detailVC.group = selectedGroup
+        if collectionView == rankCollectionView {
+            //   let selectedGroup = rankedGroups[indexPath.item]
+            // let detailVC = RankDetailViewController() // RankDetailViewController는 상세보기 화면으로 교체
+            //     detailVC.group = selectedGroup
             //   navigationController?.pushViewController(detailVC, animated: true)
-            } else if collectionView == MyBuddyCardCollectionView {
-                let selectedPost = serverPosts[indexPath.row]
-                let postDetailVC = EditProfileViewController()
-               // postDetailVC.serverPosts = selectedPost
-                postDetailVC.serverUserID = selectedPost.creator.userId
-                navigationController?.pushViewController(postDetailVC, animated: true)
-            }
+        } else if collectionView == myBuddyCardCollectionView {
+            let selectedPost = serverPosts[indexPath.row]
+            let postDetailVC = EditProfileViewController()
+            // postDetailVC.serverPosts = selectedPost
+            postDetailVC.serverUserID = selectedPost.creator.userId
+            navigationController?.pushViewController(postDetailVC, animated: true)
         }
+    }
     
     
 }
 
 
-extension DashboardViewController {  
+extension DashboardViewController {
     
     //내 프로필 가져오기
     func fetchMyProfile() {
-            // FollowPostNetworkManager 싱글턴 인스턴스를 사용하여 프로필 요청
-            FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-                switch result {
-                case .success(let profile):
-                    self?.myProfile = profile
-                   // print("내 프로필 가져오는데 성공했어요🥰", profile)
-                   
-                    
-                case .failure(let error):
-                    // 프로필 데이터를 가져오지 못했을 때
-                    print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-                }
+        // FollowPostNetworkManager 싱글턴 인스턴스를 사용하여 프로필 요청
+        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.myProfile = profile
+                // print("내 프로필 가져오는데 성공했어요🥰", profile)
+                
+                
+            case .failure(let error):
+                // 프로필 데이터를 가져오지 못했을 때
+                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
             }
         }
+    }
     
     
     // 게시글 모든피드 포스팅 가져오기
     private func fetchAllFeedPosts() {
         print(#function)
-      
+        
         let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed") //🌟
-
+        
         // 네트워크 요청 예시 (PostNetworkManager 사용)
         PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
             switch result {
@@ -389,14 +323,14 @@ extension DashboardViewController {
                 self?.serverPosts = posts
                 // 필터링 및 정렬 후, 중복된 사용자 게시물 처리
                 self?.filterAndSortPostsByUserId()
-                self?.MyBuddyCardCollectionView.reloadData() // 데이터 로드 후 컬렉션 뷰 리로드
+                self?.myBuddyCardCollectionView.reloadData() // 데이터 로드 후 컬렉션 뷰 리로드
                 print("allFeed 포스팅을 가져오는데 성공했어요🥰")
             case .failure(let error):
                 print("allFeed 포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
             }
         }
     }
-
+    
     private func filterAndSortPostsByUserId() {
         // 먼저 최신 포스트가 앞에 오도록 정렬
         serverPosts.sort { $0.createdAt > $1.createdAt }
@@ -416,19 +350,19 @@ extension DashboardViewController {
         // 중복 제거된 게시물 배열을 생성
         serverPosts = Array(uniquePostsDict.values)
     }
-   
+    
     
     // 해시태그를 사용하여 포스팅 가져오기
     private func fetchHashtagPosts(hashTag: String) {
         print(#function)
         let query = FetchHashtagReadingPostQuery(next: nil, limit: "30", product_id: "각유저가고른1등우승자", hashTag: hashTag)
-
+        
         PostNetworkManager.shared.fetchHashtagPosts(query: query) { [weak self] result in
             switch result {
             case .success(let posts):
                 
                 // 모든 포스트 출력
-             //   self?.printAllPosts(posts)
+                //   self?.printAllPosts(posts)
                 // 포스트를 처리하여 랭킹 계산
                 self?.processFetchedPosts(posts)
             case .failure(let error):
@@ -436,7 +370,7 @@ extension DashboardViewController {
             }
         }
     }
-
+    
     // 모든 포스트를 출력
     private func printAllPosts(_ posts: [PostsModel]) {
         for (index, post) in posts.enumerated() {
@@ -448,7 +382,7 @@ extension DashboardViewController {
             print("========================\n")
         }
     }
-
+    
     // 가져온 포스트를 처리
     private func processFetchedPosts(_ posts: [PostsModel]) {
         print(#function)
@@ -461,7 +395,7 @@ extension DashboardViewController {
         // 모든 순위 출력
         displayRankedGroups(rankedGroups)
     }
-
+    
     // 포스트를 그룹화하여 중복 개수 계산
     private func groupPosts(posts: [PostsModel]) -> [PostGroup: [PostsModel]] {
         var groupedPosts = [PostGroup: [PostsModel]]()
@@ -478,12 +412,12 @@ extension DashboardViewController {
         
         return groupedPosts
     }
-
+    
     // 그룹화된 포스트를 개수로 정렬하여 순위를 매김
     private func rankGroups(_ groupedPosts: [PostGroup: [PostsModel]]) -> [(key: PostGroup, value: [PostsModel])] {
         return groupedPosts.sorted { $0.value.count > $1.value.count }
     }
-
+    
     // 모든 순위 출력
     private func displayRankedGroups(_ rankedGroups: [(key: PostGroup, value: [PostsModel])]) {
         print(#function)
@@ -493,28 +427,28 @@ extension DashboardViewController {
         }
         
         for (index, group) in rankedGroups.enumerated() {
-//            print("\(index + 1)등 그룹의 타이틀: \(group.key.title)")
-//            print("\(index + 1)등 그룹의 내용: \(group.key.content)")
-//            print("\(index + 1)등 그룹의 내용1: \(group.key.content1)")
-//            print("\(index + 1)등 그룹의 중복된 포스트 개수: \(group.value.count)개")
-
+            //            print("\(index + 1)등 그룹의 타이틀: \(group.key.title)")
+            //            print("\(index + 1)등 그룹의 내용: \(group.key.content)")
+            //            print("\(index + 1)등 그룹의 내용1: \(group.key.content1)")
+            //            print("\(index + 1)등 그룹의 중복된 포스트 개수: \(group.value.count)개")
+            
             // 그룹에 포함된 포스트들을 모두 출력
             for (postIndex, post) in group.value.enumerated() {
-               // print("    포함된 포스트 \(postIndex + 1): 타이틀: \(post.title ?? "제목 없음"), 파일 URL: \(post.files ?? [])")
+                // print("    포함된 포스트 \(postIndex + 1): 타이틀: \(post.title ?? "제목 없음"), 파일 URL: \(post.files ?? [])")
             }
             
-          //  print("========================\n")
+            //  print("========================\n")
         }
         
         self.rankedGroups = rankedGroups
-      //  print("그룹이 잘 들어갔나?: \(rankedGroups)")
+        //  print("그룹이 잘 들어갔나?: \(rankedGroups)")
         rankCollectionView.reloadData()
         
         
     }
     
     
- 
+    
     
 }
 

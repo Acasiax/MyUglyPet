@@ -70,7 +70,7 @@ class CardCarouselViewController: UIViewController, UICollectionViewDataSource, 
             // 애니메이션 적용
             AnimationZip.animatePress(on: selectedCell) { [weak self] in
                 // 애니메이션이 끝난 후 화면 전환
-                let detailVC = TopicPhotoListViewController() // 새 CardCarouselViewController 인스턴스를 생성
+                let detailVC = AlbumPhotoListViewController() // 새 CardCarouselViewController 인스턴스를 생성
                 self?.navigationController?.pushViewController(detailVC, animated: true)
             }
         }

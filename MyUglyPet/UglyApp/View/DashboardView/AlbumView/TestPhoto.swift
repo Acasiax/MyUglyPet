@@ -13,11 +13,9 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class TopicPhotoListViewController: UIViewController {
+final class AlbumPhotoListViewController: UIViewController {
     
     private var serverPosts: [PostsModel] = []
-    
-    // MARK: - View Define
     
     private lazy var photoCollectionView: UICollectionView = {
         let layout = createCompositionalLayout()
@@ -27,15 +25,12 @@ final class TopicPhotoListViewController: UIViewController {
         return collectionView
     }()
     
-    // MARK: - Properties
     
     private var dataSource: UICollectionViewDiffableDataSource<Section, Photo>!
     
     private enum Section {
         case main
     }
-    
-    // MARK: - View LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +41,6 @@ final class TopicPhotoListViewController: UIViewController {
         fetchPosts()
     }
     
-    // MARK: - Layout
     
     private func setupViews() {
         view.addSubview(photoCollectionView)
@@ -78,7 +72,6 @@ final class TopicPhotoListViewController: UIViewController {
         }
     }
     
-    // MARK: - DiffableDataSource
     
     private func setupDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, Photo>(collectionView: photoCollectionView) { collectionView, indexPath, photo in
@@ -110,9 +103,8 @@ final class TopicPhotoListViewController: UIViewController {
     }
 }
 
-// MARK: - Network Fetch
-
-extension TopicPhotoListViewController {
+// MARK: - 서버 로직
+extension AlbumPhotoListViewController {
     // 게시글 모든 피드 가져오기
     private func fetchPosts() {
         let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
