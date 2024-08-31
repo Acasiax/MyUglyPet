@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct LoginQuery: Encodable {
     let email: String
@@ -154,6 +155,19 @@ struct CommentCreator: Codable {
 }
 
 
+struct DummyComment {
+    let profileImage: UIImage?
+    let username: String
+    let date: String
+    let text: String
+}
+
+struct UserComment {
+    let profileImage: UIImage?
+    let username: String
+    let date: String
+    let text: String
+}
 
 
 struct Mission {
