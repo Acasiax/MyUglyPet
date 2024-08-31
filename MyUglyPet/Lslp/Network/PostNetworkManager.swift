@@ -180,10 +180,6 @@ class SignUpPostNetworkManager {
     
     private init() {}
     
-    
-    
-    
-    
     // MARK: - 회원가입 기능 추가
     static func registerUser(email: String, password: String, nick: String, phoneNum: String?, birthDay: String?, completion: @escaping (Result<String, Error>) -> Void) {
         
@@ -315,6 +311,43 @@ class PostNetworkManager {
     static let shared = PostNetworkManager()
     
     private init() {}
+    
+    
+    // MARK: - 댓글 수정
+       func editComment(postID: String, commentID: String, newContent: String, completion: @escaping (Result<Void, Error>) -> Void) {
+           let parameters: [String: Any] = ["content": newContent]
+           let request = Router.editComment(postID: postID, commentID: commentID, parameters: parameters).asURLRequest
+           
+           print("Request URL: \(request.url?.absoluteString ?? "No URL")")
+           print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+           print("Request Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "No Body")")
+
+           AF.request(request)
+               .responseData { response in
+                   switch response.result {
+                   case .success(let data):
+                       // 응답 데이터를 확인해보세요
+                       if let jsonString = String(data: data, encoding: .utf8) {
+                           print("Response JSON String: \(jsonString)")
+                       } else {
+                           print("Response data could not be converted to a string.")
+                       }
+
+                       do {
+                           let result = try JSONDecoder().decode(CommentResponse.self, from: data)
+                           completion(.success(()))
+                       } catch {
+                           print("Decoding error: \(error.localizedDescription)")
+                           completion(.failure(error))
+                       }
+                   case .failure(let error):
+                       print("Request failed with error: \(error.localizedDescription)")
+                       completion(.failure(error))
+                   }
+               }
+       }
+    
+    
     
     //MARK: - 포스트 수정
        func updatePost(postID: String, parameters: [String: Any], completion: @escaping (Result<Void, Error>) -> Void) {

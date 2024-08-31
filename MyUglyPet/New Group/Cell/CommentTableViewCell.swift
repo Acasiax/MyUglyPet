@@ -14,6 +14,7 @@ import RxCocoa
 // Delegate 프로토콜 정의
 protocol CommentTableViewCellDelegate: AnyObject {
     func didTapDeleteButton(in cell: CommentTableViewCell)
+    func didTapReplyButton(in cell: CommentTableViewCell, withContent content: String)
 }
 
 final class CommentTableViewCell: UITableViewCell {
@@ -131,6 +132,16 @@ final class CommentTableViewCell: UITableViewCell {
                 owner.delegate?.didTapDeleteButton(in: owner)
             }
             .disposed(by: disposeBag)
+        
+        // replyButton의 탭 이벤트를 Rx로 바인딩
+        replyButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("댓글 수정 버튼이 눌렸습니다.")
+                if let commentContent = owner.commentLabel.text {
+                    owner.delegate?.didTapReplyButton(in: owner, withContent: commentContent)
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
     func configure(with profileImageURL: String?, username: String, date: String, comment: String) {
@@ -144,4 +155,6 @@ final class CommentTableViewCell: UITableViewCell {
         dateLabel.text = date
         commentLabel.text = comment
     }
+    
 }
+

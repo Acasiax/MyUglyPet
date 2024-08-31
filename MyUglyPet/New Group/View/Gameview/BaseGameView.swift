@@ -39,7 +39,7 @@ struct UIGameView {
 
     static let worldCupLabel: UILabel = {
         let label = UILabel()
-        label.text = "망한 사진 월드컵"
+        label.text = "웃긴 사진 월드컵"
         label.backgroundColor = CustomColors.softPink
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 15)
@@ -51,7 +51,7 @@ struct UIGameView {
 
     static let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "둘 중에 \n 더 망한 사진을 골라보세요!"
+        label.text = "둘 중에 \n 더 웃긴 사진을 골라보세요!"
         label.font = UIFont.boldSystemFont(ofSize: 24)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -60,7 +60,7 @@ struct UIGameView {
 
     static let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "망한 사진 월드컵 32강"
+        label.text = "웃긴 사진 월드컵 32강"
         label.backgroundColor = CustomColors.softPink
         label.textAlignment = .center
         label.textColor = .white
@@ -171,7 +171,7 @@ struct UIGameView {
 
     static let winnerTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "가장 망한 사진의\n우승자는!!"
+        label.text = "가장 웃긴 사진의\n우승자는!!"
         label.font = UIFont.boldSystemFont(ofSize: 28)
         label.textAlignment = .center
         label.numberOfLines = 0

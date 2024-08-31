@@ -42,6 +42,7 @@
 		AA6474922C80C5C90079ECE0 /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */; };
 		AA6474942C80C6800079ECE0 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474932C80C6800079ECE0 /* CustomFonts.swift */; };
 		AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */; };
+		AA6474982C829D960079ECE0 /* EditCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474972C829D960079ECE0 /* EditCommentViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -140,6 +141,7 @@
 		AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "omyu pretty.ttf"; sourceTree = "<group>"; };
 		AA6474932C80C6800079ECE0 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
+		AA6474972C829D960079ECE0 /* EditCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 				AA7272FD2C6FA138007551C4 /* BaseDetailView.swift */,
 				AA7272FF2C6FAD75007551C4 /* DeepPhotoViewController.swift */,
 				AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */,
+				AA6474972C829D960079ECE0 /* EditCommentViewController.swift */,
 			);
 			path = DetailPost;
 			sourceTree = "<group>";
@@ -699,6 +702,7 @@
 				AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */,
 				AA64742B2C7B23600079ECE0 /* MainHomeUI.swift in Sources */,
 				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
+				AA6474982C829D960079ECE0 /* EditCommentViewController.swift in Sources */,
 				AA6474492C7B69BE0079ECE0 /* EditProfileUI.swift in Sources */,
 				AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,

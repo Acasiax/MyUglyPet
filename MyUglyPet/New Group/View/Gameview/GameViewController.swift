@@ -23,7 +23,7 @@ final class GameViewController: UIViewController {
     var lastPetIndex: Int?
     var currentRoundIndex: Int = 0
     var winnerPet: Pet?  // 우승자 정보를 저장하는 변수
-    let rounds: [String] = ["망한 사진 월드컵 16강", "망한 사진 월드컵 8강", "망한 사진 월드컵 4강", "결승!"]
+    let rounds: [String] = ["웃긴 사진 월드컵 16강", "웃긴 사진 월드컵 8강", "웃긴 사진 월드컵 4강", "결승!"]
 
     
     weak var delegate: GameViewControllerDelegate?

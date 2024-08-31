@@ -161,8 +161,40 @@ final class DetailViewController: BaseDetailView {
 
 
 extension DetailViewController {
-    // 서버에 포스트 수정 요청을 보내는 메서드
     
+    func didTapReplyButton(with comment: Comment) {
+           let editVC = EditCommentViewController()
+           editVC.commentContent = comment.content
+           
+           editVC.onUpdate = { [weak self] updatedComment in
+               self?.editComment(commentId: comment.commentId, newContent: updatedComment)
+           }
+           
+           editVC.modalPresentationStyle = .overFullScreen
+           editVC.modalTransitionStyle = .crossDissolve
+           present(editVC, animated: true, completion: nil)
+       }
+    
+
+    // 서버에 댓글 수정 요청을 보내는 메서드
+    func editComment(commentId: String, newContent: String) {
+        guard let postID = post?.postId else { return }
+        
+        PostNetworkManager.shared.editComment(postID: postID, commentID: commentId, newContent: newContent) { [weak self] result in
+            switch result {
+            case .success:
+                print("댓글 수정 성공!")
+                self?.fetchLatestPostData(userID: self?.post?.creator.userId ?? "")
+            case .failure(let error):
+                print("댓글 수정 실패: \(error.localizedDescription)")
+                self?.showErrorAlert(message: "댓글 수정에 실패했습니다. 나중에 다시 시도해주세요.")
+            }
+        }
+    }
+
+    
+    
+    // 서버에 포스트 수정 요청을 보내는 메서드
     func updatePost() {
         guard let postID = post?.postId else {
             print("포스트 ID를 찾을 수 없습니다.")
@@ -316,6 +348,25 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 extension DetailViewController: CommentTableViewCellDelegate {
+    
+    func didTapReplyButton(in cell: CommentTableViewCell, withContent content: String) {
+        // 댓글 수정 화면을 띄우기 위한 EditCommentViewController 생성
+        let editVC = EditCommentViewController()
+        editVC.commentContent = content
+        
+        // 댓글 수정 후 데이터를 업데이트하기 위한 클로저 설정
+        editVC.onUpdate = { [weak self] updatedContent in
+            guard let indexPath = self?.tableView.indexPath(for: cell) else { return }
+            self?.post?.comments[indexPath.row].content = updatedContent
+            self?.editComment(commentId: self?.post?.comments[indexPath.row].commentId ?? "", newContent: updatedContent)
+        }
+
+        // 모달 프레젠테이션 스타일 설정
+        editVC.modalPresentationStyle = .overFullScreen
+        editVC.modalTransitionStyle = .crossDissolve
+        present(editVC, animated: true, completion: nil)
+    }
+    
     func didTapDeleteButton(in cell: CommentTableViewCell) {
         print("삭제 버튼이 DetailViewController에서 눌렸습니다.")
         
@@ -378,8 +429,6 @@ extension DetailViewController: CommentTableViewCellDelegate {
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
+
 }
-
-
-
-

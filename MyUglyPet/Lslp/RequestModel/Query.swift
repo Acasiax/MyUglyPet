@@ -107,7 +107,7 @@ struct Creator: Codable {
 
 struct Comment: Codable {
     let commentId: String          // 댓글 ID
-    let content: String            // 댓글 내용
+    var content: String            // 댓글 내용
     let createdAt: String          // 댓글 작성 날짜
     let creator: Creator           // 댓글 작성자 정보
     
@@ -164,7 +164,7 @@ struct Mission {
 
 struct MissionData {
     static let missions: [Mission] = [
-        Mission(iconName: "icon1", title: "망한 사진 월드컵 대회참여하기", carrotCount: 2),
+        Mission(iconName: "icon1", title: "웃긴 사진 월드컵 대회참여하기", carrotCount: 2),
         Mission(iconName: "icon2", title: "후보 구경하기", carrotCount: 3),
         Mission(iconName: "icon1", title: "개발자 집 사주기", carrotCount: 2)
     ]
