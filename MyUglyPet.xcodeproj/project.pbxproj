@@ -24,7 +24,6 @@
 		AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */; };
 		AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */; };
 		AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */; };
-		AA6474452C7B42D30079ECE0 /* exam.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474442C7B42D30079ECE0 /* exam.swift */; };
 		AA6474472C7B672A0079ECE0 /* EditProfileViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */; };
 		AA6474492C7B69BE0079ECE0 /* EditProfileUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */; };
 		AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */; };
@@ -112,6 +111,8 @@
 		AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72737F2C7397BE007551C4 /* DashboardViewController.swift */; };
 		AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */; };
 		AA7273842C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273832C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift */; };
+		AA9E35952C835E5200CF69FC /* FollowersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35942C835E5200CF69FC /* FollowersViewModel.swift */; };
+		AA9E35992C83647700CF69FC /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35982C83647700CF69FC /* EditProfileViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,7 +133,6 @@
 		AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostUI.swift; sourceTree = "<group>"; };
 		AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
 		AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewServerLogic.swift; sourceTree = "<group>"; };
-		AA6474442C7B42D30079ECE0 /* exam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exam.swift; sourceTree = "<group>"; };
 		AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewLayout.swift; sourceTree = "<group>"; };
 		AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileUI.swift; sourceTree = "<group>"; };
 		AA64744B2C7B7C630079ECE0 /* MyMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMapViewController.swift; sourceTree = "<group>"; };
@@ -212,6 +212,8 @@
 		AA72737F2C7397BE007551C4 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		AA7273812C73A4D7007551C4 /* RankCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankCollectionViewCell.swift; sourceTree = "<group>"; };
 		AA7273832C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBuddyCardCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA9E35942C835E5200CF69FC /* FollowersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersViewModel.swift; sourceTree = "<group>"; };
+		AA9E35982C83647700CF69FC /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,11 +240,9 @@
 		AA6474232C7A35650079ECE0 /* EditProfile */ = {
 			isa = PBXGroup;
 			children = (
+				AA9E35962C83645D00CF69FC /* View */,
+				AA9E35972C83646400CF69FC /* Model */,
 				AA6474572C7C46050079ECE0 /* MyFollersPost */,
-				AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */,
-				AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */,
-				AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */,
-				AA6474442C7B42D30079ECE0 /* exam.swift */,
 			);
 			path = EditProfile;
 			sourceTree = "<group>";
@@ -278,10 +278,8 @@
 		AA6474572C7C46050079ECE0 /* MyFollersPost */ = {
 			isa = PBXGroup;
 			children = (
-				AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */,
-				AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */,
-				AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */,
-				AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */,
+				AA9E35922C835E3E00CF69FC /* View */,
+				AA9E35932C835E4400CF69FC /* Model */,
 			);
 			path = MyFollersPost;
 			sourceTree = "<group>";
@@ -500,8 +498,8 @@
 				AA7273092C704145007551C4 /* HomeView */,
 				AA7273062C704075007551C4 /* CreatePost */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
-				AA7273072C704079007551C4 /* Gameview */,
 				AA6474232C7A35650079ECE0 /* EditProfile */,
+				AA7273072C704079007551C4 /* Gameview */,
 				AA72737E2C739784007551C4 /* DashboardView */,
 				AA7273212C70F891007551C4 /* LoginView */,
 				AA72730D2C705ED9007551C4 /* DetailPost */,
@@ -658,6 +656,51 @@
 			path = DashboardView;
 			sourceTree = "<group>";
 		};
+		AA9E35922C835E3E00CF69FC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474582C7C462E0079ECE0 /* FollowersViewController.swift */,
+				AA64745C2C7C46A50079ECE0 /* MyFollowingViewController.swift */,
+				AA64745A2C7C467D0079ECE0 /* MyLikedPostsViewController.swift */,
+				AA64745E2C7D430E0079ECE0 /* MyPostersViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA9E35932C835E4400CF69FC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA9E35942C835E5200CF69FC /* FollowersViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA9E35962C83645D00CF69FC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */,
+				AA9E359A2C83650600CF69FC /* Design */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA9E35972C83646400CF69FC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA9E35982C83647700CF69FC /* EditProfileViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA9E359A2C83650600CF69FC /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */,
+				AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -788,7 +831,6 @@
 			files = (
 				AA6474AC2C82E6430079ECE0 /* BaseAllPostHomeView.swift in Sources */,
 				AA6474272C7B092D0079ECE0 /* MainHomeViewModel.swift in Sources */,
-				AA6474452C7B42D30079ECE0 /* exam.swift in Sources */,
 				AA7273692C720420007551C4 /* Router.swift in Sources */,
 				AA7273552C71D032007551C4 /* NetworkManager.swift in Sources */,
 				AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */,
@@ -838,6 +880,7 @@
 				AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */,
 				AA7272DC2C6CE55B007551C4 /* DetailViewController.swift in Sources */,
 				AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */,
+				AA9E35952C835E5200CF69FC /* FollowersViewModel.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
 				AA6474472C7B672A0079ECE0 /* EditProfileViewLayout.swift in Sources */,
 				AA6474A32C82DD3B0079ECE0 /* PostCollectionViewCell.swift in Sources */,
@@ -862,6 +905,7 @@
 				AA64747A2C7F18810079ECE0 /* TestPhoto.swift in Sources */,
 				AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */,
 				AA64747C2C7F29B80079ECE0 /* CarouselViewController.swift in Sources */,
+				AA9E35992C83647700CF69FC /* EditProfileViewModel.swift in Sources */,
 				AA6474802C7F343D0079ECE0 /* PayViewController.swift in Sources */,
 				AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,

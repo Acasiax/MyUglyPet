@@ -10,14 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-
-//// 델리게이트 프로토콜 정의
-//protocol AllPostTableViewCellDelegate: AnyObject {
-//    func didTapCommentButton(in cell: AllPostTableViewCell)
-//    func didTapDeleteButton(in cell: AllPostTableViewCell)
-//}
-
-
 final class MyLikedPostsViewController: UIViewController {
     
     private var serverPosts: [PostsModel] = []

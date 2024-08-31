@@ -28,6 +28,7 @@ final class EditProfileViewController: UIViewController {
     ])
     
     private let disposeBag = DisposeBag()
+    private let viewModel = EditProfileViewModel()
     
     var followersButton = UIButton()
     var postsButton = UIButton()
@@ -35,8 +36,6 @@ final class EditProfileViewController: UIViewController {
     
     var userProfile: MyProfileResponse?
     var serverUserID: String?
-   // var serverPosts: PostsModel?
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -47,7 +46,7 @@ final class EditProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.softIvory
         setupUI()
-        bindButtons()
+        bindViewModel()
     }
     
     // MARK: - UI 설정
@@ -62,7 +61,6 @@ final class EditProfileViewController: UIViewController {
         view.addSubview(profileImageButton)
         view.addSubview(userNameLabel)
         view.addSubview(userEmailLabel)
-        
         setupProfileSectionConstraints()
     }
     
@@ -74,9 +72,7 @@ final class EditProfileViewController: UIViewController {
         profileStatsStackView.addArrangedSubview(followersButton)
         profileStatsStackView.addArrangedSubview(postsButton)
         profileStatsStackView.addArrangedSubview(followingButton)
-        
         view.addSubview(profileStatsStackView)
-        
         setupStatsSectionConstraints()
     }
     
@@ -85,90 +81,111 @@ final class EditProfileViewController: UIViewController {
         view.addSubview(notificationLabel)
         view.addSubview(logoutButton)
         view.addSubview(deleteAccountButton)
-        
         setupBottomSectionConstraints()
     }
     
-    // MARK: - Action Methods
     
-    private func bindButtons() {
-        followersButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.followersButton)
-                print("팔로워 버튼이 눌렸습니다.")
-                owner.navigateToFollowers()
-            }
+    private func bindViewModel() {
+        let input = EditProfileViewModel.Input(
+            followersButtonTap: followersButton.rx.tap.asObservable(),
+            postsButtonTap: postsButton.rx.tap.asObservable(),
+            followingButtonTap: followingButton.rx.tap.asObservable(),
+            profileImageButtonTap: profileImageButton.rx.tap.asObservable(),
+            myLikedPostsButtonTap: myLikedPostsButton.rx.tap.asObservable(),
+            editProfileButtonTap: editProfileButton.rx.tap.asObservable(),
+            viewFollowingButtonTap: viewFollowingButton.rx.tap.asObservable(),
+            viewFollowersButtonTap: viewFollowersButton.rx.tap.asObservable(),
+            logoutButtonTap: logoutButton.rx.tap.asObservable(),
+            deleteAccountButtonTap: deleteAccountButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.navigateToFollowers
+            .drive(onNext: { [weak self] in
+                self?.navigateToFollowers()
+            })
             .disposed(by: disposeBag)
         
-        postsButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.postsButton)
-                print("전체 게시물수 버튼이 눌렸습니다.")
-                owner.navigateToPosts()
-            }
+        output.navigateToPosts
+            .drive(onNext: { [weak self] in
+                self?.navigateToPosts()
+            })
             .disposed(by: disposeBag)
         
-        followingButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.followingButton)
-                print("팔로잉 버튼이 눌렸습니다.")
-                owner.navigateToFollowing()
-            }
+        output.navigateToFollowing
+            .drive(onNext: { [weak self] in
+                self?.navigateToFollowing()
+            })
             .disposed(by: disposeBag)
         
-        profileImageButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.profileImageButton)
-                owner.handleProfileImageButtonTap()
-            }
+        output.showProfileImageOptions
+            .drive(onNext: { [weak self] in
+                self?.handleProfileImageButtonTap()
+            })
             .disposed(by: disposeBag)
         
-        myLikedPostsButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.myLikedPostsButton)
-                owner.MyLikedPostsButtonTap()
-            }
+        output.navigateToMyLikedPosts
+            .drive(onNext: { [weak self] in
+                self?.MyLikedPostsButtonTap()
+            })
             .disposed(by: disposeBag)
         
-        editProfileButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.editProfileButton)
-                owner.handleEditProfileButtonTap()
-            }
+        output.navigateToEditProfile
+            .drive(onNext: { [weak self] in
+                self?.handleEditProfileButtonTap()
+            })
             .disposed(by: disposeBag)
         
-        viewFollowingButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.viewFollowingButton)
-                owner.handleViewFollowingButtonTap()
-            }
+        output.navigateToViewFollowing
+            .drive(onNext: { [weak self] in
+                self?.handleViewFollowingButtonTap()
+            })
             .disposed(by: disposeBag)
         
-        viewFollowersButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.viewFollowersButton)
-                owner.handleViewFollowersButtonTap()
-            }
+        output.navigateToViewFollowers
+            .drive(onNext: { [weak self] in
+                self?.handleViewFollowersButtonTap()
+            })
             .disposed(by: disposeBag)
         
-        logoutButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.logoutButton)
-                owner.handleLogout()
-            }
+        output.performLogout
+            .drive(onNext: { [weak self] in
+                self?.handleLogout()
+            })
             .disposed(by: disposeBag)
         
-        deleteAccountButton.rx.tap
-            .bind(with: self) { owner, _ in
-                AnimationZip.animateButtonPress(owner.deleteAccountButton)
-                owner.deleteAccount()
-            }
+        output.performDeleteAccount
+            .drive(onNext: { [weak self] in
+                self?.deleteAccount()
+            })
             .disposed(by: disposeBag)
     }
-}
-
-
-extension EditProfileViewController {
+    
+    // MARK: - 내 프로필 조회랑, 조회 후 레이블 업데이트
+    
+    private func fetchUserProfile() {
+        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.userProfile = profile
+                self?.updateUIWithProfileData()
+            case .failure(let error):
+                print("내 프로필 가져오는데 실패했어요!!: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func updateUIWithProfileData() {
+        guard let profile = userProfile else { return }
+        userNameLabel.text = profile.nick
+        userEmailLabel.text = profile.email
+        followersButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.followers.count)", title: "팔로워").attributedTitle(for: .normal), for: .normal)
+        followingButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.following.count)", title: "팔로잉").attributedTitle(for: .normal), for: .normal)
+        postsButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.posts.count)", title: "내가 작성한\n게시물수").attributedTitle(for: .normal), for: .normal)
+    }
+    
+    // MARK: - 모든 게시물 삭제 초기화
     func deleteAllPosts() {
         guard let profile = userProfile else {
             print("프로필 정보가 없습니다.")
@@ -193,34 +210,7 @@ extension EditProfileViewController {
         }
     }
     
-    // 내 프로필 가져오기
-    func fetchUserProfile() {
-        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-            switch result {
-            case .success(let profile):
-                self?.userProfile = profile
-                self?.updateUIWithProfileData()
-            case .failure(let error):
-                print("내 프로필 가져오는데 실패했어요!!: \(error.localizedDescription)")
-            }
-        }
-    }
     
-    // 프로필 데이터를 기반으로 UI 업데이트
-    private func updateUIWithProfileData() {
-        guard let profile = userProfile else { return }
-        
-        userNameLabel.text = profile.nick
-        userEmailLabel.text = profile.email
-        
-        let followersTitle = "\(profile.followers.count)\n팔로워"
-        let followingTitle = "\(profile.following.count)\n팔로잉"
-        let postsTitle = "\(profile.posts.count)\n게시물수"
-        
-        followersButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.followers.count)", title: "팔로워").attributedTitle(for: .normal), for: .normal)
-        followingButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.following.count)", title: "팔로잉").attributedTitle(for: .normal), for: .normal)
-        postsButton.setAttributedTitle(EditProfileUI.statButton(number: "\(profile.posts.count)", title: "내가 작성한\n게시물수").attributedTitle(for: .normal), for: .normal)
-    }
 }
 
 //MARK: - 위에 3개 화면 이동 함수

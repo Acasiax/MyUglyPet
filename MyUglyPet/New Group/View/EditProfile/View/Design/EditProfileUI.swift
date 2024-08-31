@@ -24,7 +24,6 @@ struct EditProfileUI {
     }
 
     
-    
     static func userNameLabel() -> UILabel {
         let label = UILabel()
         label.text = "홍길동"
@@ -93,7 +92,6 @@ struct EditProfileUI {
         return stackView
     }
     
-    // MARK: - Helper Methods
     
     static func button(withTitle title: String, backgroundColor: UIColor) -> UIButton {
         let button = UIButton()

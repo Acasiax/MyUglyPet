@@ -70,10 +70,8 @@ final class MyPostersViewController: UIViewController {
                 owner.handlePlusButtonTap()
             }
             .disposed(by: disposeBag)
-        
-        // Pan Gesture Recognizer를 tableView에 추가
-        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
-        panGestureRecognizer.delegate = self // 델리게이트 설정
+  
+      
         tableView.addGestureRecognizer(panGestureRecognizer)
     }
     
@@ -102,22 +100,7 @@ final class MyPostersViewController: UIViewController {
         }
     }
     
-//    // 내 프로필 가져오기
-//    func fetchMyProfile() {
-//        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-//            switch result {
-//            case .success(let profile):
-//                self?.myProfile = profile
-//                self?.fetchLatestPostData(userID: profile.user_id)
-//            case .failure(let error):
-//                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-//            }
-//        }
-//    }
 
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        // 기능 지웠음
-    }
 }
 
 extension MyPostersViewController: UIGestureRecognizerDelegate {
