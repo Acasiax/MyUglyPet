@@ -11,141 +11,11 @@ import Kingfisher
 import RxSwift
 import RxCocoa
 
-final class AllPostTableViewCell: UITableViewCell {
+final class AllPostTableViewCell: BaseAllPostTableCell {
     
     weak var delegate: AllPostTableViewCellDelegate?
     private let disposeBag = DisposeBag()  // DisposeBag 수동 관리
-    
-    // UI 요소들
-    let containerView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 20
-        view.clipsToBounds = true
-        view.backgroundColor = .white
-        return view
-    }()
-    
-    lazy var userProfileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 20
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "기본냥멍1")
-        return imageView
-    }()
-    
-    lazy var userNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "못난이"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        label.textColor = .black
-        return label
-    }()
-    
-    lazy var postTitle: UILabel = {
-        let label = UILabel()
-        label.text = "제목"
-        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        label.textColor = .black
-        return label
-    }()
-    
-    lazy var locationTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "서울시 문래동"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .lightGray
-        return label
-    }()
-    
-    lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "1시간 전"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .lightGray
-        return label
-    }()
-    
-    lazy var deleteButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("삭제", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 15
-        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        return button
-    }()
-    
-    lazy var followButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("팔로우", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 15
-        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        return button
-    }()
-    
-    let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.layer.cornerRadius = 10
-        collectionView.clipsToBounds = true
-        return collectionView
-    }()
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.textColor = .black
-        return label
-    }()
-    
-    lazy var contentLabel: UILabel = {
-        let label = UILabel()
-        label.text = "우리집 강쥐 오늘 해피하게 뻗음"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
-    
-    lazy var likeButton: UIButton = {
-        let button = UIButton(type: .system)
-        let heartImage = UIImage(systemName: "heart")
-        button.setImage(heartImage, for: .normal)
-        button.tintColor = .black
-        return button
-    }()
-    
-    lazy var likeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "1"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
-    
-    lazy var commentButton: UIButton = {
-        let button = UIButton(type: .system)
-        let commentImage = UIImage(systemName: "bubble.right")
-        button.setImage(commentImage, for: .normal)
-        button.tintColor = .black
-        return button
-    }()
-    
-    lazy var commentLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
-    
+   
     // 좋아요 버튼 상태를 저장할 변수
     var isPostLiked: Bool?
     
@@ -175,15 +45,7 @@ final class AllPostTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentView.addSubview(containerView)
-        containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(10)
-        }
-        
-        configureHierarchy()
-        configureConstraints()
-        
+         
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -243,25 +105,6 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    private func updateLikeButton() {
-        // serverLike 값 출력
-        if let serverLike = serverLike {
-            print("서버에서 받은 좋아요 상태: \(serverLike)")
-            
-            // 좋아요 상태가 있는지 확인하고 버튼 상태 업데이트
-            if !serverLike.isEmpty {
-                isLiked = true
-                updateLikeButtonUI()
-            } else {
-                isLiked = false
-                updateLikeButtonUI()
-            }
-        } else {
-            print("serverLike 값이 없습니다.")
-            isLiked = false
-            updateLikeButtonUI()
-        }
-    }
 
     private func updateLikeButtonUI() {
         let heartImage = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
@@ -280,44 +123,7 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    private func followButtonTapped() {
-        guard let myBuddyuserID = userID else {
-            print("userID가 없습니다.")
-            return
-        }
-        print("내가 친구하고 싶은 유저ID:\(myBuddyuserID)")
-        
-        isFollowing.toggle()
-        updateFollowButtonUI()
-        
-        if isFollowing {
-            FollowPostNetworkManager.shared.followUser(userID: myBuddyuserID) { [weak self] result in
-                switch result {
-                case .success:
-                    print("팔로우 성공")
-                case .failure(let error):
-                    print("팔로우 실패: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        self?.isFollowing.toggle()
-                        self?.updateFollowButtonUI()
-                    }
-                }
-            }
-        } else {
-            FollowPostNetworkManager.shared.unfollowUser(userID: myBuddyuserID) { [weak self] result in
-                switch result {
-                case .success:
-                    print("언팔로우 성공")
-                case .failure(let error):
-                    print("언팔로우 실패: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        self?.isFollowing.toggle()
-                        self?.updateFollowButtonUI()
-                    }
-                }
-            }
-        }
-    }
+    
     
     func configureFollowButton(isFollowing: Bool) {
         self.isFollowing = isFollowing
@@ -361,19 +167,6 @@ final class AllPostTableViewCell: UITableViewCell {
         }
     }
     
-    private func deletePost(postID: String) {
-        PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
-            switch result {
-            case .success:
-                print("포스트가 성공적으로 삭제되었습니다.")
-                if let delegate = self?.delegate {
-                    delegate.didTapDeleteButton(in: self!)
-                }
-            case .failure(let error):
-                print("포스트 삭제 중 오류 발생: \(error.localizedDescription)")
-            }
-        }
-    }
 }
 
 extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -421,8 +214,87 @@ extension AllPostTableViewCell: UICollectionViewDataSource, UICollectionViewDele
 }
 
 
+//MARK: -  팔로우 언팔로우 기능
 extension AllPostTableViewCell {
- 
+    
+    private func followButtonTapped() {
+        guard let myBuddyuserID = userID else {
+            print("userID가 없습니다.")
+            return
+        }
+        print("내가 친구하고 싶은 유저ID: \(myBuddyuserID)")
+        
+        isFollowing.toggle()
+        updateFollowButtonUI()
+        
+        if isFollowing {
+            followUser(userID: myBuddyuserID)
+        } else {
+            unfollowUser(userID: myBuddyuserID)
+        }
+    }
+    
+    private func followUser(userID: String) {
+        FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
+            switch result {
+            case .success:
+                print("팔로우 성공")
+            case .failure(let error):
+                print("팔로우 실패: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self?.isFollowing.toggle()
+                    self?.updateFollowButtonUI()
+                }
+            }
+        }
+    }
+    
+    private func unfollowUser(userID: String) {
+        FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
+            switch result {
+            case .success:
+                print("언팔로우 성공")
+            case .failure(let error):
+                print("언팔로우 실패: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self?.isFollowing.toggle()
+                    self?.updateFollowButtonUI()
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+extension AllPostTableViewCell {
+    
+    //MARK: - 좋아요 상태 업데이트 하기
+    private func updateLikeButton() {
+        // serverLike 값 출력
+        if let serverLike = serverLike {
+            print("서버에서 받은 좋아요 상태: \(serverLike)")
+            
+            // 좋아요 상태가 있는지 확인하고 버튼 상태 업데이트
+            if !serverLike.isEmpty {
+                isLiked = true
+                updateLikeButtonUI()
+            } else {
+                isLiked = false
+                updateLikeButtonUI()
+            }
+        } else {
+            print("serverLike 값이 없습니다.")
+            isLiked = false
+            updateLikeButtonUI()
+        }
+    }
+
+    
+    //MARK: - 게시물 좋아요 하기
     func likePost(postID: String, likeStatus: Bool) {
             PostNetworkManager.shared.likePost(postID: postID, likeStatus: likeStatus) { [weak self] result in
                 
@@ -444,6 +316,22 @@ extension AllPostTableViewCell {
                 }
             }
         }
+    
+    //MARK: - 삭제 하기
+    private func deletePost(postID: String) {
+        PostNetworkManager.shared.deletePost(postID: postID) { [weak self] result in
+            switch result {
+            case .success:
+                print("포스트가 성공적으로 삭제되었습니다.")
+                if let delegate = self?.delegate {
+                    delegate.didTapDeleteButton(in: self!)
+                }
+            case .failure(let error):
+                print("포스트 삭제 중 오류 발생: \(error.localizedDescription)")
+            }
+        }
+    }
+    
 }
 
 extension AllPostTableViewCell {

@@ -9,8 +9,7 @@ import UIKit
 import SnapKit
 
 class BaseAllPostTableCell: UITableViewCell {
-    
-    // MARK: - UI Components
+
     let containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
@@ -19,7 +18,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return view
     }()
     
-    let userProfileImageView: UIImageView = {
+    lazy var userProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
@@ -28,7 +27,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return imageView
     }()
     
-    let userNameLabel: UILabel = {
+    lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.text = "못난이"
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
@@ -36,7 +35,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let postTitle: UILabel = {
+    lazy var postTitle: UILabel = {
         let label = UILabel()
         label.text = "제목"
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
@@ -44,7 +43,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let locationTimeLabel: UILabel = {
+    lazy var locationTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "서울시 문래동"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
@@ -52,7 +51,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let timeLabel: UILabel = {
+    lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "1시간 전"
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
@@ -60,7 +59,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let deleteButton: UIButton = {
+    lazy var deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("삭제", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
@@ -71,7 +70,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return button
     }()
     
-    let followButton: UIButton = {
+    lazy var followButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("팔로우", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
@@ -98,7 +97,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let contentLabel: UILabel = {
+    lazy var contentLabel: UILabel = {
         let label = UILabel()
         label.text = "우리집 강쥐 오늘 해피하게 뻗음"
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -106,7 +105,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let likeButton: UIButton = {
+    lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         let heartImage = UIImage(systemName: "heart")
         button.setImage(heartImage, for: .normal)
@@ -114,7 +113,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return button
     }()
     
-    let likeLabel: UILabel = {
+    lazy var likeLabel: UILabel = {
         let label = UILabel()
         label.text = "1"
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -122,7 +121,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    let commentButton: UIButton = {
+    lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         let commentImage = UIImage(systemName: "bubble.right")
         button.setImage(commentImage, for: .normal)
@@ -130,7 +129,7 @@ class BaseAllPostTableCell: UITableViewCell {
         return button
     }()
     
-    let commentLabel: UILabel = {
+    lazy var commentLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -138,17 +137,18 @@ class BaseAllPostTableCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Initializers
+    // MARK: - 생성자
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        registerCells()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup Methods
+    // MARK: - 서브뷰랑 제약조건
     private func setupUI() {
         contentView.addSubview(containerView)
         setupSubviews()
@@ -156,6 +156,7 @@ class BaseAllPostTableCell: UITableViewCell {
     }
     
     private func setupSubviews() {
+        contentView.addSubview(containerView)
         containerView.addSubview(userProfileImageView)
         containerView.addSubview(userNameLabel)
         containerView.addSubview(postTitle)
@@ -173,6 +174,8 @@ class BaseAllPostTableCell: UITableViewCell {
     }
     
     private func setupConstraints() {
+        
+        
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(10)
         }
@@ -250,5 +253,9 @@ class BaseAllPostTableCell: UITableViewCell {
             make.left.equalTo(commentButton.snp.right).offset(4)
             make.centerY.equalTo(commentButton)
         }
+    }
+    
+    private func registerCells() {
+        collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
     }
 }
