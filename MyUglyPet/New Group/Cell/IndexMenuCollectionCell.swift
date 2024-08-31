@@ -30,7 +30,7 @@ class IndexMenuCollectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        // 셀이 재사용될 때마다 새로운 DisposeBag을 생성하여 이전의 바인딩을 해제합니다.
+        // 셀이 재사용될 때마다 새로운 DisposeBag을 생성하여 이전의 바인딩을 해제하기!
         disposeBag = DisposeBag()
     }
     

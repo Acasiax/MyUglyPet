@@ -21,7 +21,6 @@
 		AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */; };
 		AA6474362C7B29FB0079ECE0 /* GameViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */; };
 		AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */; };
-		AA64743A2C7B2FC20079ECE0 /* AllPostTableCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */; };
 		AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */; };
 		AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */; };
 		AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */; };
@@ -51,6 +50,7 @@
 		AA6474AA2C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474A92C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift */; };
 		AA6474AC2C82E6430079ECE0 /* BaseAllPostHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474AB2C82E6430079ECE0 /* BaseAllPostHomeView.swift */; };
 		AA6474AE2C82E9D30079ECE0 /* BaseAllPostTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474AD2C82E9D30079ECE0 /* BaseAllPostTableCell.swift */; };
+		AA6474B72C83460A0079ECE0 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474B62C83460A0079ECE0 /* PaymentViewController.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -129,7 +129,6 @@
 		AA6474332C7B29770079ECE0 /* GameViewAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewAnimation.swift; sourceTree = "<group>"; };
 		AA6474352C7B29FB0079ECE0 /* GameViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewServerLogic.swift; sourceTree = "<group>"; };
 		AA6474372C7B2BE90079ECE0 /* GameViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewLayout.swift; sourceTree = "<group>"; };
-		AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostTableCellLayout.swift; sourceTree = "<group>"; };
 		AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostUI.swift; sourceTree = "<group>"; };
 		AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
 		AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewServerLogic.swift; sourceTree = "<group>"; };
@@ -158,6 +157,7 @@
 		AA6474A92C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostHomeViewNetwork.swift; sourceTree = "<group>"; };
 		AA6474AB2C82E6430079ECE0 /* BaseAllPostHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAllPostHomeView.swift; sourceTree = "<group>"; };
 		AA6474AD2C82E9D30079ECE0 /* BaseAllPostTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAllPostTableCell.swift; sourceTree = "<group>"; };
+		AA6474B62C83460A0079ECE0 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -250,10 +250,8 @@
 		AA6474302C7B27260079ECE0 /* UglyCandidateView */ = {
 			isa = PBXGroup;
 			children = (
-				AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */,
-				AA6474282C7B11A90079ECE0 /* UglyCandidateViewModel.swift */,
-				AA64742E2C7B26FC0079ECE0 /* UglyCandidateUI.swift */,
-				AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */,
+				AA6474B42C8345CA0079ECE0 /* View */,
+				AA6474B52C8345D40079ECE0 /* Model */,
 			);
 			path = UglyCandidateView;
 			sourceTree = "<group>";
@@ -262,9 +260,8 @@
 			isa = PBXGroup;
 			children = (
 				AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */,
-				AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */,
-				AA6474A22C82DD3B0079ECE0 /* PostCollectionViewCell.swift */,
 				AA6474AD2C82E9D30079ECE0 /* BaseAllPostTableCell.swift */,
+				AA6474A22C82DD3B0079ECE0 /* PostCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -302,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				AA64747F2C7F343D0079ECE0 /* PayViewController.swift */,
+				AA6474B62C83460A0079ECE0 /* PaymentViewController.swift */,
 			);
 			path = PayView;
 			sourceTree = "<group>";
@@ -368,6 +366,70 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		AA6474AF2C832D5A0079ECE0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
+				AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */,
+				AA6474B12C832D9F0079ECE0 /* Design */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA6474B02C832D610079ECE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA6474B12C832D9F0079ECE0 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */,
+				AA7273592C71DA95007551C4 /* CreatePostViewLayout.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		AA6474B22C8345020079ECE0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
+				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
+				AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */,
+				AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA6474B32C8345080079ECE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474262C7B092D0079ECE0 /* MainHomeViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA6474B42C8345CA0079ECE0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */,
+				AA64742E2C7B26FC0079ECE0 /* UglyCandidateUI.swift */,
+				AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA6474B52C8345D40079ECE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474282C7B11A90079ECE0 /* UglyCandidateViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		AA7272A82C6C967C007551C4 = {
 			isa = PBXGroup;
 			children = (
@@ -411,10 +473,10 @@
 				AA7273352C71B8FD007551C4 /* SetupScene.swift */,
 				AA7273332C71B8AC007551C4 /* Protocol.swift */,
 				AA7272EF2C6F3C15007551C4 /* CustomColors.swift */,
+				AA6474932C80C6800079ECE0 /* CustomFonts.swift */,
 				AA7272CB2C6C98D5007551C4 /* TabBarController.swift */,
 				AA7272E82C6DD8BF007551C4 /* View */,
 				AA7272E32C6DC7D7007551C4 /* Cell */,
-				AA6474932C80C6800079ECE0 /* CustomFonts.swift */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
@@ -436,13 +498,13 @@
 				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
 				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273092C704145007551C4 /* HomeView */,
+				AA7273062C704075007551C4 /* CreatePost */,
+				AA7273082C7040F1007551C4 /* ReadingPostView */,
 				AA7273072C704079007551C4 /* Gameview */,
 				AA6474232C7A35650079ECE0 /* EditProfile */,
 				AA72737E2C739784007551C4 /* DashboardView */,
 				AA7273212C70F891007551C4 /* LoginView */,
-				AA7273082C7040F1007551C4 /* ReadingPostView */,
 				AA72730D2C705ED9007551C4 /* DetailPost */,
-				AA7273062C704075007551C4 /* CreatePost */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -472,11 +534,8 @@
 		AA7273062C704075007551C4 /* CreatePost */ = {
 			isa = PBXGroup;
 			children = (
-				AA7272DD2C6CEE21007551C4 /* CreatePostViewController.swift */,
-				AA6474402C7B38EF0079ECE0 /* CreatePostViewModel.swift */,
-				AA7273592C71DA95007551C4 /* CreatePostViewLayout.swift */,
-				AA64743E2C7B372A0079ECE0 /* NewPostUI.swift */,
-				AA6474422C7B3E050079ECE0 /* CreatePostViewServerLogic.swift */,
+				AA6474AF2C832D5A0079ECE0 /* View */,
+				AA6474B02C832D610079ECE0 /* Model */,
 			);
 			path = CreatePost;
 			sourceTree = "<group>";
@@ -507,11 +566,8 @@
 		AA7273092C704145007551C4 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
-				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
-				AA6474262C7B092D0079ECE0 /* MainHomeViewModel.swift */,
-				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
-				AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */,
-				AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */,
+				AA6474B22C8345020079ECE0 /* View */,
+				AA6474B32C8345080079ECE0 /* Model */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -737,6 +793,7 @@
 				AA7273552C71D032007551C4 /* NetworkManager.swift in Sources */,
 				AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */,
 				AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */,
+				AA6474B72C83460A0079ECE0 /* PaymentViewController.swift in Sources */,
 				AA64749E2C82D77B0079ECE0 /* NameInputViewModel.swift in Sources */,
 				AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */,
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
@@ -769,7 +826,6 @@
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
 				AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */,
 				AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */,
-				AA64743A2C7B2FC20079ECE0 /* AllPostTableCellLayout.swift in Sources */,
 				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
 				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,

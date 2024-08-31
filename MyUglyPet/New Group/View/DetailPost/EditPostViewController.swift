@@ -68,7 +68,6 @@ final class EditPostViewController: UIViewController {
         setupViews()
         setupConstraints()
         
-        // 텍스트 필드에 기존 제목과 내용을 설정
         titleTextField.text = postTitle
         contentTextField.text = postContent
         

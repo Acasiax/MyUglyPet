@@ -196,7 +196,7 @@ extension CreatePostViewController: PHPickerViewControllerDelegate {
         selectedImages.append(container)
         updatePhotoCountLabel()
         
-        // RxSwift를 사용하여 버튼 이벤트 처리
+       
         deleteButton.rx.tap
             .bind(with: self) { owner, _ in
                 if let index = owner.selectedImages.firstIndex(of: container) {

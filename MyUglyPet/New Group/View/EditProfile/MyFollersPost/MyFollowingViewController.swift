@@ -47,7 +47,7 @@ class MyFollowingViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(HHiCollectionViewCell.self, forCellWithReuseIdentifier: HHiCollectionViewCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = CustomColors.softPurple
+        collectionView.backgroundColor = CustomColors.lightBeige
         return collectionView
     }()
     
@@ -235,6 +235,7 @@ class HHiCollectionViewCell: UICollectionViewCell {
     }
     
     private func handleFollowButtonTap() {
+       
         guard let userID = userID else {
             print("userID가 없습니다.")
             return
@@ -244,6 +245,7 @@ class HHiCollectionViewCell: UICollectionViewCell {
         updateFollowButtonUI()
 
         if isFollowing {
+            print(userID)
             FollowPostNetworkManager.shared.followUser(userID: userID) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -260,6 +262,7 @@ class HHiCollectionViewCell: UICollectionViewCell {
             }
         } else {
             FollowPostNetworkManager.shared.unfollowUser(userID: userID) { [weak self] result in
+                print(userID)
                 guard let self = self else { return }
                 switch result {
                 case .success:

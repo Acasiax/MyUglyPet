@@ -10,7 +10,6 @@ import SnapKit
 
 class DetailPhotoCollectionViewCell: UICollectionViewCell {
 
-    
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill

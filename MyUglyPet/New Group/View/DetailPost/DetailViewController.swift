@@ -12,7 +12,6 @@ import RxCocoa
 import SnapKit
 import Kingfisher
 
-
 final class DetailViewController: BaseDetailView {
     private let disposeBag = DisposeBag()
     
@@ -111,22 +110,26 @@ final class DetailViewController: BaseDetailView {
     }
     
     private func handleSendButtonTap() {
-        guard let text = commentTextField.text, !text.isEmpty else { return }
-        guard let postID = post?.postId, let userID = post?.creator.userId else {
-            print("Post ID 또는 User ID를 찾을 수 없습니다.")
-            return
-        }
-        
-        PostNetworkManager.shared.postComment(toPostWithID: postID, content: text) { [weak self] result in
-            switch result {
-            case .success:
-                self?.fetchLatestPostData(userID: userID)
-                self?.commentTextField.text = ""
-            case .failure(let error):
-                self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요. \(error.localizedDescription)")
-            }
-        }
-    }
+          guard let text = commentTextField.text, !text.isEmpty else { return }
+          guard let postID = post?.postId, let userID = post?.creator.userId else {
+              print("Post ID 또는 User ID를 찾을 수 없습니다.")
+              return
+          }
+          
+          postComment(toPostWithID: postID, content: text, userID: userID)
+      }
+      
+      private func postComment(toPostWithID postID: String, content: String, userID: String) {
+          PostNetworkManager.shared.postComment(toPostWithID: postID, content: content) { [weak self] result in
+              switch result {
+              case .success:
+                  self?.fetchLatestPostData(userID: userID)
+                  self?.commentTextField.text = ""
+              case .failure(let error):
+                  self?.showErrorAlert(message: "댓글 작성에 실패했습니다. 나중에 다시 시도해주세요. \(error.localizedDescription)")
+              }
+          }
+      }
     
      func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)

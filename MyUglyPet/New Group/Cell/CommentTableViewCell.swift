@@ -11,7 +11,7 @@ import Kingfisher
 import RxSwift
 import RxCocoa
 
-// Delegate 프로토콜 정의
+
 protocol CommentTableViewCellDelegate: AnyObject {
     func didTapDeleteButton(in cell: CommentTableViewCell)
     func didTapReplyButton(in cell: CommentTableViewCell, withContent content: String)
@@ -19,7 +19,7 @@ protocol CommentTableViewCellDelegate: AnyObject {
 
 final class CommentTableViewCell: UITableViewCell {
 
-    // Delegate 변수 선언
+   
     weak var delegate: CommentTableViewCellDelegate?
     var postId: String?
     private let disposeBag = DisposeBag()
@@ -125,7 +125,7 @@ final class CommentTableViewCell: UITableViewCell {
     }
     
     private func configureBindings() {
-        // deleteButton의 탭 이벤트를 Rx로 바인딩
+       
         deleteButton.rx.tap
             .bind(with: self) { owner, _ in
                 print("삭제 버튼이 눌렸습니다.")
@@ -133,7 +133,7 @@ final class CommentTableViewCell: UITableViewCell {
             }
             .disposed(by: disposeBag)
         
-        // replyButton의 탭 이벤트를 Rx로 바인딩
+       
         replyButton.rx.tap
             .bind(with: self) { owner, _ in
                 print("댓글 수정 버튼이 눌렸습니다.")

@@ -62,7 +62,7 @@ final class AllPostHomeViewController: UIViewController {
     }
     
     deinit {
-        print("AllPostHomeViewController deinitialized")
+     //   print("AllPostHomeViewController deinitialized")
     }
     
     private func setupUI() {
