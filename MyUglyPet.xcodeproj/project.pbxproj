@@ -47,6 +47,10 @@
 		AA64749E2C82D77B0079ECE0 /* NameInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64749D2C82D77B0079ECE0 /* NameInputViewModel.swift */; };
 		AA6474A02C82D7A70079ECE0 /* PasswordInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64749F2C82D7A70079ECE0 /* PasswordInputViewModel.swift */; };
 		AA6474A32C82DD3B0079ECE0 /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474A22C82DD3B0079ECE0 /* PostCollectionViewCell.swift */; };
+		AA6474A72C82E4770079ECE0 /* AllPostHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474A62C82E4770079ECE0 /* AllPostHomeViewModel.swift */; };
+		AA6474AA2C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474A92C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift */; };
+		AA6474AC2C82E6430079ECE0 /* BaseAllPostHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474AB2C82E6430079ECE0 /* BaseAllPostHomeView.swift */; };
+		AA6474AE2C82E9D30079ECE0 /* BaseAllPostTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474AD2C82E9D30079ECE0 /* BaseAllPostTableCell.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -150,6 +154,10 @@
 		AA64749D2C82D77B0079ECE0 /* NameInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputViewModel.swift; sourceTree = "<group>"; };
 		AA64749F2C82D7A70079ECE0 /* PasswordInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputViewModel.swift; sourceTree = "<group>"; };
 		AA6474A22C82DD3B0079ECE0 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA6474A62C82E4770079ECE0 /* AllPostHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostHomeViewModel.swift; sourceTree = "<group>"; };
+		AA6474A92C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPostHomeViewNetwork.swift; sourceTree = "<group>"; };
+		AA6474AB2C82E6430079ECE0 /* BaseAllPostHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAllPostHomeView.swift; sourceTree = "<group>"; };
+		AA6474AD2C82E9D30079ECE0 /* BaseAllPostTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAllPostTableCell.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -256,6 +264,7 @@
 				AA72731C2C70880C007551C4 /* AllPostTableViewCell.swift */,
 				AA6474392C7B2FC20079ECE0 /* AllPostTableCellLayout.swift */,
 				AA6474A22C82DD3B0079ECE0 /* PostCollectionViewCell.swift */,
+				AA6474AD2C82E9D30079ECE0 /* BaseAllPostTableCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -332,6 +341,31 @@
 				AA7273242C70FB7E007551C4 /* BirthdayInputViewController.swift */,
 			);
 			path = unused;
+			sourceTree = "<group>";
+		};
+		AA6474A42C82E4550079ECE0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */,
+				AA6474AB2C82E6430079ECE0 /* BaseAllPostHomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA6474A52C82E45D0079ECE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474A62C82E4770079ECE0 /* AllPostHomeViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA6474A82C82E49C0079ECE0 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474A92C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		AA7272A82C6C967C007551C4 = {
@@ -462,7 +496,9 @@
 		AA7273082C7040F1007551C4 /* ReadingPostView */ = {
 			isa = PBXGroup;
 			children = (
-				AA7272C92C6C989D007551C4 /* AllPostHomeViewController.swift */,
+				AA6474A42C82E4550079ECE0 /* View */,
+				AA6474A52C82E45D0079ECE0 /* Model */,
+				AA6474A82C82E49C0079ECE0 /* Network */,
 				AA64743B2C7B31120079ECE0 /* Cell */,
 			);
 			path = ReadingPostView;
@@ -694,6 +730,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA6474AC2C82E6430079ECE0 /* BaseAllPostHomeView.swift in Sources */,
 				AA6474272C7B092D0079ECE0 /* MainHomeViewModel.swift in Sources */,
 				AA6474452C7B42D30079ECE0 /* exam.swift in Sources */,
 				AA7273692C720420007551C4 /* Router.swift in Sources */,
@@ -712,6 +749,7 @@
 				AA7273822C73A4D7007551C4 /* RankCollectionViewCell.swift in Sources */,
 				AA7273802C7397BE007551C4 /* DashboardViewController.swift in Sources */,
 				AA72736B2C72CDB8007551C4 /* PostNetworkManager.swift in Sources */,
+				AA6474AA2C82E4BA0079ECE0 /* AllPostHomeViewNetwork.swift in Sources */,
 				AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */,
 				AA7273672C71FFB7007551C4 /* MyLoginNetworkManager.swift in Sources */,
 				AA7273572C71D032007551C4 /* TargetType.swift in Sources */,
@@ -751,6 +789,7 @@
 				AA6474362C7B29FB0079ECE0 /* GameViewServerLogic.swift in Sources */,
 				AA7272EA2C6DD8E9007551C4 /* MainHomeViewController.swift in Sources */,
 				AA7272E72C6DC83B007551C4 /* DetailPhotoCollectionViewCell.swift in Sources */,
+				AA6474A72C82E4770079ECE0 /* AllPostHomeViewModel.swift in Sources */,
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
 				AA64745D2C7C46A50079ECE0 /* MyFollowingViewController.swift in Sources */,
 				AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */,
@@ -761,6 +800,7 @@
 				AA64745B2C7C467D0079ECE0 /* MyLikedPostsViewController.swift in Sources */,
 				AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */,
 				AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */,
+				AA6474AE2C82E9D30079ECE0 /* BaseAllPostTableCell.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
 				AA6474292C7B11A90079ECE0 /* UglyCandidateViewModel.swift in Sources */,
 				AA64747A2C7F18810079ECE0 /* TestPhoto.swift in Sources */,

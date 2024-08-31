@@ -16,31 +16,13 @@ protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapDeleteButton(in cell: AllPostTableViewCell)
 }
 
-// ViewModel 설계
-final class AllPostHomeViewModel {
-    struct Input {
-        let plusButtonTap: Observable<Void>
-    }
-    
-    struct Output {
-        let navigateToCreatePost: Driver<Void>
-    }
-    
-    private let disposeBag = DisposeBag()
-    
-    func transform(input: Input) -> Output {
-        let navigateToCreatePost = input.plusButtonTap
-            .asDriver(onErrorDriveWith: .empty())
-        
-        return Output(navigateToCreatePost: navigateToCreatePost)
-    }
-}
+
 
 final class AllPostHomeViewController: UIViewController {
     
-    private var serverPosts: [PostsModel] = []
+     var serverPosts: [PostsModel] = []
     private let disposeBag = DisposeBag()
-    private var myProfile: MyProfileResponse?
+    var myProfile: MyProfileResponse?
     private let viewModel = AllPostHomeViewModel()
     
     let colors: [UIColor] = [
@@ -191,29 +173,3 @@ extension AllPostHomeViewController: AllPostTableViewCellDelegate {
     }
 }
 
-extension AllPostHomeViewController {
-    func fetchMyProfile() {
-        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-            switch result {
-            case .success(let profile):
-                self?.myProfile = profile
-            case .failure(let error):
-                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func fetchPosts() {
-        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
-        
-        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
-            switch result {
-            case .success(let posts):
-                self?.serverPosts = posts
-                self?.tableView.reloadData()
-            case .failure(let error):
-                print("포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-            }
-        }
-    }
-}
