@@ -16,11 +16,32 @@ protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapDeleteButton(in cell: AllPostTableViewCell)
 }
 
+// ViewModel 설계
+final class AllPostHomeViewModel {
+    struct Input {
+        let plusButtonTap: Observable<Void>
+    }
+    
+    struct Output {
+        let navigateToCreatePost: Driver<Void>
+    }
+    
+    private let disposeBag = DisposeBag()
+    
+    func transform(input: Input) -> Output {
+        let navigateToCreatePost = input.plusButtonTap
+            .asDriver(onErrorDriveWith: .empty())
+        
+        return Output(navigateToCreatePost: navigateToCreatePost)
+    }
+}
+
 final class AllPostHomeViewController: UIViewController {
     
     private var serverPosts: [PostsModel] = []
     private let disposeBag = DisposeBag()
     private var myProfile: MyProfileResponse?
+    private let viewModel = AllPostHomeViewModel()
     
     let colors: [UIColor] = [
         CustomColors.softBlue
@@ -75,8 +96,14 @@ final class AllPostHomeViewController: UIViewController {
     }
     
     private func setupBindings() {
-        plusButton.rx.tap
-            .bind(with: self) { owner, _ in
+        let input = AllPostHomeViewModel.Input(
+            plusButtonTap: plusButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.navigateToCreatePost
+            .drive(with: self) { owner, _ in
                 owner.handlePlusButtonTap()
             }
             .disposed(by: disposeBag)
@@ -107,8 +134,6 @@ final class AllPostHomeViewController: UIViewController {
         fetchPosts()
         fetchMyProfile()
     }
-    
-  
 }
 
 extension AllPostHomeViewController: UIGestureRecognizerDelegate {
@@ -192,61 +217,3 @@ extension AllPostHomeViewController {
         }
     }
 }
-
-extension AllPostTableViewCell {
-    func configure(with post: PostsModel, myProfile: MyProfileResponse?, color: UIColor) {
-        self.postID = post.postId
-        self.userID = post.creator.userId
-        self.userNameLabel.text = post.creator.nick
-        self.postTitle.text = post.title
-        self.titleLabel.text = post.title
-        self.contentLabel.text = post.content
-        self.imageFiles = post.files ?? []
-        self.serverLike = post.likes
-        self.containerView.backgroundColor = color
-        
-        if let myProfile = myProfile {
-            let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
-            self.configureFollowButton(isFollowing: isFollowing)
-        }
-    }
-}
-
-
-
-class PostCollectionViewCell: UICollectionViewCell {
-
-    
-    let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "기본냥멍2")
-        imageView.backgroundColor = CustomColors.softIvory
-        return imageView
-    }()
-    
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configureHierarchy()
-        configureConstraints()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func configureHierarchy() {
-        contentView.addSubview(imageView)
-    }
-    
-    private func configureConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-}
-
-

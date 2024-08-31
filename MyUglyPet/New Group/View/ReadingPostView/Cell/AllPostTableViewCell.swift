@@ -445,3 +445,23 @@ extension AllPostTableViewCell {
             }
         }
 }
+
+extension AllPostTableViewCell {
+    func configure(with post: PostsModel, myProfile: MyProfileResponse?, color: UIColor) {
+        self.postID = post.postId
+        self.userID = post.creator.userId
+        self.userNameLabel.text = post.creator.nick
+        self.postTitle.text = post.title
+        self.titleLabel.text = post.title
+        self.contentLabel.text = post.content
+        self.imageFiles = post.files ?? []
+        self.serverLike = post.likes
+        self.containerView.backgroundColor = color
+
+        if let myProfile = myProfile {
+            let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
+            self.configureFollowButton(isFollowing: isFollowing)
+        }
+    }
+}
+
