@@ -44,6 +44,8 @@
 		AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */; };
 		AA6474982C829D960079ECE0 /* EditCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474972C829D960079ECE0 /* EditCommentViewController.swift */; };
 		AA64749A2C82AAA00079ECE0 /* DetailViewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474992C82AAA00079ECE0 /* DetailViewNetwork.swift */; };
+		AA64749E2C82D77B0079ECE0 /* NameInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64749D2C82D77B0079ECE0 /* NameInputViewModel.swift */; };
+		AA6474A02C82D7A70079ECE0 /* PasswordInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64749F2C82D7A70079ECE0 /* PasswordInputViewModel.swift */; };
 		AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B42C6C967C007551C4 /* AppDelegate.swift */; };
 		AA7272B72C6C967C007551C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B62C6C967C007551C4 /* SceneDelegate.swift */; };
 		AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7272B82C6C967C007551C4 /* ViewController.swift */; };
@@ -144,6 +146,8 @@
 		AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		AA6474972C829D960079ECE0 /* EditCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentViewController.swift; sourceTree = "<group>"; };
 		AA6474992C82AAA00079ECE0 /* DetailViewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewNetwork.swift; sourceTree = "<group>"; };
+		AA64749D2C82D77B0079ECE0 /* NameInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputViewModel.swift; sourceTree = "<group>"; };
+		AA64749F2C82D7A70079ECE0 /* PasswordInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputViewModel.swift; sourceTree = "<group>"; };
 		AA7272B12C6C967C007551C4 /* MyUglyPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyUglyPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7272B42C6C967C007551C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA7272B62C6C967C007551C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -296,6 +300,35 @@
 				AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */,
 			);
 			path = Font;
+			sourceTree = "<group>";
+		};
+		AA64749B2C82D7510079ECE0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA7273262C70FC0A007551C4 /* NameInputViewController.swift */,
+				AA7273282C70FCA4007551C4 /* EmailInputViewController.swift */,
+				AA72732B2C70FD18007551C4 /* PasswordInputViewController.swift */,
+				AA7273312C71B3C1007551C4 /* WelcomeViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA64749C2C82D75A0079ECE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA64749D2C82D77B0079ECE0 /* NameInputViewModel.swift */,
+				AA64749F2C82D7A70079ECE0 /* PasswordInputViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA6474A12C82D7E20079ECE0 /* unused */ = {
+			isa = PBXGroup;
+			children = (
+				AA72732D2C70FD85007551C4 /* PhoneNumberInputViewController.swift */,
+				AA7273242C70FB7E007551C4 /* BirthdayInputViewController.swift */,
+			);
+			path = unused;
 			sourceTree = "<group>";
 		};
 		AA7272A82C6C967C007551C4 = {
@@ -470,12 +503,9 @@
 		AA72732A2C70FCF7007551C4 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				AA7273262C70FC0A007551C4 /* NameInputViewController.swift */,
-				AA7273282C70FCA4007551C4 /* EmailInputViewController.swift */,
-				AA72732B2C70FD18007551C4 /* PasswordInputViewController.swift */,
-				AA72732D2C70FD85007551C4 /* PhoneNumberInputViewController.swift */,
-				AA7273242C70FB7E007551C4 /* BirthdayInputViewController.swift */,
-				AA7273312C71B3C1007551C4 /* WelcomeViewController.swift */,
+				AA64749B2C82D7510079ECE0 /* View */,
+				AA64749C2C82D75A0079ECE0 /* Model */,
+				AA6474A12C82D7E20079ECE0 /* unused */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -667,6 +697,7 @@
 				AA7273552C71D032007551C4 /* NetworkManager.swift in Sources */,
 				AA7272B92C6C967C007551C4 /* ViewController.swift in Sources */,
 				AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */,
+				AA64749E2C82D77B0079ECE0 /* NameInputViewModel.swift in Sources */,
 				AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */,
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
 				AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */,
@@ -734,6 +765,7 @@
 				AA6474802C7F343D0079ECE0 /* PayViewController.swift in Sources */,
 				AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */,
 				AA7273002C6FAD75007551C4 /* DeepPhotoViewController.swift in Sources */,
+				AA6474A02C82D7A70079ECE0 /* PasswordInputViewModel.swift in Sources */,
 				AA6474252C7A35810079ECE0 /* EditProfileViewController.swift in Sources */,
 				AA64749A2C82AAA00079ECE0 /* DetailViewNetwork.swift in Sources */,
 				AA7273842C73A4F6007551C4 /* MyBuddyCardCollectionViewCell.swift in Sources */,

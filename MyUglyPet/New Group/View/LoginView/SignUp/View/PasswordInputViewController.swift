@@ -7,11 +7,16 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class PasswordInputViewController: UIViewController {
     
     var nickname: String?
     var email: String?
+    
+    private let viewModel = PasswordInputViewModel()
+    private let disposeBag = DisposeBag()
     
     let progressBar: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
@@ -35,7 +40,7 @@ class PasswordInputViewController: UIViewController {
         textField.borderStyle = .none
         textField.textAlignment = .center
         textField.font = UIFont.systemFont(ofSize: 20)
-        textField.isSecureTextEntry = false
+        textField.isSecureTextEntry = true
         let bottomLine = UIView()
         bottomLine.backgroundColor = .lightGray
         textField.addSubview(bottomLine)
@@ -49,9 +54,8 @@ class PasswordInputViewController: UIViewController {
     
     let togglePasswordVisibilityButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("비번 가리기", for: .normal)
+        button.setTitle("비번 보이기", for: .normal)
         button.setTitleColor(.orange, for: .normal)
-        button.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         return button
     }()
     
@@ -62,19 +66,18 @@ class PasswordInputViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.isEnabled = false
-        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        configureTextField()
+        bindViewModel()
         
         print("이메일뷰에서 전달 받은 닉네임: \(nickname ?? ""), 이메일: \(email ?? "")")
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = .white
         
         view.addSubview(progressBar)
@@ -112,71 +115,59 @@ class PasswordInputViewController: UIViewController {
         }
     }
     
-    func configureTextField() {
-        passwordTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-    }
-    
-    @objc func togglePasswordVisibility() {
-        passwordTextField.isSecureTextEntry.toggle()
-        if passwordTextField.isSecureTextEntry {
-            togglePasswordVisibilityButton.setTitle("비번 보이기", for: .normal)
-        } else {
-            togglePasswordVisibilityButton.setTitle("비번 가리기", for: .normal)
-        }
-    }
-    
-    @objc func nextButtonTapped() {
-        guard let email = email, let nickname = nickname, let password = passwordTextField.text else {
-            showAlert(message: "필수 정보가 누락되었습니다.")
-            return
-        }
+    private func bindViewModel() {
+        let input = PasswordInputViewModel.Input(
+            passwordText: passwordTextField.rx.text.orEmpty.asObservable(),
+            togglePasswordVisibility: togglePasswordVisibilityButton.rx.tap.asObservable(),
+            nextButtonTap: nextButton.rx.tap.asObservable()
+        )
         
-        fetchSignup(email: email, nickname: nickname, password: password)
+        let output = viewModel.transform(input: input)
+        
+        output.isNextButtonEnabled
+            .drive(nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.isNextButtonEnabled
+            .map { $0 ? UIColor.orange : UIColor.lightGray }
+            .drive(nextButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
+        
+        output.isPasswordVisible
+            .drive(onNext: { [weak self] isVisible in
+                self?.passwordTextField.isSecureTextEntry = !isVisible
+                self?.togglePasswordVisibilityButton.setTitle(isVisible ? "비번 가리기" : "비번 보이기", for: .normal)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showSuccessMessage
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(message: message)
+                let welcomeVC = WelcomeViewController()
+                self?.navigationController?.pushViewController(welcomeVC, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showErrorMessage
+            .drive(onNext: { [weak self] message in
+                self?.showAlert(message: message)
+            })
+            .disposed(by: disposeBag)
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if let text = textField.text, !text.isEmpty {
-            nextButton.backgroundColor = UIColor.orange
-            nextButton.isEnabled = true
-        } else {
-            nextButton.backgroundColor = UIColor.lightGray
-            nextButton.isEnabled = false
-        }
-    }
-    
-    
-    
-    func showAlert(message: String) {
+    private func showAlert(message: String) {
         let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
-        print("회원가입에러: \(message)")
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
-        self.present(alert, animated: true)
-    }
-}
-
-
-extension PasswordInputViewController {
-    
-    func fetchSignup(email: String, nickname: String, password: String) {
-        
-        // 전달된 매개변수들을 출력
-        print("fetchSignup - email: \(email), nickname: \(nickname), password: \(password)")
-        
-        SignUpPostNetworkManager.registerUser(email: email, password: password, nick: nickname, phoneNum: "11", birthDay: "2000") { result in
-            switch result {
-                
-            case .success(let successMessage):
-                DispatchQueue.main.async {
-                    self.showAlert(message: successMessage)
-                    let welcomeVC = WelcomeViewController()
-                    self.navigationController?.pushViewController(welcomeVC, animated: true)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.showAlert(message: "회원가입 실패: \(error.localizedDescription)")
-                }
-            }
+        let confirmAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            // 확인 버튼이 눌렸을 때 WelcomeViewController로 이동
+            let welcomeVC = WelcomeViewController()
+            self?.navigationController?.pushViewController(welcomeVC, animated: true)
         }
+        alert.addAction(confirmAction)
+        present(alert, animated: true)
     }
-    
+
 }
+
+
+
+

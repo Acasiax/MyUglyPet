@@ -10,27 +10,20 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-
 // 델리게이트 프로토콜 정의
 protocol AllPostTableViewCellDelegate: AnyObject {
     func didTapCommentButton(in cell: AllPostTableViewCell)
     func didTapDeleteButton(in cell: AllPostTableViewCell)
 }
 
-
 final class AllPostHomeViewController: UIViewController {
     
     private var serverPosts: [PostsModel] = []
     private let disposeBag = DisposeBag()
+    private var myProfile: MyProfileResponse?
     
     let colors: [UIColor] = [
         CustomColors.softBlue
-//        CustomColors.deepPurple,
-//        UIColor(red: 1.00, green: 0.78, blue: 0.87, alpha: 1.00),
-//        UIColor(red: 0.73, green: 0.96, blue: 0.48, alpha: 1.00),
-//        CustomColors.softPink,
-//        CustomColors.softBlue,
-//        CustomColors.softPurple
     ]
     
     let plusButton: UIButton = {
@@ -53,16 +46,23 @@ final class AllPostHomeViewController: UIViewController {
     }()
     
     private let panGestureRecognizer = UIPanGestureRecognizer()
-    private var myProfile: MyProfileResponse?
     
     override func viewWillAppear(_ animated: Bool) {
-        // 데이터 로드
-        fetchPosts()
-        fetchMyProfile()
+        super.viewWillAppear(animated)
+        loadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        setupBindings()
+    }
+    
+    deinit {
+        print("AllPostHomeViewController deinitialized")
+    }
+    
+    private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(tableView)
         view.addSubview(plusButton)
@@ -70,21 +70,16 @@ final class AllPostHomeViewController: UIViewController {
         tableView.dataSource = self
         configureConstraints()
         
-        // Rx 방식으로 버튼 이벤트 처리
+        panGestureRecognizer.delegate = self
+        tableView.addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    private func setupBindings() {
         plusButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.handlePlusButtonTap()
             }
             .disposed(by: disposeBag)
-        
-        // Pan Gesture Recognizer를 tableView에 추가
-        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
-        panGestureRecognizer.delegate = self // 델리게이트 설정
-        tableView.addGestureRecognizer(panGestureRecognizer)
-    }
-    
-    deinit {
-        print("AllPostHomeView 디이닛")
     }
     
     private func configureConstraints() {
@@ -99,7 +94,7 @@ final class AllPostHomeViewController: UIViewController {
     }
     
     private func handlePlusButtonTap() {
-        print("게시글추가 +버튼 탭")
+        print("게시글 추가 + 버튼 탭")
         AnimationZip.animateButtonPress(plusButton)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -108,36 +103,12 @@ final class AllPostHomeViewController: UIViewController {
         }
     }
     
-    // 내 프로필 가져오기
-    func fetchMyProfile() {
-        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-            switch result {
-            case .success(let profile):
-                self?.myProfile = profile
-            case .failure(let error):
-                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-            }
-        }
+    private func loadData() {
+        fetchPosts()
+        fetchMyProfile()
     }
     
-    // 게시글 모든 피드 가져오기
-    private func fetchPosts() {
-        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
-        
-        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
-            switch result {
-            case .success(let posts):
-                self?.serverPosts = posts
-                self?.tableView.reloadData()
-            case .failure(let error):
-                print("포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        // 기능 지웠음
-    }
+  
 }
 
 extension AllPostHomeViewController: UIGestureRecognizerDelegate {
@@ -155,24 +126,8 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: AllPostTableViewCell.identifier, for: indexPath) as! AllPostTableViewCell
         
         let post = serverPosts[indexPath.row]
-        cell.postID = post.postId
-        cell.userID = post.creator.userId
-        cell.userNameLabel.text = post.creator.nick
-        cell.postTitle.text = post.title
-        cell.titleLabel.text = post.title
-        cell.contentLabel.text = post.content
-        cell.imageFiles = post.files ?? []
-        cell.serverLike = post.likes
-        //print("셀에 보낸 좋아요 값: \(cell.serverLike)")
+        cell.configure(with: post, myProfile: myProfile, color: colors[indexPath.row % colors.count])
         cell.delegate = self
-        
-        if let myProfile = myProfile {
-            let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
-            cell.configureFollowButton(isFollowing: isFollowing)
-        }
-        
-        let colorIndex = indexPath.row % colors.count
-        cell.containerView.backgroundColor = colors[colorIndex]
         
         return cell
     }
@@ -208,6 +163,52 @@ extension AllPostHomeViewController: AllPostTableViewCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         serverPosts.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+}
+
+extension AllPostHomeViewController {
+    func fetchMyProfile() {
+        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.myProfile = profile
+            case .failure(let error):
+                print("내 프로필 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func fetchPosts() {
+        let query = FetchReadingPostQuery(next: nil, limit: "30", product_id: "allFeed")
+        
+        PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.serverPosts = posts
+                self?.tableView.reloadData()
+            case .failure(let error):
+                print("포스팅을 가져오는데 실패했어요🥺ㅠㅜ: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+extension AllPostTableViewCell {
+    func configure(with post: PostsModel, myProfile: MyProfileResponse?, color: UIColor) {
+        self.postID = post.postId
+        self.userID = post.creator.userId
+        self.userNameLabel.text = post.creator.nick
+        self.postTitle.text = post.title
+        self.titleLabel.text = post.title
+        self.contentLabel.text = post.content
+        self.imageFiles = post.files ?? []
+        self.serverLike = post.likes
+        self.containerView.backgroundColor = color
+        
+        if let myProfile = myProfile {
+            let isFollowing = myProfile.following.contains(where: { $0.user_id == post.creator.userId })
+            self.configureFollowButton(isFollowing: isFollowing)
+        }
     }
 }
 

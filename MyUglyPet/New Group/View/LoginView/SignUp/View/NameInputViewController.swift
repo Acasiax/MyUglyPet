@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
 class NameInputViewController: UIViewController {
@@ -50,26 +52,26 @@ class NameInputViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.isEnabled = false
-        button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
     
+    private let viewModel = NameInputViewModel()
+    private let disposeBag = DisposeBag()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        configureTextField()
+        bindViewModel()
     }
     
     func setupUI() {
         view.backgroundColor = .white
         
-     
         view.addSubview(progressBar)
         view.addSubview(titleLabel)
         view.addSubview(nameTextField)
         view.addSubview(nextButton)
         
-      
         progressBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.left.right.equalTo(view).inset(40)
@@ -94,30 +96,31 @@ class NameInputViewController: UIViewController {
         }
     }
     
-    func configureTextField() {
-        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-    }
-    
-    @objc func nextButtonTapped() {
-        if let nickname = nameTextField.text {
-            print("입력한 닉네임: \(nickname)")
-            
-            let emailInputVC = EmailInputViewController()
-            emailInputVC.nickname = nickname  // 닉네임을 전달
-            
-            navigationController?.pushViewController(emailInputVC, animated: true)
-        }
-    }
-
-    
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if let text = textField.text, !text.isEmpty {
-            nextButton.backgroundColor = CustomColors.softPink
-            nextButton.isEnabled = true
-        } else {
-            nextButton.backgroundColor = UIColor.lightGray
-            nextButton.isEnabled = false
-        }
+    func bindViewModel() {
+        let input = NameInputViewModel.Input(
+            nameText: nameTextField.rx.text.orEmpty.asObservable(),
+            nextButtonTap: nextButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.isNextButtonEnabled
+            .drive(nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.isNextButtonEnabled
+            .map { $0 ? CustomColors.softPink : UIColor.lightGray }
+            .drive(nextButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
+        
+        output.navigateToNextScreen
+            .subscribe(onNext: { [unowned self] nickname in
+                print("입력한 닉네임: \(nickname)")
+                let emailInputVC = EmailInputViewController()
+                emailInputVC.nickname = nickname
+                self.navigationController?.pushViewController(emailInputVC, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 }
 

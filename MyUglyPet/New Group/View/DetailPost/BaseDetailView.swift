@@ -69,44 +69,12 @@ class BaseDetailView: UIViewController {
     lazy var contentLabel: UILabel = {
         let label = UILabel()
         label.text = "아침산책~~"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = .black
         return label
     }()
 
-    lazy var likeButton: UIButton = {
-        let button = UIButton(type: .system)
-        let heartImage = UIImage(systemName: "heart")
-        button.setImage(heartImage, for: .normal)
-        button.tintColor = .black
-        button.backgroundColor = .green
-        return button
-    }()
 
-    lazy var likeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
-
-    lazy var commentButton: UIButton = {
-        let button = UIButton(type: .system)
-        let commentImage = UIImage(systemName: "bubble.right")
-        button.setImage(commentImage, for: .normal)
-        button.tintColor = .black
-        return button
-    }()
-
-    lazy var commentLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
-    
     // 구분선
     lazy var separatorLine: UIView = {
         let view = UIView()
@@ -194,10 +162,7 @@ class BaseDetailView: UIViewController {
         view.addSubview(followButton)
         view.addSubview(collectionView)
         view.addSubview(contentLabel)
-        view.addSubview(likeButton)
-        view.addSubview(likeLabel)
-        view.addSubview(commentButton)
-        view.addSubview(commentLabel)
+
         view.addSubview(separatorLine)
         view.addSubview(noCommentsLabel)
         view.addSubview(tableView)
@@ -252,34 +217,16 @@ class BaseDetailView: UIViewController {
         }
 
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(4)
+            make.top.equalTo(collectionView.snp.bottom).offset(20)
             make.left.equalTo(userProfileImageView)
             make.right.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.height.lessThanOrEqualTo(80)
         }
 
-        likeButton.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(10)
-            make.left.equalTo(contentLabel)
-        }
 
-        likeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right).offset(5)
-        }
-
-        commentButton.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeLabel.snp.right).offset(20)
-        }
-
-        commentLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(commentButton)
-            make.left.equalTo(commentButton.snp.right).offset(5)
-        }
 
         separatorLine.snp.makeConstraints { make in
-            make.top.equalTo(likeButton.snp.bottom).offset(20)
+            make.top.equalTo(contentLabel.snp.bottom).offset(20)
             make.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(1)
         }

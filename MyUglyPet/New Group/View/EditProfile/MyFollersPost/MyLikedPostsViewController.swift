@@ -216,7 +216,7 @@ extension MyLikedPostsViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailViewController = DetailViewController(post: <#PostsModel#>)
+        let detailViewController = DetailViewController()
         let selectedPost = serverPosts[indexPath.row]
         
         detailViewController.post = selectedPost
