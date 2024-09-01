@@ -95,6 +95,10 @@ struct PaymentHistory: Decodable {
 
 
 // MARK: - 결제
+import Foundation
+import Alamofire
+
+// MARK: - 결제
 class PayNetworkManager {
     
     static let shared = PayNetworkManager()
@@ -102,63 +106,64 @@ class PayNetworkManager {
     private init() {}
     
     // 영수증 검증
-        func payValidateReceipt(imp_uid: String, post_id: String, completion: @escaping (Result<ReceiptValidationResponse, Error>) -> Void) {
-            // 1. 영수증 검증에 필요한 데이터를 준비합니다.
-            let query = ValidateReceiptQuery(imp_uid: imp_uid, post_id: post_id)
+    func payValidateReceipt(imp_uid: String, post_id: String, completion: @escaping (Result<ReceiptValidationResponse, Error>) -> Void) {
+        // 1. 영수증 검증에 필요한 데이터를 준비합니다.
+        let query = ValidateReceiptQuery(imp_uid: imp_uid, post_id: post_id)
+        
+        // 로그로 imp_uid와 post_id를 확인합니다.
+        print("검증에 사용되는 imp_uid: \(imp_uid), post_id: \(post_id)")
+        
+        // 2. Router를 사용하여 요청을 생성합니다.
+        let router = Router.validateReceipt(query: query)
+        
+        // 3. Alamofire를 사용하여 요청을 전송합니다.
+        do {
+            let urlRequest = try router.asURLRequest() // ()를 사용하여 메서드 호출
+            // URL을 프린트합니다.
+            if let url = urlRequest.url {
+                print("서버로 보내는 URL: \(url.absoluteString)")
+            }
             
-            // 로그로 imp_uid와 post_id를 확인합니다.
-            print("검증에 사용되는 imp_uid: \(imp_uid), post_id: \(post_id)")
+            // 헤더 값과 액세스 토큰을 출력합니다.
+            if let headers = urlRequest.allHTTPHeaderFields {
+                print("요청 헤더: \(headers)")
+            }
+            if let token = urlRequest.value(forHTTPHeaderField: "Authorization") {
+                print("액세스 토큰: \(token)")
+            }
             
-            // 2. Router를 사용하여 요청을 생성합니다.
-            let router = Router.validateReceipt(query: query)
-            
-            // 3. Alamofire를 사용하여 요청을 전송합니다.
-            if var urlRequest = try? router.asURLRequest() {
-                // URL을 프린트합니다.
-                if let url = urlRequest.url {
-                    print("서버로 보내는 URL: \(url.absoluteString)")
-                }
-                
-                // 헤더 값과 액세스 토큰을 출력합니다.
-                if let headers = urlRequest.allHTTPHeaderFields {
-                    print("요청 헤더: \(headers)")
-                }
-                if let token = urlRequest.value(forHTTPHeaderField: "Authorization") {
-                    print("액세스 토큰: \(token)")
-                }
-                
-                AF.request(urlRequest)
-                    .validate(statusCode: 200..<300) // 성공적인 HTTP 상태 코드 범위
-                    .responseDecodable(of: ReceiptValidationResponse.self) { response in
-                        switch response.result {
-                        case .success(let validationResponse):
-                            print("검증 성공: \(validationResponse)")
-                            completion(.success(validationResponse))
-                            
-                        case .failure(let error):
-                            // 실패한 경우, 오류 응답 데이터를 파싱하여 출력합니다.
-                            if let data = response.data {
-                                if let errorJson = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                                   let message = errorJson["message"] as? String {
-                                    print("오류 메시지: \(message)")
-                                    let customError = NSError(domain: "PayValidation", code: 400, userInfo: [NSLocalizedDescriptionKey: message])
-                                    completion(.failure(customError))
-                                } else {
-                                    print("오류 데이터 로드 실패: \(error.localizedDescription)")
-                                    completion(.failure(error))
-                                }
+            AF.request(urlRequest)
+                .validate(statusCode: 200..<300) // 성공적인 HTTP 상태 코드 범위
+                .responseDecodable(of: ReceiptValidationResponse.self) { response in
+                    switch response.result {
+                    case .success(let validationResponse):
+                        print("검증 성공: \(validationResponse)")
+                        completion(.success(validationResponse))
+                        
+                    case .failure(let error):
+                        // 실패한 경우, 오류 응답 데이터를 파싱하여 출력합니다.
+                        if let data = response.data {
+                            if let errorJson = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                               let message = errorJson["message"] as? String {
+                                print("오류 메시지: \(message)")
+                                let customError = NSError(domain: "PayValidation", code: 400, userInfo: [NSLocalizedDescriptionKey: message])
+                                completion(.failure(customError))
                             } else {
-                                print("요청 실패: \(error.localizedDescription)")
+                                print("오류 데이터 로드 실패: \(error.localizedDescription)")
                                 completion(.failure(error))
                             }
+                        } else {
+                            print("요청 실패: \(error.localizedDescription)")
+                            completion(.failure(error))
                         }
                     }
-            } else {
-                print("URLRequest 생성 실패")
-                let customError = NSError(domain: "PayNetworkManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate URLRequest"])
-                completion(.failure(customError))
-            }
+                }
+        } catch {
+            print("URLRequest 생성 실패: \(error)")
+            let customError = NSError(domain: "PayNetworkManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate URLRequest"])
+            completion(.failure(customError))
         }
+    }
     
     // 결제 내역 가져오기
     func fetchPaymentHistory(completion: @escaping (Result<[PaymentHistory], Error>) -> Void) {
@@ -166,7 +171,8 @@ class PayNetworkManager {
         let router = Router.fetchPaymentHistory
         
         // 2. Alamofire를 사용하여 요청을 전송합니다.
-        if let urlRequest = try? router.asURLRequest() {
+        do {
+            let urlRequest = try router.asURLRequest() // ()를 사용하여 메서드 호출
             AF.request(urlRequest)
                 .validate()
                 .responseDecodable(of: PaymentHistoryListValidationResponse.self) { response in
@@ -178,14 +184,12 @@ class PayNetworkManager {
                         completion(.failure(error))
                     }
                 }
-        } else {
+        } catch {
             // URLRequest 생성에 실패한 경우 에러를 반환합니다.
             completion(.failure(NSError(domain: "PayNetworkManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate URLRequest"])))
         }
     }
-
 }
-
 
 
 
@@ -257,87 +261,6 @@ class SignUpPostNetworkManager {
     }
 }
 
-
-// MARK: - 팔로우 기능
-class FollowPostNetworkManager {
-
-    static let shared = FollowPostNetworkManager()
-    
-    private init() {}
-    
-    // 다른 유저 프로필 조회
-    func fetchUserProfile(userID: String, completion: @escaping (Result<MyProfileResponse, Error>) -> Void) {
-            let router = Router.fetchUserProfile(userID: userID)
-            
-            do {
-                let request = try router.asURLRequest()
-                
-                AF.request(request).responseDecodable(of: MyProfileResponse.self) { response in
-                    switch response.result {
-                    case .success(let profileResponse):
-                        completion(.success(profileResponse))
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                    }
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    
-    
-    // 내 프로필 조회
-       func fetchMyProfile(completion: @escaping (Result<MyProfileResponse, Error>) -> Void) {
-           let router = Router.fetchMyProfile
-
-           do {
-               let request = try router.asURLRequest()
-               
-               AF.request(request).responseDecodable(of: MyProfileResponse.self) { response in
-                   switch response.result {
-                   case .success(let profileResponse):
-                       completion(.success(profileResponse))
-                   case .failure(let error):
-                       completion(.failure(error))
-                   }
-               }
-           } catch {
-               completion(.failure(error))
-           }
-       }
-    
-    
-    func followUser(userID: String, completion: @escaping (Result<FollowResponse, Error>) -> Void) {
-        let router = Router.follow(userID: userID)
-        
-        AF.request(router.asURLRequest)
-            .validate()
-            .responseDecodable(of: FollowResponse.self) { response in
-                switch response.result {
-                case .success(let followResponse):
-                    completion(.success(followResponse))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-    }
-    
-    // MARK: - 언팔로우 기능 추가
-    func unfollowUser(userID: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let router = Router.unfollow(userID: userID)
-        
-        AF.request(router.asURLRequest)
-            .validate()
-            .response { response in
-                switch response.result {
-                case .success:
-                    completion(.success(())) // 성공 시 Void 반환
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-    }
-}
 
 
 

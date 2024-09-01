@@ -5,6 +5,7 @@
 //  Created by 이윤지 on 8/18/24.
 //
 
+
 import Foundation
 import Alamofire
 
@@ -43,42 +44,50 @@ class MyLoginNetworkManager {
         }
     }
     
-    
-    
-    func refreshToken() {
-        do {
-            // 요청 생성
-            let request = try Router.refresh.asURLRequest()
-            
-            // 요청 전송
-            AF.request(request)
-              .responseDecodable(of: RefreshModel.self) { response in
-                  
-                if response.response?.statusCode == 418 {
-                    // 리프레시 토큰 만료 처리
-                    print("리프레시 토큰이 만료되었습니다.")
-                    // 필요한 추가 처리 (예: 로그인 화면으로 전환)
-                } else {
-                    switch response.result {
-                    case .success(let success):
-                        print("토큰 갱신 성공:", success)
+    // 리프레시 토큰 갱신 메서드
+    // 리프레시 토큰 갱신 메서드
+        func refreshToken(completion: @escaping (Bool) -> Void) {
+            do {
+                let request = try Router.refresh.asURLRequest()
+                
+                AF.request(request)
+                    .responseDecodable(of: RefreshModel.self) { response in
                         
-                        // 새로운 Access Token 저장
-                        UserDefaultsManager.shared.token = success.accessToken
+                        // 응답 로그 출력
+                        if let data = response.data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) {
+                            print("서버 응답: \(json)")
+                        }
                         
-                        // 갱신된 토큰으로 프로필 정보 요청
-                       // self.fetchProfile()
-                      //  FollowPostNetworkManager.shared.fetchMyProfile()
-                    case .failure(let failure):
-                        print("토큰 갱신 실패:", failure)
-                        // 실패 시 추가 처리 (예: 사용자에게 오류 알림)
+                        if response.response?.statusCode == 418 {
+                            // 리프레시 토큰 만료 처리
+                            print("리프레시 토큰이 만료되었습니다.")
+                            completion(false)
+                        } else if response.response?.statusCode == 403 || response.response?.statusCode == 401 {
+                            // 권한 문제 처리 (예: 잘못된 토큰)
+                            print("권한 문제로 토큰 갱신 실패.")
+                            completion(false)
+                        } else {
+                            switch response.result {
+                            case .success(let success):
+                                print("토큰 갱신 성공:", success)
+                                UserDefaultsManager.shared.token = success.accessToken
+                                completion(true)
+                                
+                            case .failure(let failure):
+                                print("토큰 갱신 실패:", failure)
+                                // 서버가 예상하지 못한 응답을 보낸 경우
+                                if let data = response.data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) {
+                                    print("디코딩 실패. 서버 응답: \(json)")
+                                }
+                                completion(false)
+                            }
+                        }
                     }
-                }
+                
+            } catch {
+                print("토큰 갱신 요청 생성 중 오류 발생:", error)
+                completion(false)
             }
-
-        } catch {
-            print("토큰 갱신 요청 생성 중 오류 발생:", error)
         }
-    }
-   
+ 
 }

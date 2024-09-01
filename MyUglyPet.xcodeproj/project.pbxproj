@@ -120,6 +120,7 @@
 		AA9E35B62C84425000CF69FC /* EditOtherProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */; };
 		AA9E35BA2C845AEF00CF69FC /* EditPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */; };
 		AA9E35BC2C845B8D00CF69FC /* EditCommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */; };
+		AA9E35C12C8468A200CF69FC /* FollowPostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35C02C8468A200CF69FC /* FollowPostNetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -228,6 +229,7 @@
 		AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOtherProfileLayout.swift; sourceTree = "<group>"; };
 		AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewModel.swift; sourceTree = "<group>"; };
 		AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentViewModel.swift; sourceTree = "<group>"; };
+		AA9E35C02C8468A200CF69FC /* FollowPostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowPostNetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -636,11 +638,11 @@
 		AA7273532C71D032007551C4 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				AA9E35BE2C84687A00CF69FC /* New Group */,
 				AA72734E2C71D032007551C4 /* Header.swift */,
 				AA72734F2C71D032007551C4 /* NetworkManager.swift */,
 				AA7273512C71D032007551C4 /* TargetType.swift */,
 				AA7273522C71D032007551C4 /* UserDefaultsManager.swift */,
-				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
 				AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */,
 				AA7273682C720420007551C4 /* Router.swift */,
 			);
@@ -874,6 +876,23 @@
 			path = Design;
 			sourceTree = "<group>";
 		};
+		AA9E35BE2C84687A00CF69FC /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
+				AA9E35BF2C84689B00CF69FC /* New Group */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		AA9E35BF2C84689B00CF69FC /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				AA9E35C02C8468A200CF69FC /* FollowPostNetworkManager.swift */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1061,6 +1080,7 @@
 				AA72732C2C70FD18007551C4 /* PasswordInputViewController.swift in Sources */,
 				AA9E35952C835E5200CF69FC /* FollowersViewModel.swift in Sources */,
 				AA7272CC2C6C98D6007551C4 /* TabBarController.swift in Sources */,
+				AA9E35C12C8468A200CF69FC /* FollowPostNetworkManager.swift in Sources */,
 				AA6474472C7B672A0079ECE0 /* EditProfileViewLayout.swift in Sources */,
 				AA6474A32C82DD3B0079ECE0 /* PostCollectionViewCell.swift in Sources */,
 				AA7273582C71D032007551C4 /* UserDefaultsManager.swift in Sources */,
