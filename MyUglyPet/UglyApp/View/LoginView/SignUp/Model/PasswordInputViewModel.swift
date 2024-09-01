@@ -11,14 +11,14 @@ import RxSwift
 import RxCocoa
 
 class PasswordInputViewModel {
-    // MARK: - Input
+
     struct Input {
         let passwordText: Observable<String>
         let togglePasswordVisibility: Observable<Void>
         let nextButtonTap: Observable<Void>
     }
     
-    // MARK: - Output
+
     struct Output {
         let isNextButtonEnabled: Driver<Bool>
         let isPasswordVisible: Driver<Bool>
@@ -26,10 +26,9 @@ class PasswordInputViewModel {
         let showErrorMessage: Driver<String>
     }
     
-    // DisposeBag for RxSwift
     private let disposeBag = DisposeBag()
     
-    // MARK: - Transform Function
+
     func transform(input: Input) -> Output {
         let isPasswordVisibleRelay = BehaviorRelay<Bool>(value: false)
         
@@ -70,7 +69,7 @@ class PasswordInputViewModel {
         )
     }
     
-    // MARK: - Network Call
+    // MARK: - 네트워크 호출
     private func registerUser(email: String, nickname: String, password: String) -> Observable<Result<String, Error>> {
         return Observable.create { observer in
             SignUpPostNetworkManager.registerUser(email: email, password: password, nick: nickname, phoneNum: "11", birthDay: "2000") { result in

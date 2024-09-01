@@ -9,7 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-// ViewModel 설계
 final class AllPostHomeViewModel {
     struct Input {
         let plusButtonTap: Observable<Void>

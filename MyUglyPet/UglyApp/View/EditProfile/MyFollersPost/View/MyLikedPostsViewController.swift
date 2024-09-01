@@ -62,16 +62,13 @@ final class MyLikedPostsViewController: UIViewController {
         tableView.dataSource = self
         configureConstraints()
         
-        // Rx 방식으로 버튼 이벤트 처리
+
         plusButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.handlePlusButtonTap()
             }
             .disposed(by: disposeBag)
         
-        // Pan Gesture Recognizer를 tableView에 추가
-        panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
-        panGestureRecognizer.delegate = self // 델리게이트 설정
         tableView.addGestureRecognizer(panGestureRecognizer)
     }
     
@@ -100,12 +97,7 @@ final class MyLikedPostsViewController: UIViewController {
         }
     }
 
-    
-    
-    
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        // 기능 지웠음
-    }
+ 
 }
 
 
@@ -127,8 +119,8 @@ extension MyLikedPostsViewController{
                         self?.tableView.reloadData()
                     }
                 case .failure(let error):
-                    print("Failed to fetch liked posts: \(error.localizedDescription)")
-                    // 에러 처리를 추가로 구현할 수 있습니다.
+                    print("좋아요한 정보를 가져오는데 실패함: \(error.localizedDescription)")
+                    
                 }
             }
         }

@@ -190,7 +190,7 @@ extension MyPostersViewController {
         }
     }
     
-    // showErrorAlert 대신 UIAlertController 사용
+    // showErrorAlert 대신 UIAlertController 사용함
     private func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

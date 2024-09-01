@@ -15,7 +15,6 @@ struct EditProfileUI {
         button.imageView?.contentMode = .scaleAspectFit
         button.tintColor = UIColor.systemGray2
         button.layer.cornerRadius = 40 // 버튼 크기의 절반 (80 / 2)
-        // 테두리 설정
         button.layer.borderWidth = 3
         button.layer.borderColor = CustomColors.softPink.cgColor
         button.layer.masksToBounds = true

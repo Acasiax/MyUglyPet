@@ -17,7 +17,6 @@ protocol AllPostTableViewCellDelegate: AnyObject {
 }
 
 
-
 final class AllPostHomeViewController: UIViewController {
     
      var serverPosts: [PostsModel] = []

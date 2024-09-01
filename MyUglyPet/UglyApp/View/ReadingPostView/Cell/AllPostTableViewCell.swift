@@ -14,7 +14,7 @@ import RxCocoa
 final class AllPostTableViewCell: BaseAllPostTableCell {
     
     weak var delegate: AllPostTableViewCellDelegate?
-    private let disposeBag = DisposeBag()  // DisposeBag 수동 관리
+    private let disposeBag = DisposeBag()
    
     // 좋아요 버튼 상태를 저장할 변수
     var isPostLiked: Bool?
@@ -90,7 +90,7 @@ final class AllPostTableViewCell: BaseAllPostTableCell {
     }
     
     private func toggleLikeButton() {
-        isLiked.toggle()  // 상태를 토글
+        isLiked.toggle()
 
         // UI 업데이트
         let heartImage = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
@@ -302,8 +302,7 @@ extension AllPostTableViewCell {
                 case .success(let liked):
                     self?.isPostLiked = liked
                     print("포스트 좋아요 상태: \(liked)")
-                    
-                    // 추가로 UI 업데이트 등을 여기에 작성할 수 있습니다.
+
                     if liked {
                         print("포스트에 좋아요가 성공적으로 설정되었습니다.")
                     } else {
@@ -312,7 +311,7 @@ extension AllPostTableViewCell {
 
                 case .failure(let error):
                     print("좋아요 요청 실패: \(error.localizedDescription)")
-                    self?.isPostLiked = nil  // 요청이 실패했을 때, 상태를 nil로 설정하거나 적절히 처리
+                    self?.isPostLiked = nil  // 요청이 실패했을 때, 상태를 nil로 설정하거나 적절히 처리?
                 }
             }
         }

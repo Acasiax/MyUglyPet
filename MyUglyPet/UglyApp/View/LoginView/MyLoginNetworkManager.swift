@@ -14,7 +14,7 @@ class MyLoginNetworkManager {
     
     private init() {}
     
-    // 로그인 메서드 개선
+    // 로그인 메서드 
     func createLogin(email: String, password: String, completion: @escaping (Bool) -> Void) {
         let query = LoginQuery(email: email, password: password)
         

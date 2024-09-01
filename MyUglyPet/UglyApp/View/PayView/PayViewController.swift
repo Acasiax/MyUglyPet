@@ -11,6 +11,8 @@
 //9/5(목) lslp 팀, 랜덤으로 발표자 결정
 // 9/8(일) 서버 종료
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
 class PayViewController: UIViewController {
@@ -25,11 +27,12 @@ class PayViewController: UIViewController {
         return button
     }()
     
+    private var disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        payButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
-        
+        bindUI()
     }
     
     func setupUI() {
@@ -39,17 +42,17 @@ class PayViewController: UIViewController {
             make.width.equalTo(200)
             make.height.equalTo(50)
         }
-        
     }
     
-    
-    @objc private func payButtonTapped() {
-        AnimationZip.animateButtonPress(payButton)
-        let paymentVC = PaymentViewController()
-        paymentVC.modalPresentationStyle = .fullScreen
-        present(paymentVC, animated: true, completion: nil)
+
+    func bindUI() {
+        payButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AnimationZip.animateButtonPress(owner.payButton)
+                let paymentVC = PaymentViewController()
+                paymentVC.modalPresentationStyle = .fullScreen
+                owner.present(paymentVC, animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
     }
 }
-
-
-

@@ -26,10 +26,10 @@ final class MainHomeViewController: UIViewController {
     lazy var panGestureRecognizer = UIPanGestureRecognizer()
     
     lazy var lottieView: LottieAnimationView = {
-            let view = LottieAnimationView(name: "Congratulation") // Lottie 애니메이션 파일 이름
+            let view = LottieAnimationView(name: "Congratulation")
             view.contentMode = .scaleAspectFit
             view.loopMode = .playOnce
-            view.isHidden = true // 초기에는 숨기기
+            view.isHidden = true
             return view
         }()
 
@@ -65,12 +65,11 @@ final class MainHomeViewController: UIViewController {
     
     func animateLottieAnimation() {
         DispatchQueue.main.async {
-            // lottieView를 표시합니다.
             self.lottieView.isHidden = false
             
-            // 애니메이션을 재생합니다.
+            // 애니메이션 재생
             self.lottieView.play { [weak self] _ in
-                // 애니메이션이 완료된 후 lottieView를 숨깁니다.
+                // 애니메이션이 완료된 후 lottieView를 숨기기
                 self?.lottieView.isHidden = true
             }
         }
@@ -96,12 +95,7 @@ extension MainHomeViewController {
                 self?.navigationController?.pushViewController(viewController, animated: true)
             })
             .disposed(by: disposeBag)
-        
-//        output.animatePetButton
-//            .subscribe()
-//            .disposed(by: disposeBag)
-        
-       //  petButton이 클릭되면 lottieView 애니메이션 실행
+
         output.animatePetButton
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in

@@ -121,7 +121,6 @@ class FollowersViewController: UIViewController {
         
         output.error
             .drive(onNext: { errorMessage in
-                // 에러 메시지를 처리할 수 있습니다.
                 print(errorMessage)
             })
             .disposed(by: disposeBag)

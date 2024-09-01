@@ -72,7 +72,7 @@ class BirthdayInputViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .white
         
-        // Add subviews
+       
         view.addSubview(progressBar)
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
@@ -80,7 +80,7 @@ class BirthdayInputViewController: UIViewController {
         view.addSubview(nextButton)
         view.addSubview(skipButton)
         
-        // Set up SnapKit constraints
+        
         progressBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.left.right.equalTo(view).inset(40)

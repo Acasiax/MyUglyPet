@@ -9,7 +9,6 @@ import UIKit
 
 class BaseAllPostHomeView: UIViewController {
     
-//MARK: - 변수 설정
     let plusButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("+", for: .normal)

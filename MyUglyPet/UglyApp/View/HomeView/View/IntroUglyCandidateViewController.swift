@@ -45,7 +45,7 @@ class IntroUglyCandidateViewController: UIViewController {
         let button = UIButton()
         button.setTitle("게임 시작", for: .normal)
         button.backgroundColor = CustomColors.softPink
-        button.layer.cornerRadius = 16 // 모서리 반경 증가
+        button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.isEnabled = false // 초기에는 비활성화
         button.alpha = 0.5 // 비활성화 시 시각적으로 나타내기 위해 반투명 설정
@@ -115,7 +115,6 @@ class IntroUglyCandidateViewController: UIViewController {
         // 쿼리 파라미터 생성
         let query = FetchReadingPostQuery(next: nil, limit: "60", product_id: "못난이후보등록")
 
-        // 네트워크 요청 예시 (PostNetworkManager 사용)
         PostNetworkManager.shared.fetchPosts(query: query) { [weak self] result in
             guard let self = self else { return }
             switch result {

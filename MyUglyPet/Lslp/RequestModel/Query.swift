@@ -189,3 +189,46 @@ struct Pet {
     let userName: String
     let imageURL: String
 }
+
+// MARK: - Response Model
+struct FollowResponse: Codable {
+    let nick: String
+    let opponent_nick: String
+    let following_status: Bool
+}
+
+// MARK: - MyProfileResponse Model
+struct MyProfileResponse: Codable {
+    let user_id: String
+    let email: String
+    let nick: String
+    let phoneNum: String?
+    let birthDay: String?
+    let profileImage: String?
+    let followers: [MyUser]
+    let following: [MyUser]
+    let posts: [String]
+}
+
+// MARK: - MyUser Model
+struct MyUser: Codable {
+    let user_id: String
+    let nick: String
+    let profileImage: String?
+}
+
+//좋아요 설정하는 코드
+struct LikePostQuery: Codable {
+    let like_status: Bool
+}
+
+struct FetchLikedPostsQuery {
+    let next: String?
+    let limit: String?
+}
+
+//영수증 검증
+struct ValidateReceiptQuery: Codable {
+    let imp_uid: String
+    let post_id: String
+}

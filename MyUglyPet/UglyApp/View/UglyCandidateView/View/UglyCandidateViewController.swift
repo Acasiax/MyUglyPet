@@ -95,7 +95,7 @@ class UglyCandidateViewController: UIViewController {
     }
 }
 
-// MARK: - PHPicker 사진 선택
+// MARK: - PHPicker 사진 선택 부분
 extension UglyCandidateViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
