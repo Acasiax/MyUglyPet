@@ -46,8 +46,8 @@ class IntroUglyCandidateViewController: UIViewController {
         button.backgroundColor = CustomColors.softPink
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.isEnabled = false // 초기에는 비활성화
-        button.alpha = 0.5 // 비활성화 시 시각적으로 나타내기 위해 반투명 설정
+        button.isEnabled = false 
+        button.alpha = 0.5
         return button
     }()
     

@@ -7,14 +7,11 @@
 
 import Foundation
 
-
-// MARK: - 전체 응답을 나타내는 구조체
+// MARK: - 결제 전체 응답
 struct PaymentHistoryListValidationResponse: Decodable {
     let data: [PaymentHistory]
 }
 
-
-// MARK: -  개별 결제 내역을 나타내는 구조체
 struct PaymentHistory: Decodable {
     let buyerID: String
     let postID: String
