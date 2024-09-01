@@ -12,7 +12,7 @@ enum MainTab: CaseIterable {
     case music
     case movies
     case podcast
-    case books
+  //  case books
     case search
 
     // MARK: - 제목
@@ -21,7 +21,7 @@ enum MainTab: CaseIterable {
         case .music: return "홈,게임"
         case .movies: return "랭킹"
         case .podcast: return "피드구경"
-        case .books: return "앨범"
+       // case .books: return "앨범"
         case .search: return "프로필설정"
         }
     }
@@ -32,7 +32,7 @@ enum MainTab: CaseIterable {
         case .music: return UIImage(systemName: "pawprint")
         case .movies: return UIImage(systemName: "house")
         case .podcast: return UIImage(systemName: "rectangle.and.pencil.and.ellipsis")
-        case .books: return UIImage(systemName: "book.closed")
+      //  case .books: return UIImage(systemName: "book.closed")
         case .search: return UIImage(systemName: "person")
         }
     }
@@ -45,9 +45,7 @@ enum MainTab: CaseIterable {
         case .music: viewController = MainHomeViewController()
         case .movies: viewController = DashboardViewController()
         case .podcast: viewController = AllPostHomeViewController()
-            
-            //TopicPhotoListViewController
-        case .books: viewController = AlbumPhotoListViewController()
+     //   case .books: viewController = AlbumPhotoListViewController()
        // case .books: viewController = MyMapViewController()
         case .search: viewController = EditProfileViewController()
         }
@@ -65,7 +63,7 @@ class TabBarControllerFactory {
 
         // 특정 조건에 따라 TabBar의 순서를 변경할 수 있도록 유연하게 설정
         var viewControllers = [UIViewController]()
-        let tabs: [MainTab] = [.music, .movies, .podcast, .books, .search]
+        let tabs: [MainTab] = [.music, .movies, .podcast, .search]
 
         for tab in tabs {
             viewControllers.append(tab.viewController)

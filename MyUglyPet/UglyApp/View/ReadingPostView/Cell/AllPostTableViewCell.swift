@@ -276,7 +276,7 @@ extension AllPostTableViewCell {
     private func updateLikeButton() {
         // serverLike 값 출력
         if let serverLike = serverLike {
-            print("서버에서 받은 좋아요 상태: \(serverLike)")
+           // print("서버에서 받은 좋아요 상태: \(serverLike)")
             
             // 좋아요 상태가 있는지 확인하고 버튼 상태 업데이트
             if !serverLike.isEmpty {
