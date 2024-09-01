@@ -72,6 +72,10 @@ class PasswordInputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
+        viewModel.nickname = nickname
+        viewModel.email = email
+        
         bindViewModel()
         
         print("이메일뷰에서 전달 받은 닉네임: \(nickname ?? ""), 이메일: \(email ?? "")")

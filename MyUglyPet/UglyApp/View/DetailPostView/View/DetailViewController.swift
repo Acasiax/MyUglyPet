@@ -21,6 +21,8 @@ final class DetailViewController: BaseDetailView {
     var comments: [Comment] = []  // 댓글 배열
     var postId: String?
     var commentId: String?
+    var userName: String?
+    var titleText: String?
     var isFollowing: Bool = false
     
     private var serverPosts: [PostsModel] = []
@@ -66,6 +68,15 @@ final class DetailViewController: BaseDetailView {
         contentLabel.text = post.content
         collectionView.reloadData()
         tableView.reloadData()
+        
+        if let userName = userName {
+                    userNameLabel.text = userName
+                }
+        
+        if let titleText = titleText {
+            infoLabel.text = titleText
+        }
+        
         
         if let firstComment = post.comments.first {
             print("Comment ID (첫 번째 댓글): \(firstComment.commentId)")

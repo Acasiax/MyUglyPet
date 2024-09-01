@@ -146,6 +146,8 @@ extension AllPostHomeViewController: UITableViewDelegate, UITableViewDataSource 
         detailViewController.comments = selectedPost.comments
         detailViewController.imageFiles = selectedPost.files ?? []
         detailViewController.postId = selectedPost.postId
+        detailViewController.userName = selectedPost.creator.nick
+        detailViewController.titleText = selectedPost.title
         
         if let firstComment = selectedPost.comments.first {
             detailViewController.commentId = firstComment.commentId

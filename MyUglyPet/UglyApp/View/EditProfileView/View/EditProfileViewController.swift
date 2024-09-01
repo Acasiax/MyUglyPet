@@ -281,6 +281,7 @@ extension EditProfileViewController {
     
     private func handleEditProfileButtonTap() {
         print("프로필 수정 버튼이 눌렸습니다.")
+        
     }
     
     private func handleViewFollowingButtonTap() {

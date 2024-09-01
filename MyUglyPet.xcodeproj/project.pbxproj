@@ -121,6 +121,15 @@
 		AA9E35BA2C845AEF00CF69FC /* EditPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */; };
 		AA9E35BC2C845B8D00CF69FC /* EditCommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */; };
 		AA9E35C12C8468A200CF69FC /* FollowPostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35C02C8468A200CF69FC /* FollowPostNetworkManager.swift */; };
+		AA9E35C32C84740A00CF69FC /* PayNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35C22C84740A00CF69FC /* PayNetworkManager.swift */; };
+		AA9E35C52C84742600CF69FC /* SignUpPostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35C42C84742600CF69FC /* SignUpPostNetworkManager.swift */; };
+		AA9E35C72C84745200CF69FC /* WinnerPostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35C62C84745200CF69FC /* WinnerPostNetworkManager.swift */; };
+		AA9E35C92C84763000CF69FC /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35C82C84763000CF69FC /* LoginDTO.swift */; };
+		AA9E35CB2C84767800CF69FC /* PayDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35CA2C84767800CF69FC /* PayDTO.swift */; };
+		AA9E35CD2C8476B800CF69FC /* PostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35CC2C8476B800CF69FC /* PostDTO.swift */; };
+		AA9E35CF2C8476E600CF69FC /* SignupProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35CE2C8476E600CF69FC /* SignupProfileDTO.swift */; };
+		AA9E35D12C8477B500CF69FC /* LikePostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35D02C8477B500CF69FC /* LikePostDTO.swift */; };
+		AA9E35D32C8477DA00CF69FC /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35D22C8477DA00CF69FC /* CommentDTO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -230,6 +239,15 @@
 		AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewModel.swift; sourceTree = "<group>"; };
 		AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentViewModel.swift; sourceTree = "<group>"; };
 		AA9E35C02C8468A200CF69FC /* FollowPostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowPostNetworkManager.swift; sourceTree = "<group>"; };
+		AA9E35C22C84740A00CF69FC /* PayNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayNetworkManager.swift; sourceTree = "<group>"; };
+		AA9E35C42C84742600CF69FC /* SignUpPostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPostNetworkManager.swift; sourceTree = "<group>"; };
+		AA9E35C62C84745200CF69FC /* WinnerPostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinnerPostNetworkManager.swift; sourceTree = "<group>"; };
+		AA9E35C82C84763000CF69FC /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
+		AA9E35CA2C84767800CF69FC /* PayDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayDTO.swift; sourceTree = "<group>"; };
+		AA9E35CC2C8476B800CF69FC /* PostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDTO.swift; sourceTree = "<group>"; };
+		AA9E35CE2C8476E600CF69FC /* SignupProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupProfileDTO.swift; sourceTree = "<group>"; };
+		AA9E35D02C8477B500CF69FC /* LikePostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostDTO.swift; sourceTree = "<group>"; };
+		AA9E35D22C8477DA00CF69FC /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,8 +522,8 @@
 		AA7272E82C6DD8BF007551C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273092C704145007551C4 /* HomeView */,
+				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273062C704075007551C4 /* CreatePostView */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
 				AA6474232C7A35650079ECE0 /* EditProfileView */,
@@ -513,10 +531,10 @@
 				AA9E35AA2C84394400CF69FC /* EditPostComment */,
 				AA7273212C70F891007551C4 /* LoginView */,
 				AA64747E2C7F34180079ECE0 /* PayView */,
-				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
 				AA7273072C704079007551C4 /* GameView */,
 				AA72737E2C739784007551C4 /* DashboardView */,
 				AA72730D2C705ED9007551C4 /* DetailPostView */,
+				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -631,6 +649,12 @@
 			isa = PBXGroup;
 			children = (
 				AA72734B2C71CC6E007551C4 /* Query.swift */,
+				AA9E35C82C84763000CF69FC /* LoginDTO.swift */,
+				AA9E35CA2C84767800CF69FC /* PayDTO.swift */,
+				AA9E35CC2C8476B800CF69FC /* PostDTO.swift */,
+				AA9E35CE2C8476E600CF69FC /* SignupProfileDTO.swift */,
+				AA9E35D02C8477B500CF69FC /* LikePostDTO.swift */,
+				AA9E35D22C8477DA00CF69FC /* CommentDTO.swift */,
 			);
 			path = RequestModel;
 			sourceTree = "<group>";
@@ -880,17 +904,20 @@
 			isa = PBXGroup;
 			children = (
 				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
-				AA9E35BF2C84689B00CF69FC /* New Group */,
+				AA9E35BF2C84689B00CF69FC /* NetworkManager */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		AA9E35BF2C84689B00CF69FC /* New Group */ = {
+		AA9E35BF2C84689B00CF69FC /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
 				AA9E35C02C8468A200CF69FC /* FollowPostNetworkManager.swift */,
+				AA9E35C22C84740A00CF69FC /* PayNetworkManager.swift */,
+				AA9E35C42C84742600CF69FC /* SignUpPostNetworkManager.swift */,
+				AA9E35C62C84745200CF69FC /* WinnerPostNetworkManager.swift */,
 			);
-			path = "New Group";
+			path = NetworkManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1022,6 +1049,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA6474AC2C82E6430079ECE0 /* BaseAllPostHomeView.swift in Sources */,
+				AA9E35C32C84740A00CF69FC /* PayNetworkManager.swift in Sources */,
 				AA6474272C7B092D0079ECE0 /* MainHomeViewModel.swift in Sources */,
 				AA7273692C720420007551C4 /* Router.swift in Sources */,
 				AA7273552C71D032007551C4 /* NetworkManager.swift in Sources */,
@@ -1029,6 +1057,7 @@
 				AA72732E2C70FD85007551C4 /* PhoneNumberInputViewController.swift in Sources */,
 				AA6474B72C83460A0079ECE0 /* PaymentViewController.swift in Sources */,
 				AA64749E2C82D77B0079ECE0 /* NameInputViewModel.swift in Sources */,
+				AA9E35CD2C8476B800CF69FC /* PostDTO.swift in Sources */,
 				AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */,
 				AA9E35B62C84425000CF69FC /* EditOtherProfileLayout.swift in Sources */,
 				AA9E35AF2C8439CC00CF69FC /* PhotoCollectionViewCell.swift in Sources */,
@@ -1036,6 +1065,7 @@
 				AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */,
 				AA64742D2C7B23C50079ECE0 /* MainHomeViewLayout.swift in Sources */,
 				AA7272F02C6F3C15007551C4 /* CustomColors.swift in Sources */,
+				AA9E35CB2C84767800CF69FC /* PayDTO.swift in Sources */,
 				AA7273232C70F8AC007551C4 /* LoginViewController.swift in Sources */,
 				AA64744E2C7BA0B80079ECE0 /* LocationManager.swift in Sources */,
 				AA7272E22C6D861F007551C4 /* APIKey.swift in Sources */,
@@ -1061,17 +1091,21 @@
 				AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */,
 				AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */,
 				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
+				AA9E35D32C8477DA00CF69FC /* CommentDTO.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
 				AA9E35B42C8441EE00CF69FC /* EditOtherProfileViewController.swift in Sources */,
 				AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */,
+				AA9E35D12C8477B500CF69FC /* LikePostDTO.swift in Sources */,
 				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,
 				AA7273272C70FC0A007551C4 /* NameInputViewController.swift in Sources */,
 				AA9E35A52C8372E400CF69FC /* DeepPhotoViewModel.swift in Sources */,
 				AA7273052C70403D007551C4 /* IndexMenuCollectionCell.swift in Sources */,
 				AA64743F2C7B372A0079ECE0 /* NewPostUI.swift in Sources */,
+				AA9E35C72C84745200CF69FC /* WinnerPostNetworkManager.swift in Sources */,
 				AA64742B2C7B23600079ECE0 /* MainHomeUI.swift in Sources */,
 				AA72731D2C70880C007551C4 /* AllPostTableViewCell.swift in Sources */,
+				AA9E35C52C84742600CF69FC /* SignUpPostNetworkManager.swift in Sources */,
 				AA6474982C829D960079ECE0 /* EditCommentViewController.swift in Sources */,
 				AA6474492C7B69BE0079ECE0 /* EditProfileUI.swift in Sources */,
 				AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */,
@@ -1091,6 +1125,7 @@
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
 				AA64745D2C7C46A50079ECE0 /* MyFollowingViewController.swift in Sources */,
 				AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */,
+				AA9E35C92C84763000CF69FC /* LoginDTO.swift in Sources */,
 				AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */,
 				AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */,
 				AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */,
@@ -1099,6 +1134,7 @@
 				AA6474342C7B29770079ECE0 /* GameViewAnimation.swift in Sources */,
 				AA64742F2C7B26FC0079ECE0 /* UglyCandidateUI.swift in Sources */,
 				AA6474AE2C82E9D30079ECE0 /* BaseAllPostTableCell.swift in Sources */,
+				AA9E35CF2C8476E600CF69FC /* SignupProfileDTO.swift in Sources */,
 				AA7273292C70FCA4007551C4 /* EmailInputViewController.swift in Sources */,
 				AA6474292C7B11A90079ECE0 /* UglyCandidateViewModel.swift in Sources */,
 				AA64747A2C7F18810079ECE0 /* AlbumPhotoListViewController.swift in Sources */,

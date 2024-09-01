@@ -47,7 +47,7 @@ struct EditProfileUI {
     
     static func notificationLabel() -> UILabel {
         let label = UILabel()
-        label.text = "2.0 베타 버전이 완료되었습니다. 확인 부탁드립니다."
+        label.text = "게시글 초기화를 누르지 마세요 초기화 됩니다."
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .systemGray
         return label
@@ -72,7 +72,7 @@ struct EditProfileUI {
     }
     
     static func editProfileButton() -> UIButton {
-        return button(withTitle: "프로필 수정", backgroundColor: CustomColors.mintGreen)
+        return button(withTitle: "없음", backgroundColor: CustomColors.mintGreen)
     }
     
     static func viewFollowingButton() -> UIButton {

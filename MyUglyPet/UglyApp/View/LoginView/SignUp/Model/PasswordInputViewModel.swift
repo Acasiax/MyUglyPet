@@ -27,7 +27,8 @@ class PasswordInputViewModel {
     }
     
     private let disposeBag = DisposeBag()
-    
+    var nickname: String?
+    var email: String?
 
     func transform(input: Input) -> Output {
         let isPasswordVisibleRelay = BehaviorRelay<Bool>(value: false)
@@ -48,7 +49,15 @@ class PasswordInputViewModel {
         input.nextButtonTap
             .withLatestFrom(input.passwordText)
             .subscribe(onNext: { [weak self] password in
-                self?.registerUser(email: "test@example.com", nickname: "nickname", password: password)
+                guard let email = self?.email, let nickname = self?.nickname else {
+                    showErrorMessage.accept("이메일이나 닉네임이 설정되지 않았습니다.")
+                    return
+                }
+
+                // print 문을 추가합니다.
+                print("이메일뷰에서 전달 받은 닉네임: \(nickname), 이메일: \(email)")
+
+                self?.registerUser(email: email, nickname: nickname, password: password)
                     .subscribe { result in
                         switch result {
                         case .success(let message):
@@ -69,7 +78,7 @@ class PasswordInputViewModel {
         )
     }
     
-    // MARK: - 네트워크 호출
+    // 네트워크 호출 메서드
     private func registerUser(email: String, nickname: String, password: String) -> Observable<Result<String, Error>> {
         return Observable.create { observer in
             SignUpPostNetworkManager.registerUser(email: email, password: password, nick: nickname, phoneNum: "11", birthDay: "2000") { result in

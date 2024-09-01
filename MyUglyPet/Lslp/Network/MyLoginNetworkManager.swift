@@ -31,20 +31,19 @@ class MyLoginNetworkManager {
                     UserDefaultsManager.shared.token = success.access
                     UserDefaultsManager.shared.refreshToken = success.refresh
                     UserDefaultsManager.shared.id = success.id
-                    completion(true) // 로그인 성공
+                    completion(true)
                     
                 case .failure(let failure):
                     print("로그인 실패:", failure)
-                    completion(false) // 로그인 실패를 알림
+                    completion(false)
                 }
             }
         } catch {
             print("로그인 요청 생성 중 오류 발생:", error)
-            completion(false) // 요청 생성 실패를 알림
+            completion(false)
         }
     }
     
-    // 리프레시 토큰 갱신 메서드
     // 리프레시 토큰 갱신 메서드
         func refreshToken(completion: @escaping (Bool) -> Void) {
             do {
@@ -63,7 +62,7 @@ class MyLoginNetworkManager {
                             print("리프레시 토큰이 만료되었습니다.")
                             completion(false)
                         } else if response.response?.statusCode == 403 || response.response?.statusCode == 401 {
-                            // 권한 문제 처리 (예: 잘못된 토큰)
+                    
                             print("권한 문제로 토큰 갱신 실패.")
                             completion(false)
                         } else {

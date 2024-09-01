@@ -5,9 +5,7 @@
 //  Created by 이윤지 on 8/28/24.
 //
 
-
 //결제 서비스 면접 볼때 면접관들이 자주 물어본다고 함.
-
 
 import UIKit
 import SnapKit
@@ -123,14 +121,14 @@ extension AlbumPhotoListViewController {
 }
 
 
-// MARK: - Models
+// MARK: - 사진 정보
 
 import Foundation
 
 struct Photo: Hashable {
     let id: String
     let user: User
-    let imageUrls: [String]  // 이미지 URL 리스트를 추가
+    let imageUrls: [String]
 }
 
 struct User: Hashable {

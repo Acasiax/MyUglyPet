@@ -53,7 +53,7 @@ struct DashboardUI {
     static func hobbyCardHeaderLabel() -> UILabel {
         let label = UILabel()
         label.text = "게시글 작성한 친구들"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = CustomFonts.omyuprettyFont(size: 25)
         return label
     }
 
