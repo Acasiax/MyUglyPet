@@ -122,7 +122,6 @@ class DashboardViewController: UIViewController {
         // CardCarouselViewController의 view에 대한 제약 조건 설정
         let cardCarouselView = contentStackView.arrangedSubviews[2]
         cardCarouselView.snp.makeConstraints { make in
-            //make.height.equalTo(view.snp.height).multipliedBy(0.3)
             make.height.equalTo(210)
         }
         
@@ -131,7 +130,7 @@ class DashboardViewController: UIViewController {
         }
         
         myBuddyCardCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(400) // 필요 시 조정 가능
+            make.height.equalTo(400)
         }
     }
     
@@ -279,7 +278,7 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             //   navigationController?.pushViewController(detailVC, animated: true)
         } else if collectionView == myBuddyCardCollectionView {
             let selectedPost = serverPosts[indexPath.row]
-            let postDetailVC = EditProfileViewController()
+            let postDetailVC = EditOtherProfileViewController()
             // postDetailVC.serverPosts = selectedPost
             postDetailVC.serverUserID = selectedPost.creator.userId
             navigationController?.pushViewController(postDetailVC, animated: true)

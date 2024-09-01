@@ -11,7 +11,6 @@ import Alamofire
 import RxSwift
 import RxCocoa
 
-
 class IntroUglyCandidateViewController: UIViewController {
 
     let titleLabel: UILabel = {

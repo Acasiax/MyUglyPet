@@ -112,15 +112,7 @@ class BaseAllPostTableCell: UITableViewCell {
         button.tintColor = .black
         return button
     }()
-    
-    lazy var likeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "1"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
-    
+  
     lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         let commentImage = UIImage(systemName: "bubble.right")
@@ -129,13 +121,6 @@ class BaseAllPostTableCell: UITableViewCell {
         return button
     }()
     
-    lazy var commentLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .black
-        return label
-    }()
     
     // MARK: - 생성자
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -168,9 +153,8 @@ class BaseAllPostTableCell: UITableViewCell {
         containerView.addSubview(titleLabel)
         containerView.addSubview(contentLabel)
         containerView.addSubview(likeButton)
-        containerView.addSubview(likeLabel)
         containerView.addSubview(commentButton)
-        containerView.addSubview(commentLabel)
+      
     }
     
     private func setupConstraints() {
@@ -238,21 +222,13 @@ class BaseAllPostTableCell: UITableViewCell {
             make.left.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(16)
         }
-        
-        likeLabel.snp.makeConstraints { make in
-            make.left.equalTo(likeButton.snp.right).offset(4)
-            make.centerY.equalTo(likeButton)
-        }
-        
+    
         commentButton.snp.makeConstraints { make in
-            make.left.equalTo(likeLabel.snp.right).offset(16)
+            make.left.equalTo(likeButton.snp.right).offset(16)
             make.centerY.equalTo(likeButton)
         }
         
-        commentLabel.snp.makeConstraints { make in
-            make.left.equalTo(commentButton.snp.right).offset(4)
-            make.centerY.equalTo(commentButton)
-        }
+      
     }
     
     private func registerCells() {

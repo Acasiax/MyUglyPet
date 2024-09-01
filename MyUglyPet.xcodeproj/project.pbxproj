@@ -116,6 +116,8 @@
 		AA9E359E2C8367C900CF69FC /* DashboardUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E359D2C8367C900CF69FC /* DashboardUI.swift */; };
 		AA9E35A52C8372E400CF69FC /* DeepPhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35A42C8372E400CF69FC /* DeepPhotoViewModel.swift */; };
 		AA9E35AF2C8439CC00CF69FC /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35AE2C8439CC00CF69FC /* PhotoCollectionViewCell.swift */; };
+		AA9E35B42C8441EE00CF69FC /* EditOtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B32C8441EE00CF69FC /* EditOtherProfileViewController.swift */; };
+		AA9E35B62C84425000CF69FC /* EditOtherProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -220,6 +222,8 @@
 		AA9E359D2C8367C900CF69FC /* DashboardUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardUI.swift; sourceTree = "<group>"; };
 		AA9E35A42C8372E400CF69FC /* DeepPhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepPhotoViewModel.swift; sourceTree = "<group>"; };
 		AA9E35AE2C8439CC00CF69FC /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		AA9E35B32C8441EE00CF69FC /* EditOtherProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOtherProfileViewController.swift; sourceTree = "<group>"; };
+		AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOtherProfileLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,9 +408,8 @@
 			isa = PBXGroup;
 			children = (
 				AA7272E92C6DD8E9007551C4 /* MainHomeViewController.swift */,
-				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
-				AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */,
 				AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */,
+				AA9E35B22C843DF000CF69FC /* Design */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 			isa = PBXGroup;
 			children = (
 				AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */,
+				AA9E35B32C8441EE00CF69FC /* EditOtherProfileViewController.swift */,
 				AA9E359A2C83650600CF69FC /* Design */,
 			);
 			path = View;
@@ -694,6 +698,7 @@
 			children = (
 				AA6474482C7B69BE0079ECE0 /* EditProfileUI.swift */,
 				AA6474462C7B672A0079ECE0 /* EditProfileViewLayout.swift */,
+				AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -828,6 +833,15 @@
 				AA7273332C71B8AC007551C4 /* Protocol.swift */,
 			);
 			path = Ptotocols;
+			sourceTree = "<group>";
+		};
+		AA9E35B22C843DF000CF69FC /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */,
+				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -967,6 +981,7 @@
 				AA6474B72C83460A0079ECE0 /* PaymentViewController.swift in Sources */,
 				AA64749E2C82D77B0079ECE0 /* NameInputViewModel.swift in Sources */,
 				AA6474592C7C462F0079ECE0 /* FollowersViewController.swift in Sources */,
+				AA9E35B62C84425000CF69FC /* EditOtherProfileLayout.swift in Sources */,
 				AA9E35AF2C8439CC00CF69FC /* PhotoCollectionViewCell.swift in Sources */,
 				AA7272B52C6C967C007551C4 /* AppDelegate.swift in Sources */,
 				AA6474962C81E1C90079ECE0 /* EditPostViewController.swift in Sources */,
@@ -997,6 +1012,7 @@
 				AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */,
 				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
+				AA9E35B42C8441EE00CF69FC /* EditOtherProfileViewController.swift in Sources */,
 				AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */,
 				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,

@@ -1,8 +1,8 @@
 //
-//  EditProfileViewController.swift
+//  EditOtherProfileViewController.swift
 //  MyUglyPet
 //
-//  Created by 이윤지 on 8/25/24.
+//  Created by 이윤지 on 9/1/24.
 //
 
 import UIKit
@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class EditProfileViewController: UIViewController {
+final class EditOtherProfileViewController: UIViewController {
     
     lazy var profileImageButton = EditProfileUI.profileImageButton()
     lazy var userNameLabel = EditProfileUI.userNameLabel()
@@ -35,20 +35,15 @@ final class EditProfileViewController: UIViewController {
     var followingButton = UIButton()
     
     var userProfile: MyProfileResponse?
-    var serverUserID: String?
-    
+   // var otheruserProfile: UserProfileResponse?
+    var serverUserID: String? //🌟
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let myUserID = UserDefaultsManager.shared.id
-        if let serverUserID = userProfile?.user_id, serverUserID != myUserID {
-            fetchOtherUserProfile()
-        } else {
-            fetchUserProfile()
-        }
+       // fetchUserProfile()
+        fetchOtherUserProfile()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = CustomColors.softIvory
@@ -195,20 +190,21 @@ final class EditProfileViewController: UIViewController {
     
     
     
+    
     // MARK: - 내 프로필 조회랑, 조회 후 레이블 업데이트
     
-    private func fetchUserProfile() {
-        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
-            switch result {
-            case .success(let profile):
-                self?.userProfile = profile
-                self?.updateUIWithProfileData()
-            case .failure(let error):
-                print("내 프로필 가져오는데 실패했어요!!: \(error.localizedDescription)")
-            }
-        }
-    }
-    
+//    private func fetchUserProfile() {
+//        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+//            switch result {
+//            case .success(let profile):
+//                self?.userProfile = profile
+//                self?.updateUIWithProfileData()
+//            case .failure(let error):
+//                print("내 프로필 가져오는데 실패했어요!!: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//    
     private func updateUIWithProfileData() {
         guard let profile = userProfile else { return }
         userNameLabel.text = profile.nick
@@ -247,7 +243,7 @@ final class EditProfileViewController: UIViewController {
 }
 
 //MARK: - 위에 3개 화면 이동 함수
-extension EditProfileViewController {
+extension EditOtherProfileViewController {
     //팔로워 화면(나를 추가한 친구들)
     private func navigateToFollowers() {
         let followersVC = FollowersViewController()
@@ -273,7 +269,7 @@ extension EditProfileViewController {
 }
 
 //MARK: - 이미지뷰 + 네모4개 버튼뷰 화면 이동 함수
-extension EditProfileViewController {
+extension EditOtherProfileViewController {
     private func handleProfileImageButtonTap() {
         print("프로필 이미지 버튼이 눌렸습니다.")
     }
@@ -312,3 +308,20 @@ extension EditProfileViewController {
         print("탈퇴하기 버튼 눌림")
     }
 }
+
+
+
+// MARK: - 내 프로필 조회랑, 조회 후 레이블 업데이트
+
+//    private func fetchUserProfile() {
+//        FollowPostNetworkManager.shared.fetchMyProfile { [weak self] result in
+//            switch result {
+//            case .success(let profile):
+//                self?.userProfile = profile
+//                self?.updateUIWithProfileData()
+//            case .failure(let error):
+//                print("내 프로필 가져오는데 실패했어요!!: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//

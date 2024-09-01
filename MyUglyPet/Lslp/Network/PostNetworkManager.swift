@@ -5,10 +5,29 @@
 //  Created by 이윤지 on 8/19/24.
 //
 
-
 import UIKit
 import Alamofire
 
+struct UserProfileResponse: Decodable {
+    let userId: String
+    let nick: String
+    let profileImage: String
+    let followers: [Follower]
+    let following: [Following]
+    let posts: [String]
+
+    struct Follower: Decodable {
+        let userId: String
+        let nick: String
+        let profileImage: String
+    }
+
+    struct Following: Decodable {
+        let userId: String
+        let nick: String
+        let profileImage: String
+    }
+}
 
 
 struct RegistrationResponse: Encodable {
@@ -245,6 +264,27 @@ class FollowPostNetworkManager {
     static let shared = FollowPostNetworkManager()
     
     private init() {}
+    
+    // 다른 유저 프로필 조회
+    func fetchUserProfile(userID: String, completion: @escaping (Result<MyProfileResponse, Error>) -> Void) {
+            let router = Router.fetchUserProfile(userID: userID)
+            
+            do {
+                let request = try router.asURLRequest()
+                
+                AF.request(request).responseDecodable(of: MyProfileResponse.self) { response in
+                    switch response.result {
+                    case .success(let profileResponse):
+                        completion(.success(profileResponse))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                    }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    
     
     // 내 프로필 조회
        func fetchMyProfile(completion: @escaping (Result<MyProfileResponse, Error>) -> Void) {
