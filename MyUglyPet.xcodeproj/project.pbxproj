@@ -591,7 +591,6 @@
 			isa = PBXGroup;
 			children = (
 				AA7273222C70F8AC007551C4 /* LoginViewController.swift */,
-				AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */,
 				AA72732A2C70FCF7007551C4 /* SignUp */,
 			);
 			path = LoginView;
@@ -642,6 +641,7 @@
 				AA7273512C71D032007551C4 /* TargetType.swift */,
 				AA7273522C71D032007551C4 /* UserDefaultsManager.swift */,
 				AA72736A2C72CDB7007551C4 /* PostNetworkManager.swift */,
+				AA7273662C71FFB7007551C4 /* MyLoginNetworkManager.swift */,
 				AA7273682C720420007551C4 /* Router.swift */,
 			);
 			path = Network;
