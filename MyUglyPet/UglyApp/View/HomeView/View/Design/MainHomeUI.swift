@@ -26,7 +26,7 @@ struct MainHomeUI {
         button.imageView?.contentMode = .scaleAspectFill
         button.clipsToBounds = true
         button.layer.cornerRadius = 75
-        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderColor = CustomColors.lightBeige.cgColor
         button.layer.borderWidth = 2
         return button
     }

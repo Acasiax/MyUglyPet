@@ -32,7 +32,7 @@ class CardCarouselViewController: UIViewController, UICollectionViewDataSource, 
         let layout = CarouselLayout()
        // layout.itemSize = CGSize(width: view.frame.width * 0.7, height: view.frame.height * 0.5)
         
-        layout.itemSize = CGSize(width: view.frame.width * 0.35, height: view.frame.height * 0.25)
+        layout.itemSize = CGSize(width: view.frame.width * 0.5, height: view.frame.height * 0.25)
 
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -45,7 +45,7 @@ class CardCarouselViewController: UIViewController, UICollectionViewDataSource, 
         
         // SnapKit을 사용하여 컬렉션 뷰의 오토레이아웃 설정
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview() 
+            make.edges.equalToSuperview()
         }
 
     }
@@ -107,7 +107,7 @@ class CardCell: UICollectionViewCell {
         
         // SnapKit을 사용하여 imageView의 오토레이아웃 설정
         imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(20)
         }
     }
     

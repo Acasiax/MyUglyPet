@@ -281,11 +281,11 @@ extension DashboardViewController: UICollectionViewDataSource, UICollectionViewD
             let postDetailVC = EditOtherProfileViewController()
             // postDetailVC.serverPosts = selectedPost
             postDetailVC.serverUserID = selectedPost.creator.userId
+          //  print(postDetailVC.serverUserID)
             navigationController?.pushViewController(postDetailVC, animated: true)
         }
     }
-    
-    
+  
 }
 
 

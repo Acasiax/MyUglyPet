@@ -76,7 +76,7 @@ class BaseDetailView: UIViewController {
     // 구분선
     lazy var separatorLine: UIView = {
         let view = UIView()
-        view.backgroundColor = .green
+        view.backgroundColor = .gray
         return view
     }()
     
@@ -93,7 +93,7 @@ class BaseDetailView: UIViewController {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
-        tableView.backgroundColor = CustomColors.softBlue
+        tableView.backgroundColor = CustomColors.lightBeige
         tableView.separatorStyle = .singleLine
         return tableView
     }()
@@ -101,7 +101,7 @@ class BaseDetailView: UIViewController {
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0  // 줄 간격을
+        layout.minimumLineSpacing = 0  // 줄 간격
         layout.minimumInteritemSpacing = 0
         layout.sectionInset = .zero
 
@@ -110,7 +110,6 @@ class BaseDetailView: UIViewController {
         collectionView.showsHorizontalScrollIndicator = true
         collectionView.isScrollEnabled = false // 스크롤 비활성화
         collectionView.backgroundColor = .yellow
-        // 모서리를 둥글게 설정
         collectionView.layer.cornerRadius = 10 // 원하는 반지름 값으로 설정
         collectionView.clipsToBounds = true
         
@@ -142,15 +141,7 @@ class BaseDetailView: UIViewController {
         return button
     }()
     
-    lazy var attachmentButton: UIButton = {
-        let button = UIButton(type: .system)
-        let attachImage = UIImage(systemName: "photo")
-        button.setImage(attachImage, for: .normal)
-        button.tintColor = .systemGray
-        return button
-    }()
-    
-    
+
    func configureHierarchy() {
         view.addSubview(userProfileImageView)
         view.addSubview(userNameLabel)
@@ -165,7 +156,6 @@ class BaseDetailView: UIViewController {
         view.addSubview(noCommentsLabel)
         view.addSubview(tableView)
         view.addSubview(commentInputView)
-        commentInputView.addSubview(attachmentButton)
         commentInputView.addSubview(commentTextField)
         commentInputView.addSubview(sendButton)
     }
@@ -246,19 +236,10 @@ class BaseDetailView: UIViewController {
             make.height.equalTo(50)
         }
         
-        attachmentButton.snp.makeConstraints { make in
-            make.left.equalTo(commentInputView).inset(10)
-            make.centerY.equalTo(commentInputView)
-            make.width.height.equalTo(24)
-        }
-        
-//        commentTextField.snp.makeConstraints { make in
-//            make.left.equalTo(attachmentButton.snp.right).offset(10)
-//            make.centerY.equalTo(commentInputView)
-//        }
+
          commentTextField.snp.makeConstraints { make in
              make.top.bottom.equalTo(commentInputView)
-             make.left.equalTo(commentInputView.snp.left).offset(40)
+             make.left.equalTo(commentInputView.snp.left).offset(5)
              make.right.equalTo(commentInputView.snp.right)
          }
 

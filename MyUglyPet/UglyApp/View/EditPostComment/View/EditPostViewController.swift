@@ -14,7 +14,7 @@ final class EditPostViewController: UIViewController {
     
     var postTitle: String?
     var postContent: String?
-    var onUpdate: ((String, String) -> Void)?  // 추가된 클로저 프로퍼티
+    var onUpdate: ((String, String) -> Void)?
     
     private let containerView: UIView = {
         let view = UIView()
@@ -63,7 +63,8 @@ final class EditPostViewController: UIViewController {
         return button
     }()
     
-    private let disposeBag = DisposeBag() 
+    private let disposeBag = DisposeBag()
+    private let viewModel = EditPostViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,13 +128,21 @@ final class EditPostViewController: UIViewController {
     }
     
     private func bindUI() {
-        confirmButton.rx.tap
-            .bind(with: self) { owner, _ in
-                guard let newTitle = owner.titleTextField.text, let newContent = owner.contentTextField.text else { return }
-                
-                // 클로저를 통해 수정된 데이터를 전달
-                owner.onUpdate?(newTitle, newContent)
-                
+        let input = EditPostViewModel.Input(
+            confirmTap: confirmButton.rx.tap.asObservable(),
+            titleText: titleTextField.rx.text.asObservable(),
+            contentText: contentTextField.rx.text.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.isConfirmEnabled
+            .drive(confirmButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.updatedData
+            .bind(with: self) { owner, data in
+                owner.onUpdate?(data.0, data.1)
                 owner.dismiss(animated: true, completion: nil)
             }
             .disposed(by: disposeBag)

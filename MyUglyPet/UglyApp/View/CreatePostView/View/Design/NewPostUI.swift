@@ -74,7 +74,7 @@ struct NewPostUI {
     
     static func rewardLabelUI() -> UILabel {
         let label = UILabel()
-        label.text = "사진 첨부 시 150M → 500M 지급"
+        label.text = "사진 버튼을 누르면 사진이 추가 됩니다."
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = CustomColors.softPink
         return label

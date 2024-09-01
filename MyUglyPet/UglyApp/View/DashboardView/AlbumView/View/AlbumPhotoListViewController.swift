@@ -122,9 +122,6 @@ extension AlbumPhotoListViewController {
     }
 }
 
-// MARK: - PhotoCollectionViewCell
-
-
 
 // MARK: - Models
 

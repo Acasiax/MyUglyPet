@@ -118,6 +118,8 @@
 		AA9E35AF2C8439CC00CF69FC /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35AE2C8439CC00CF69FC /* PhotoCollectionViewCell.swift */; };
 		AA9E35B42C8441EE00CF69FC /* EditOtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B32C8441EE00CF69FC /* EditOtherProfileViewController.swift */; };
 		AA9E35B62C84425000CF69FC /* EditOtherProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */; };
+		AA9E35BA2C845AEF00CF69FC /* EditPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */; };
+		AA9E35BC2C845B8D00CF69FC /* EditCommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -224,6 +226,8 @@
 		AA9E35AE2C8439CC00CF69FC /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		AA9E35B32C8441EE00CF69FC /* EditOtherProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOtherProfileViewController.swift; sourceTree = "<group>"; };
 		AA9E35B52C84425000CF69FC /* EditOtherProfileLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOtherProfileLayout.swift; sourceTree = "<group>"; };
+		AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewModel.swift; sourceTree = "<group>"; };
+		AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,10 +301,8 @@
 		AA64747D2C7F34030079ECE0 /* AlbumView */ = {
 			isa = PBXGroup;
 			children = (
-				AA9E35AD2C8439B700CF69FC /* Cell */,
 				AA9E35AC2C8439B100CF69FC /* View */,
-				AA6474792C7F18810079ECE0 /* AlbumPhotoListViewController.swift */,
-				AA64747B2C7F29B80079ECE0 /* CarouselViewController.swift */,
+				AA9E35AD2C8439B700CF69FC /* Cell */,
 			);
 			path = AlbumView;
 			sourceTree = "<group>";
@@ -506,6 +508,7 @@
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
 				AA6474232C7A35650079ECE0 /* EditProfileView */,
 				AA9E35A12C8372BE00CF69FC /* DeepPhotoView */,
+				AA9E35AA2C84394400CF69FC /* EditPostComment */,
 				AA7273212C70F891007551C4 /* LoginView */,
 				AA64747E2C7F34180079ECE0 /* PayView */,
 				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
@@ -578,7 +581,6 @@
 		AA72730D2C705ED9007551C4 /* DetailPostView */ = {
 			isa = PBXGroup;
 			children = (
-				AA9E35AA2C84394400CF69FC /* EditPostComment */,
 				AA9E35A62C83739500CF69FC /* View */,
 				AA7272E32C6DC7D7007551C4 /* Cell */,
 			);
@@ -716,7 +718,7 @@
 			isa = PBXGroup;
 			children = (
 				AA72737F2C7397BE007551C4 /* DashboardViewController.swift */,
-				AA9E359D2C8367C900CF69FC /* DashboardUI.swift */,
+				AA9E35BD2C845C3D00CF69FC /* Design */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -788,8 +790,8 @@
 		AA9E35AA2C84394400CF69FC /* EditPostComment */ = {
 			isa = PBXGroup;
 			children = (
-				AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */,
-				AA6474972C829D960079ECE0 /* EditCommentViewController.swift */,
+				AA9E35B72C845ADC00CF69FC /* View */,
+				AA9E35B82C845AE400CF69FC /* Model */,
 			);
 			path = EditPostComment;
 			sourceTree = "<group>";
@@ -806,6 +808,8 @@
 		AA9E35AC2C8439B100CF69FC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				AA6474792C7F18810079ECE0 /* AlbumPhotoListViewController.swift */,
+				AA64747B2C7F29B80079ECE0 /* CarouselViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -840,6 +844,32 @@
 			children = (
 				AA64742C2C7B23C50079ECE0 /* MainHomeViewLayout.swift */,
 				AA64742A2C7B23600079ECE0 /* MainHomeUI.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		AA9E35B72C845ADC00CF69FC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA6474952C81E1C90079ECE0 /* EditPostViewController.swift */,
+				AA6474972C829D960079ECE0 /* EditCommentViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA9E35B82C845AE400CF69FC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA9E35B92C845AEF00CF69FC /* EditPostViewModel.swift */,
+				AA9E35BB2C845B8D00CF69FC /* EditCommentViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA9E35BD2C845C3D00CF69FC /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				AA9E359D2C8367C900CF69FC /* DashboardUI.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -1000,6 +1030,7 @@
 				AA7272EC2C6DECD6007551C4 /* GameViewController.swift in Sources */,
 				AA7272E52C6DC7E2007551C4 /* CommentTableViewCell.swift in Sources */,
 				AA7272DE2C6CEE21007551C4 /* CreatePostViewController.swift in Sources */,
+				AA9E35BC2C845B8D00CF69FC /* EditCommentViewModel.swift in Sources */,
 				AA9E359E2C8367C900CF69FC /* DashboardUI.swift in Sources */,
 				AA7273542C71D032007551C4 /* Header.swift in Sources */,
 				AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */,
@@ -1052,6 +1083,7 @@
 				AA6474292C7B11A90079ECE0 /* UglyCandidateViewModel.swift in Sources */,
 				AA64747A2C7F18810079ECE0 /* AlbumPhotoListViewController.swift in Sources */,
 				AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */,
+				AA9E35BA2C845AEF00CF69FC /* EditPostViewModel.swift in Sources */,
 				AA64747C2C7F29B80079ECE0 /* CarouselViewController.swift in Sources */,
 				AA9E35992C83647700CF69FC /* EditProfileViewModel.swift in Sources */,
 				AA6474802C7F343D0079ECE0 /* PayViewController.swift in Sources */,

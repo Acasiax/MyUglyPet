@@ -40,14 +40,9 @@ final class EditProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let myUserID = UserDefaultsManager.shared.id
-        if let serverUserID = userProfile?.user_id, serverUserID != myUserID {
-            fetchOtherUserProfile()
-        } else {
-            fetchUserProfile()
-        }
+      fetchUserProfile()
     }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()

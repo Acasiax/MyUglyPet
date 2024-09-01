@@ -49,6 +49,7 @@ final class EditCommentViewController: UIViewController {
     }()
     
     private let disposeBag = DisposeBag()
+    private let viewModel = EditCommentViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,10 +58,9 @@ final class EditCommentViewController: UIViewController {
         setupViews()
         setupConstraints()
         
-        // 텍스트 필드에 기존 댓글 내용을 설정
         commentTextField.text = commentContent
         
-        bindUI() 
+        bindUI()
     }
     
     private func setupViews() {
@@ -98,16 +98,23 @@ final class EditCommentViewController: UIViewController {
     }
     
     private func bindUI() {
-      
-        confirmButton.rx.tap
-            .bind(with: self) { owner, _ in
-                guard let newComment = owner.commentTextField.text else { return }
-                
-                // 클로저를 통해 수정된 데이터를 전달
+        let input = EditCommentViewModel.Input(
+            confirmTap: confirmButton.rx.tap.asObservable(),
+            commentText: commentTextField.rx.text.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.isConfirmEnabled
+            .drive(confirmButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.updatedComment
+            .bind(with: self) { owner, newComment in
                 owner.onUpdate?(newComment)
-                
                 owner.dismiss(animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
     }
 }
+
