@@ -95,7 +95,6 @@
 		AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273332C71B8AC007551C4 /* Protocol.swift */; };
 		AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273352C71B8FD007551C4 /* SetupScene.swift */; };
 		AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273442C71CC5D007551C4 /* LoginModel.swift */; };
-		AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273452C71CC5D007551C4 /* ProfileModel.swift */; };
 		AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273462C71CC5D007551C4 /* RefreshModel.swift */; };
 		AA72734D2C71CC6E007551C4 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734B2C71CC6E007551C4 /* Query.swift */; };
 		AA7273542C71D032007551C4 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734E2C71D032007551C4 /* Header.swift */; };
@@ -202,7 +201,6 @@
 		AA7273332C71B8AC007551C4 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		AA7273352C71B8FD007551C4 /* SetupScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScene.swift; sourceTree = "<group>"; };
 		AA7273442C71CC5D007551C4 /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
-		AA7273452C71CC5D007551C4 /* ProfileModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		AA7273462C71CC5D007551C4 /* RefreshModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		AA72734B2C71CC6E007551C4 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		AA72734E2C71D032007551C4 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
@@ -245,14 +243,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AA6474232C7A35650079ECE0 /* EditProfile */ = {
+		AA6474232C7A35650079ECE0 /* EditProfileView */ = {
 			isa = PBXGroup;
 			children = (
 				AA9E35962C83645D00CF69FC /* View */,
 				AA9E35972C83646400CF69FC /* Model */,
 				AA6474572C7C46050079ECE0 /* MyFollersPost */,
 			);
-			path = EditProfile;
+			path = EditProfileView;
 			sourceTree = "<group>";
 		};
 		AA6474302C7B27260079ECE0 /* UglyCandidateView */ = {
@@ -315,6 +313,7 @@
 		AA64748F2C80C41D0079ECE0 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				AA6474932C80C6800079ECE0 /* CustomFonts.swift */,
 				AA6474912C80C5C90079ECE0 /* omyu pretty.ttf */,
 			);
 			path = Font;
@@ -460,7 +459,6 @@
 		AA7272B32C6C967C007551C4 /* MyUglyPet */ = {
 			isa = PBXGroup;
 			children = (
-				AA64748F2C80C41D0079ECE0 /* Font */,
 				AA7273432C71CC28007551C4 /* Lslp */,
 				AA7273012C70286A007551C4 /* Animation */,
 				AA7272C82C6C97E9007551C4 /* UglyApp */,
@@ -478,10 +476,9 @@
 		AA7272C82C6C97E9007551C4 /* UglyApp */ = {
 			isa = PBXGroup;
 			children = (
+				AA9E35B12C843BF900CF69FC /* Ptotocols */,
+				AA9E35B02C843BE700CF69FC /* InitalSetting */,
 				AA9E35A72C83793200CF69FC /* CustomUI */,
-				AA7273332C71B8AC007551C4 /* Protocol.swift */,
-				AA7273352C71B8FD007551C4 /* SetupScene.swift */,
-				AA7272CB2C6C98D5007551C4 /* TabBarController.swift */,
 				AA7272E82C6DD8BF007551C4 /* View */,
 			);
 			path = UglyApp;
@@ -502,16 +499,16 @@
 			children = (
 				AA6474302C7B27260079ECE0 /* UglyCandidateView */,
 				AA7273092C704145007551C4 /* HomeView */,
-				AA7273062C704075007551C4 /* CreatePost */,
+				AA7273062C704075007551C4 /* CreatePostView */,
 				AA7273082C7040F1007551C4 /* ReadingPostView */,
-				AA6474232C7A35650079ECE0 /* EditProfile */,
+				AA6474232C7A35650079ECE0 /* EditProfileView */,
 				AA9E35A12C8372BE00CF69FC /* DeepPhotoView */,
 				AA7273212C70F891007551C4 /* LoginView */,
 				AA64747E2C7F34180079ECE0 /* PayView */,
 				AA64744A2C7B7C4E0079ECE0 /* MyMapView */,
-				AA7273072C704079007551C4 /* Gameview */,
+				AA7273072C704079007551C4 /* GameView */,
 				AA72737E2C739784007551C4 /* DashboardView */,
-				AA72730D2C705ED9007551C4 /* DetailPost */,
+				AA72730D2C705ED9007551C4 /* DetailPostView */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -538,21 +535,21 @@
 			path = Animation;
 			sourceTree = "<group>";
 		};
-		AA7273062C704075007551C4 /* CreatePost */ = {
+		AA7273062C704075007551C4 /* CreatePostView */ = {
 			isa = PBXGroup;
 			children = (
 				AA6474AF2C832D5A0079ECE0 /* View */,
 				AA6474B02C832D610079ECE0 /* Model */,
 			);
-			path = CreatePost;
+			path = CreatePostView;
 			sourceTree = "<group>";
 		};
-		AA7273072C704079007551C4 /* Gameview */ = {
+		AA7273072C704079007551C4 /* GameView */ = {
 			isa = PBXGroup;
 			children = (
 				AA9E35A82C84387C00CF69FC /* View */,
 			);
-			path = Gameview;
+			path = GameView;
 			sourceTree = "<group>";
 		};
 		AA7273082C7040F1007551C4 /* ReadingPostView */ = {
@@ -575,14 +572,14 @@
 			path = HomeView;
 			sourceTree = "<group>";
 		};
-		AA72730D2C705ED9007551C4 /* DetailPost */ = {
+		AA72730D2C705ED9007551C4 /* DetailPostView */ = {
 			isa = PBXGroup;
 			children = (
 				AA9E35AA2C84394400CF69FC /* EditPostComment */,
 				AA9E35A62C83739500CF69FC /* View */,
 				AA7272E32C6DC7D7007551C4 /* Cell */,
 			);
-			path = DetailPost;
+			path = DetailPostView;
 			sourceTree = "<group>";
 		};
 		AA7273212C70F891007551C4 /* LoginView */ = {
@@ -619,7 +616,6 @@
 			isa = PBXGroup;
 			children = (
 				AA7273442C71CC5D007551C4 /* LoginModel.swift */,
-				AA7273452C71CC5D007551C4 /* ProfileModel.swift */,
 				AA7273462C71CC5D007551C4 /* RefreshModel.swift */,
 			);
 			path = ResponseModel;
@@ -758,7 +754,7 @@
 		AA9E35A72C83793200CF69FC /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
-				AA6474932C80C6800079ECE0 /* CustomFonts.swift */,
+				AA64748F2C80C41D0079ECE0 /* Font */,
 				AA7272EF2C6F3C15007551C4 /* CustomColors.swift */,
 			);
 			path = CustomUI;
@@ -815,6 +811,23 @@
 				AA9E35AE2C8439CC00CF69FC /* PhotoCollectionViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		AA9E35B02C843BE700CF69FC /* InitalSetting */ = {
+			isa = PBXGroup;
+			children = (
+				AA7272CB2C6C98D5007551C4 /* TabBarController.swift */,
+				AA7273352C71B8FD007551C4 /* SetupScene.swift */,
+			);
+			path = InitalSetting;
+			sourceTree = "<group>";
+		};
+		AA9E35B12C843BF900CF69FC /* Ptotocols */ = {
+			isa = PBXGroup;
+			children = (
+				AA7273332C71B8AC007551C4 /* Protocol.swift */,
+			);
+			path = Ptotocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -984,7 +997,6 @@
 				AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */,
 				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
 				AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */,
-				AA7273492C71CC5D007551C4 /* ProfileModel.swift in Sources */,
 				AA6474412C7B38EF0079ECE0 /* CreatePostViewModel.swift in Sources */,
 				AA72734D2C71CC6E007551C4 /* Query.swift in Sources */,
 				AA7273032C70287B007551C4 /* AnimationZip.swift in Sources */,

@@ -18,9 +18,9 @@ enum MainTab: CaseIterable {
     // MARK: - 제목
     var title: String {
         switch self {
-        case .music: return "커뮤니티"
-        case .movies: return "홈,게임"
-        case .podcast: return "포스팅하기"
+        case .music: return "홈,게임"
+        case .movies: return "랭킹"
+        case .podcast: return "피드구경"
         case .books: return "앨범"
         case .search: return "프로필설정"
         }
