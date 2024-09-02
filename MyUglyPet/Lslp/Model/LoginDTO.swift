@@ -1,11 +1,20 @@
 //
-//  LoginModel.swift
-//  SeSAC5LSLPPractice
+//  LoginDTO.swift
+//  MyUglyPet
 //
-//  Created by jack on 7/24/24.
+//  Created by 이윤지 on 9/1/24.
 //
 
 import Foundation
+
+struct LoginQuery: Encodable {
+    let email: String
+    let password: String
+}
+
+struct RefreshModel: Decodable {
+    let accessToken: String
+}
 
 struct LoginModel: Decodable {
     let id: String
@@ -23,4 +32,3 @@ struct LoginModel: Decodable {
         case refresh = "refreshToken"
     }
 }
-

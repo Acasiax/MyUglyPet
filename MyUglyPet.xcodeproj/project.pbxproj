@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		AA0C87D92C7486D100C8A950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */; };
 		AA0C87DB2C74D75B00C8A950 /* UglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */; };
-		AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */; };
 		AA6474222C7845050079ECE0 /* IntroUglyCandidateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */; };
 		AA6474252C7A35810079ECE0 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */; };
 		AA6474272C7B092D0079ECE0 /* MainHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6474262C7B092D0079ECE0 /* MainHomeViewModel.swift */; };
@@ -94,8 +93,6 @@
 		AA7273322C71B3C1007551C4 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273312C71B3C1007551C4 /* WelcomeViewController.swift */; };
 		AA7273342C71B8AC007551C4 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273332C71B8AC007551C4 /* Protocol.swift */; };
 		AA7273362C71B8FD007551C4 /* SetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273352C71B8FD007551C4 /* SetupScene.swift */; };
-		AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273442C71CC5D007551C4 /* LoginModel.swift */; };
-		AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273462C71CC5D007551C4 /* RefreshModel.swift */; };
 		AA7273542C71D032007551C4 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA72734E2C71D032007551C4 /* Header.swift */; };
 		AA7273572C71D032007551C4 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273512C71D032007551C4 /* TargetType.swift */; };
 		AA7273582C71D032007551C4 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7273522C71D032007551C4 /* UserDefaultsManager.swift */; };
@@ -134,7 +131,6 @@
 /* Begin PBXFileReference section */
 		AA0C87D82C7486D100C8A950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UglyCandidateViewController.swift; sourceTree = "<group>"; };
-		AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingCalculatorViewController.swift; sourceTree = "<group>"; };
 		AA6474212C7845050079ECE0 /* IntroUglyCandidateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroUglyCandidateViewController.swift; sourceTree = "<group>"; };
 		AA6474242C7A35810079ECE0 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		AA6474262C7B092D0079ECE0 /* MainHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeViewModel.swift; sourceTree = "<group>"; };
@@ -213,8 +209,6 @@
 		AA7273312C71B3C1007551C4 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		AA7273332C71B8AC007551C4 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		AA7273352C71B8FD007551C4 /* SetupScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScene.swift; sourceTree = "<group>"; };
-		AA7273442C71CC5D007551C4 /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
-		AA7273462C71CC5D007551C4 /* RefreshModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		AA72734E2C71D032007551C4 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		AA7273512C71D032007551C4 /* TargetType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
 		AA7273522C71D032007551C4 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
@@ -446,8 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				AA0C87DA2C74D75B00C8A950 /* UglyCandidateViewController.swift */,
-				AA64742E2C7B26FC0079ECE0 /* UglyCandidateUI.swift */,
-				AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */,
+				AA81173E2C853F55003FDFC3 /* Design */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -627,23 +620,13 @@
 		AA7273432C71CC28007551C4 /* Lslp */ = {
 			isa = PBXGroup;
 			children = (
-				AA72734C2C71CC6E007551C4 /* RequestModel */,
+				AA72734C2C71CC6E007551C4 /* Model */,
 				AA7273532C71D032007551C4 /* Network */,
-				AA7273472C71CC5D007551C4 /* ResponseModel */,
 			);
 			path = Lslp;
 			sourceTree = "<group>";
 		};
-		AA7273472C71CC5D007551C4 /* ResponseModel */ = {
-			isa = PBXGroup;
-			children = (
-				AA7273442C71CC5D007551C4 /* LoginModel.swift */,
-				AA7273462C71CC5D007551C4 /* RefreshModel.swift */,
-			);
-			path = ResponseModel;
-			sourceTree = "<group>";
-		};
-		AA72734C2C71CC6E007551C4 /* RequestModel */ = {
+		AA72734C2C71CC6E007551C4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				AA9E35C82C84763000CF69FC /* LoginDTO.swift */,
@@ -654,7 +637,7 @@
 				AA9E35D22C8477DA00CF69FC /* CommentDTO.swift */,
 				AA9E35D42C84AA9D00CF69FC /* DummyData.swift */,
 			);
-			path = RequestModel;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		AA7273532C71D032007551C4 /* Network */ = {
@@ -674,10 +657,18 @@
 			children = (
 				AA9E35A02C83705F00CF69FC /* View */,
 				AA9E359F2C83705100CF69FC /* Cell */,
-				AA64741A2C760EBC0079ECE0 /* RankingCalculatorViewController.swift */,
 				AA64747D2C7F34030079ECE0 /* AlbumView */,
 			);
 			path = DashboardView;
+			sourceTree = "<group>";
+		};
+		AA81173E2C853F55003FDFC3 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				AA64742E2C7B26FC0079ECE0 /* UglyCandidateUI.swift */,
+				AA6474312C7B275E0079ECE0 /* UglyCandidateLayout.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 		AA9E35922C835E3E00CF69FC /* View */ = {
@@ -1079,12 +1070,10 @@
 				AA9E35BC2C845B8D00CF69FC /* EditCommentViewModel.swift in Sources */,
 				AA9E359E2C8367C900CF69FC /* DashboardUI.swift in Sources */,
 				AA7273542C71D032007551C4 /* Header.swift in Sources */,
-				AA64741B2C760EBC0079ECE0 /* RankingCalculatorViewController.swift in Sources */,
 				AA7272FE2C6FA138007551C4 /* BaseDetailView.swift in Sources */,
 				AA6474942C80C6800079ECE0 /* CustomFonts.swift in Sources */,
 				AA64744C2C7B7C630079ECE0 /* MyMapViewController.swift in Sources */,
 				AA7272EE2C6E637A007551C4 /* BaseGameView.swift in Sources */,
-				AA7273482C71CC5D007551C4 /* LoginModel.swift in Sources */,
 				AA6474322C7B275E0079ECE0 /* UglyCandidateLayout.swift in Sources */,
 				AA64745F2C7D430E0079ECE0 /* MyPostersViewController.swift in Sources */,
 				AA6474382C7B2BE90079ECE0 /* GameViewLayout.swift in Sources */,
@@ -1120,7 +1109,6 @@
 				AA6474A72C82E4770079ECE0 /* AllPostHomeViewModel.swift in Sources */,
 				AA7272CA2C6C989D007551C4 /* AllPostHomeViewController.swift in Sources */,
 				AA64745D2C7C46A50079ECE0 /* MyFollowingViewController.swift in Sources */,
-				AA72734A2C71CC5D007551C4 /* RefreshModel.swift in Sources */,
 				AA9E35C92C84763000CF69FC /* LoginDTO.swift in Sources */,
 				AA7273252C70FB7E007551C4 /* BirthdayInputViewController.swift in Sources */,
 				AA6474432C7B3E050079ECE0 /* CreatePostViewServerLogic.swift in Sources */,

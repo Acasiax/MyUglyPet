@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 // MARK: - 게시글 조회 쿼리
 struct FetchReadingPostQuery: Encodable {
     let next: String?
